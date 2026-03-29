@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beam Flexure Design — ACI 318</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root{--blue:#2F5496;--lb:#D9E2F3;--yel:#FFF2CC;--grn:#C6EFCE;--red:#FFC7CE;--gray:#F2F2F2}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Calibri,Arial,sans-serif;background:var(--gray);color:#222;padding:20px;max-width:1020px;margin:0 auto}
+h1{background:var(--blue);color:#fff;padding:18px 24px;border-radius:10px 10px 0 0;font-size:1.35em;text-align:center}
+.sub{background:var(--blue);color:rgba(255,255,255,.8);text-align:center;padding:0 24px 14px;border-radius:0 0 10px 10px;font-size:.9em;margin-bottom:20px}
+.bar{display:flex;justify-content:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.bar button{padding:8px 18px;border:2px solid var(--blue);border-radius:8px;background:#fff;color:var(--blue);font-weight:600;font-size:.92em;cursor:pointer;transition:.2s}
+.bar button:hover{background:var(--blue);color:#fff}
+.warn{text-align:center;padding:14px;background:#FFF3CD;border:2px solid #FFCA2C;border-radius:10px;margin-bottom:18px;font-weight:600;font-size:.95em;color:#856404}
+.sec{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:20px;overflow:hidden}
+.sh{background:var(--blue);color:#fff;padding:12px 20px;font-weight:700;font-size:1.05em}
+.sb{padding:16px 20px}
+.ir{display:grid;grid-template-columns:120px 1fr 90px 55px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #eee}
+.ir:last-child{border-bottom:none}
+.il{font-weight:600;color:var(--blue);font-size:.95em}
+.desc{font-size:.8em;color:#888;grid-column:1/-1;margin-top:-4px;padding-bottom:4px}
+.exp{font-size:.82em;color:#444;grid-column:1/-1;padding:8px 12px;background:#f0f4ff;border-radius:6px;border-left:3px solid var(--blue);margin:2px 0 8px;line-height:1.6}
+input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}
+input[type=number]{width:85px;padding:6px 8px;border:2px solid #ddd;border-radius:6px;font-size:.95em;font-weight:600;text-align:center;background:var(--yel)}
+input[type=number]:focus{border-color:var(--blue);outline:none}
+input[type=number].empty{border-color:#dc3545;background:#fff0f0}
+.unit{color:#888;font-size:.9em}
+select{padding:6px 8px;border:2px solid #ddd;border-radius:6px;font-size:.95em;background:var(--yel);font-weight:600;cursor:pointer}
+table.c{width:100%;border-collapse:collapse;font-size:.9em}
+table.c th{background:#D6DCE4;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #ccc}
+table.c td{padding:9px 10px;border:1px solid #ddd;vertical-align:middle}
+table.c td:nth-child(1){text-align:center;width:40px;font-weight:600}
+table.c td:nth-child(2){text-align:center;width:75px;font-weight:600;color:var(--blue)}
+table.c td:nth-child(3){background:#fff}
+table.c td:nth-child(4){font-size:.85em;color:#555}
+table.c td:nth-child(5){text-align:center;font-weight:700;width:100px}
+table.c td:nth-child(6){text-align:center;width:55px;color:#888}
+tr.cr td{background:var(--lb)}
+tr.ck td{background:var(--grn);font-weight:600}
+tr.ck.fail td{background:var(--red)}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.si{display:flex;justify-content:space-between;padding:8px 14px;background:var(--gray);border-radius:6px;border-left:4px solid var(--blue)}
+.si .lb{font-weight:600;color:#555}.si .vl{font-weight:700;color:var(--blue)}
+.nb{margin-top:14px;padding:12px;background:var(--yel);border-radius:8px;border-left:4px solid #e6a800;font-size:.9em;line-height:1.6}
+.hidden{display:none}
+#overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999;overflow:auto}
+#sumCard{background:#fff;max-width:700px;margin:30px auto;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);padding:24px 28px;position:relative}
+#sumCard h2{text-align:center;color:var(--blue);margin-bottom:12px;font-size:1.2em}
+#sumCard .close{position:absolute;top:10px;right:14px;font-size:1.3em;cursor:pointer;color:#888}
+#sumCard table{width:100%;border-collapse:collapse;font-size:.88em;margin-bottom:10px}
+#sumCard table th{background:var(--blue);color:#fff;padding:6px 10px;text-align:center;border:1px solid #2a4a80}
+#sumCard table td{padding:6px 10px;border:1px solid #ccc;text-align:center}
+#sumCard table tr:nth-child(even) td{background:#f5f7fb}
+#sumCard .rb{text-align:center;padding:12px;border-radius:8px;font-size:1.1em;font-weight:700;margin:8px 0}
+#sumCard .rs{background:var(--grn);color:#006100}
+#sumCard .rf{background:var(--red);color:#9c0006}
+@media print{body{padding:0;background:#fff}.sec{box-shadow:none;break-inside:avoid}input[type=range],.bar{display:none}}
+@media(max-width:700px){.ir{grid-template-columns:100px 1fr 75px 42px;gap:6px}.sg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<h1>&#127959; RC Beam Flexure Design &#8212; ACI 318</h1>
+<div class="sub">SI Units (kN, mm, MPa) &#8226; Interactive Calculator</div>
+
+<div class="bar">
+  <button id="btnL" onclick="togLang()">&#127760; Arabic Descriptions</button>
+  <button onclick="clearAll()">&#128465;&#65039; Clear All</button>
+  <button onclick="showSum()">&#128248; Summary</button>
+  <button onclick="window.print()">&#128424; Print PDF</button>
+</div>
+
+<div class="warn hidden" id="warn">
+  <span data-en="&#9888;&#65039; Please fill in ALL input fields before results can be calculated."
+        data-ar="&#9888;&#65039; &#1610;&#1585;&#1580;&#1609; &#1605;&#1604;&#1569; &#1580;&#1605;&#1610;&#1593; &#1575;&#1604;&#1605;&#1583;&#1582;&#1604;&#1575;&#1578; &#1602;&#1576;&#1604; &#1581;&#1587;&#1575;&#1576; &#1575;&#1604;&#1606;&#1578;&#1575;&#1574;&#1580;."
+        id="warnTxt">&#9888;&#65039; Please fill in ALL input fields before results can be calculated.</span>
+</div>
+
+<!-- SECTION A -->
+<div class="sec">
+  <div class="sh">SECTION A &#8212; Material Properties
+    <span class="desc-h" data-ar=" / &#1582;&#1589;&#1575;&#1574;&#1589; &#1575;&#1604;&#1605;&#1608;&#1575;&#1583;"></span>
+  </div>
+  <div class="sb">
+    <div class="ir">
+      <span class="il">f'c</span>
+      <input type="range" id="sl_fc" min="0" max="80" step="1" value="0" oninput="sync('fc')">
+      <input type="number" id="fc" min="0" max="80" step="1" value="" placeholder="0" oninput="sync('fc',1)">
+      <span class="unit">MPa</span>
+    </div>
+    <div class="desc" data-en="Concrete compressive strength (cylinder test, 28 days)" data-ar="&#1605;&#1602;&#1575;&#1608;&#1605;&#1577; &#1590;&#1594;&#1591; &#1575;&#1604;&#1582;&#1585;&#1587;&#1575;&#1606;&#1577; (&#1575;&#1582;&#1578;&#1576;&#1575;&#1585; &#1575;&#1604;&#1575;&#1587;&#1591;&#1608;&#1575;&#1606;&#1577;&#1548; 28 &#1610;&#1608;&#1605;)">Concrete compressive strength (cylinder test, 28 days)</div>
+    <div class="exp" data-en="f'c is measured from a standard cylinder (150&#215;300mm) crushed at 28 days. Common values: 21&#8211;25 MPa (normal), 28&#8211;40 MPa (high-strength). Higher f'c reduces the compression block depth 'a' and therefore reduces the required steel area. It also affects Beta-1 and minimum steel formulas." data-ar="f'c &#1578;&#1615;&#1602;&#1575;&#1587; &#1605;&#1606; &#1575;&#1587;&#1591;&#1608;&#1575;&#1606;&#1577; &#1602;&#1610;&#1575;&#1587;&#1610;&#1577; (150&#215;300 &#1605;&#1605;) &#1578;&#1615;&#1587;&#1581;&#1602; &#1593;&#1606;&#1583; 28 &#1610;&#1608;&#1605;. &#1575;&#1604;&#1602;&#1610;&#1605; &#1575;&#1604;&#1588;&#1575;&#1574;&#1593;&#1577;: 21-25 (&#1593;&#1575;&#1583;&#1610;&#1577;)&#1548; 28-40 (&#1593;&#1575;&#1604;&#1610;&#1577; &#1575;&#1604;&#1605;&#1602;&#1575;&#1608;&#1605;&#1577;). &#1603;&#1604;&#1605;&#1575; &#1586;&#1575;&#1583;&#1578; f'c &#1602;&#1604;&#1617; &#1593;&#1605;&#1602; &#1603;&#1578;&#1604;&#1577; &#1575;&#1604;&#1590;&#1594;&#1591; 'a' &#1608;&#1576;&#1575;&#1604;&#1578;&#1575;&#1604;&#1610; &#1602;&#1604;&#1617;&#1578; &#1605;&#1587;&#1575;&#1581;&#1577; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583; &#1575;&#1604;&#1605;&#1591;&#1604;&#1608;&#1576;&#1577;. &#1578;&#1572;&#1579;&#1585; &#1571;&#1610;&#1590;&#1575; &#1593;&#1604;&#1609; Beta-1 &#1608;&#1605;&#1593;&#1575;&#1583;&#1604;&#1575;&#1578; &#1575;&#1604;&#1581;&#1583; &#1575;&#1604;&#1571;&#1583;&#1606;&#1609; &#1604;&#1604;&#1581;&#1583;&#1610;&#1583;.">f'c is measured from a standard cylinder (150&#215;300mm) crushed at 28 days. Common values: 21&#8211;25 MPa (normal), 28&#8211;40 MPa (high-strength). Higher f'c reduces the compression block depth 'a' and therefore reduces the required steel area. It also affects Beta-1 and minimum steel formulas.</div>
+
+    <div class="ir">
+      <span class="il">fy</span>
+      <input type="range" id="sl_fy" min="0" max="700" step="10" value="0" oninput="sync('fy')">
+      <input type="number" id="fy" min="0" max="700" step="10" value="" placeholder="0" oninput="sync('fy',1)">
+      <span class="unit">MPa</span>
+    </div>
+    <div class="desc" data-en="Steel yield strength (420 = Grade 60)" data-ar="&#1605;&#1602;&#1575;&#1608;&#1605;&#1577; &#1582;&#1590;&#1608;&#1593; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583; (420 = Grade 60)">Steel yield strength (420 = Grade 60)</div>
+    <div class="exp" data-en="fy is the stress where steel starts to deform permanently (yield point). Grade 60 (fy=420 MPa) is the most common. The design assumes steel reaches fy before concrete crushes &#8212; called tension-controlled behavior. If the steel doesn't yield (es &lt; 0.005), the phi factor is reduced, making the design less efficient." data-ar="fy &#1607;&#1608; &#1575;&#1604;&#1573;&#1580;&#1607;&#1575;&#1583; &#1575;&#1604;&#1584;&#1610; &#1610;&#1576;&#1583;&#1571; &#1593;&#1606;&#1583;&#1607; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583; &#1576;&#1575;&#1604;&#1578;&#1588;&#1608;&#1607; &#1575;&#1604;&#1583;&#1575;&#1574;&#1605; (&#1606;&#1602;&#1591;&#1577; &#1575;&#1604;&#1582;&#1590;&#1608;&#1593;). Grade 60 (fy=420) &#1607;&#1608; &#1575;&#1604;&#1571;&#1603;&#1579;&#1585; &#1588;&#1610;&#1608;&#1593;&#1575;. &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605; &#1610;&#1601;&#1578;&#1585;&#1590; &#1571;&#1606; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583; &#1610;&#1589;&#1604; fy &#1602;&#1576;&#1604; &#1575;&#1606;&#1587;&#1581;&#1575;&#1602; &#1575;&#1604;&#1582;&#1585;&#1587;&#1575;&#1606;&#1577; &#8212; &#1608;&#1607;&#1584;&#1575; &#1610;&#1587;&#1605;&#1609; &#1575;&#1604;&#1587;&#1604;&#1608;&#1603; &#1575;&#1604;&#1605;&#1581;&#1603;&#1608;&#1605; &#1576;&#1575;&#1604;&#1588;&#1583;. &#1573;&#1584;&#1575; &#1604;&#1605; &#1610;&#1582;&#1590;&#1593; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583; (es &lt; 0.005)&#1548; &#1610;&#1606;&#1582;&#1601;&#1590; &#1605;&#1593;&#1575;&#1605;&#1604; phi &#1605;&#1605;&#1575; &#1610;&#1580;&#1593;&#1604; &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605; &#1571;&#1602;&#1604; &#1603;&#1601;&#1575;&#1569;&#1577;.">fy is the stress where steel starts to deform permanently (yield point). Grade 60 (fy=420 MPa) is the most common. The design assumes steel reaches fy before concrete crushes &#8212; called tension-controlled behavior.</div>
+  </div>
+</div>
+
+<!-- SECTION B -->
+<div class="sec">
+  <div class="sh">SECTION B &#8212; Section Geometry
+    <span class="desc-h" data-ar=" / &#1571;&#1576;&#1593;&#1575;&#1583; &#1575;&#1604;&#1605;&#1602;&#1591;&#1593;"></span>
+  </div>
+  <div class="sb">
+    <div class="ir">
+      <span class="il">h</span>
+      <input type="range" id="sl_h" min="0" max="2000" step="10" value="0" oninput="sync('h')">
+      <input type="number" id="h" min="0" max="2000" step="10" value="" placeholder="0" oninput="sync('h',1)">
+      <span class="unit">mm</span>
+    </div>
+    <div class="desc" data-en="Total section depth" data-ar="&#1575;&#1604;&#1593;&#1605;&#1602; &#1575;&#1604;&#1603;&#1604;&#1610; &#1604;&#1604;&#1605;&#1602;&#1591;&#1593;">Total section depth</div>
+    <div class="exp" data-en="h is the full depth of the beam/slab from top to bottom. For slabs it is the slab thickness. Deeper sections resist more moment but use more concrete and increase building height. The effective depth d = h - cover is what actually resists the forces." data-ar="h &#1607;&#1608; &#1575;&#1604;&#1593;&#1605;&#1602; &#1575;&#1604;&#1603;&#1604;&#1610; &#1604;&#1604;&#1603;&#1605;&#1585;&#1577;/&#1575;&#1604;&#1576;&#1604;&#1575;&#1591;&#1577; &#1605;&#1606; &#1575;&#1604;&#1571;&#1593;&#1604;&#1609; &#1604;&#1604;&#1571;&#1587;&#1601;&#1604;. &#1604;&#1604;&#1576;&#1604;&#1575;&#1591;&#1575;&#1578; &#1610;&#1603;&#1608;&#1606; &#1587;&#1605;&#1575;&#1603;&#1577; &#1575;&#1604;&#1576;&#1604;&#1575;&#1591;&#1577;. &#1575;&#1604;&#1605;&#1602;&#1591;&#1593; &#1575;&#1604;&#1571;&#1593;&#1605;&#1602; &#1610;&#1578;&#1581;&#1605;&#1604; &#1593;&#1586;&#1605; &#1571;&#1603;&#1576;&#1585; &#1604;&#1603;&#1606; &#1610;&#1587;&#1578;&#1582;&#1583;&#1605; &#1582;&#1585;&#1587;&#1575;&#1606;&#1577; &#1571;&#1603;&#1579;&#1585;. &#1575;&#1604;&#1593;&#1605;&#1602; &#1575;&#1604;&#1601;&#1593;&#1575;&#1604; d = h - cover &#1607;&#1608; &#1575;&#1604;&#1584;&#1610; &#1610;&#1602;&#1575;&#1608;&#1605; &#1575;&#1604;&#1602;&#1608;&#1609; &#1601;&#1593;&#1604;&#1610;&#1575;.">h is the full depth of the beam/slab from top to bottom. For slabs it is the slab thickness. The effective depth d = h - cover is what actually resists the forces.</div>
+
+    <div class="ir">
+      <span class="il">b_web</span>
+      <input type="range" id="sl_bw" min="0" max="3000" step="25" value="0" oninput="sync('bw')">
+      <input type="number" id="bw" min="0" max="3000" step="25" value="" placeholder="0" oninput="sync('bw',1)">
+      <span class="unit">mm</span>
+    </div>
+    <div class="desc" data-en="Web width (slabs: 1000mm strip)" data-ar="&#1593;&#1585;&#1590; &#1575;&#1604;&#1580;&#1587;&#1605; (&#1576;&#1604;&#1575;&#1591;&#1575;&#1578;: &#1588;&#1585;&#1610;&#1581;&#1577; 1000 &#1605;&#1605;)">Web width (slabs: 1000mm strip)</div>
+    <div class="exp" data-en="b_web is the beam web width. For one-way slabs, design a 1m strip (b=1000mm). For T-beams, this is the stem width only (used in minimum steel formulas As,min). For rectangular beams, b_web = b_eff. You MUST enter both b_web and b_eff." data-ar="b_web &#1607;&#1608; &#1593;&#1585;&#1590; &#1580;&#1587;&#1605; &#1575;&#1604;&#1603;&#1605;&#1585;&#1577;. &#1604;&#1604;&#1576;&#1604;&#1575;&#1591;&#1575;&#1578; &#1576;&#1575;&#1578;&#1580;&#1575;&#1607; &#1608;&#1575;&#1581;&#1583; &#1606;&#1589;&#1605;&#1605; &#1588;&#1585;&#1610;&#1581;&#1577; 1 &#1605;&#1578;&#1585; (b=1000). &#1604;&#1604;&#1603;&#1605;&#1585;&#1575;&#1578; T &#1607;&#1584;&#1575; &#1601;&#1602;&#1591; &#1593;&#1585;&#1590; &#1575;&#1604;&#1587;&#1575;&#1602; (&#1610;&#1587;&#1578;&#1582;&#1583;&#1605; &#1601;&#1610; &#1605;&#1593;&#1575;&#1583;&#1604;&#1575;&#1578; As,min). &#1604;&#1604;&#1605;&#1587;&#1578;&#1591;&#1610;&#1604;&#1577;: b_web = b_eff. &#1610;&#1580;&#1576; &#1573;&#1583;&#1582;&#1575;&#1604; &#1603;&#1604;&#1610;&#1607;&#1605;&#1575;.">b_web is the beam web width. For one-way slabs, use 1m strip (b=1000mm). For T-beams, this is stem width only (for As,min). For rectangular beams, b_web = b_eff.</div>
+
+    <div class="ir">
+      <span class="il">b_eff</span>
+      <input type="range" id="sl_beff" min="0" max="3000" step="25" value="0" oninput="sync('beff')">
+      <input type="number" id="beff" min="0" max="3000" step="25" value="" placeholder="0" oninput="sync('beff',1)">
+      <span class="unit">mm</span>
+    </div>
+    <div class="desc" data-en="Effective flange width (= b_web for rect.)" data-ar="&#1575;&#1604;&#1593;&#1585;&#1590; &#1575;&#1604;&#1601;&#1593;&#1575;&#1604; &#1604;&#1604;&#1588;&#1601;&#1577; (= b_web &#1604;&#1604;&#1605;&#1587;&#1578;&#1591;&#1610;&#1604;&#1577;)">Effective flange width (= b_web for rect.)</div>
+    <div class="exp" data-en="b_eff is the effective compression flange width. For rectangular beams and slabs, b_eff = b_web. For T-beams, b_eff is wider because part of the slab acts as a compression flange. b_eff is used in the compression block formula: a = As.fy / (0.85.f'c.b_eff)." data-ar="b_eff &#1607;&#1608; &#1575;&#1604;&#1593;&#1585;&#1590; &#1575;&#1604;&#1601;&#1593;&#1575;&#1604; &#1604;&#1588;&#1601;&#1577; &#1575;&#1604;&#1590;&#1594;&#1591;. &#1604;&#1604;&#1603;&#1605;&#1585;&#1575;&#1578; &#1575;&#1604;&#1605;&#1587;&#1578;&#1591;&#1610;&#1604;&#1577; &#1608;&#1575;&#1604;&#1576;&#1604;&#1575;&#1591;&#1575;&#1578;: b_eff = b_web. &#1604;&#1604;&#1603;&#1605;&#1585;&#1575;&#1578; T&#1548; b_eff &#1571;&#1593;&#1585;&#1590; &#1604;&#1571;&#1606; &#1580;&#1586;&#1569; &#1605;&#1606; &#1575;&#1604;&#1576;&#1604;&#1575;&#1591;&#1577; &#1610;&#1593;&#1605;&#1604; &#1603;&#1588;&#1601;&#1577; &#1590;&#1594;&#1591;. b_eff &#1610;&#1587;&#1578;&#1582;&#1583;&#1605; &#1601;&#1610; &#1605;&#1593;&#1575;&#1583;&#1604;&#1577; &#1603;&#1578;&#1604;&#1577; &#1575;&#1604;&#1590;&#1594;&#1591;: a = As.fy / (0.85.f'c.b_eff).">b_eff is the effective compression flange width. For rectangular beams, b_eff = b_web. For T-beams, b_eff is wider. Used in: a = As.fy / (0.85.f'c.b_eff).</div>
+
+    <div class="ir">
+      <span class="il">Cover</span>
+      <input type="range" id="sl_cover" min="0" max="100" step="5" value="0" oninput="sync('cover')">
+      <input type="number" id="cover" min="0" max="100" step="5" value="" placeholder="0" oninput="sync('cover',1)">
+      <span class="unit">mm</span>
+    </div>
+    <div class="desc" data-en="Cover to centroid of tension steel" data-ar="&#1575;&#1604;&#1594;&#1591;&#1575;&#1569; &#1581;&#1578;&#1609; &#1605;&#1585;&#1603;&#1586; &#1581;&#1583;&#1610;&#1583; &#1575;&#1604;&#1588;&#1583;">Cover to centroid of tension steel</div>
+    <div class="exp" data-en="Cover is from the bottom face to the centroid of tension bars. It protects steel from fire/corrosion. Typical: 20mm slabs, 40mm beams, 50-75mm foundations. Larger cover = smaller d = more steel needed." data-ar="&#1575;&#1604;&#1594;&#1591;&#1575;&#1569; &#1605;&#1606; &#1575;&#1604;&#1587;&#1591;&#1581; &#1575;&#1604;&#1587;&#1601;&#1604;&#1610; &#1573;&#1604;&#1609; &#1605;&#1585;&#1603;&#1586; &#1602;&#1590;&#1576;&#1575;&#1606; &#1575;&#1604;&#1588;&#1583;. &#1610;&#1581;&#1605;&#1610; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583; &#1605;&#1606; &#1575;&#1604;&#1581;&#1585;&#1610;&#1602;/&#1575;&#1604;&#1578;&#1570;&#1603;&#1604;. &#1575;&#1604;&#1588;&#1575;&#1574;&#1593;: 20 &#1605;&#1605; &#1576;&#1604;&#1575;&#1591;&#1575;&#1578;&#1548; 40 &#1605;&#1605; &#1603;&#1605;&#1585;&#1575;&#1578;&#1548; 50-75 &#1605;&#1605; &#1571;&#1587;&#1575;&#1587;&#1575;&#1578;. &#1594;&#1591;&#1575;&#1569; &#1571;&#1603;&#1576;&#1585; = d &#1571;&#1589;&#1594;&#1585; = &#1581;&#1583;&#1610;&#1583; &#1571;&#1603;&#1579;&#1585;.">Cover from bottom face to tension bar centroid. Typical: 20mm slabs, 40mm beams. Larger cover = smaller d = more steel.</div>
+  </div>
+</div>
+
+<!-- SECTION C -->
+<div class="sec">
+  <div class="sh">SECTION C &#8212; Factored Load
+    <span class="desc-h" data-ar=" / &#1575;&#1604;&#1571;&#1581;&#1605;&#1575;&#1604; &#1575;&#1604;&#1605;&#1590;&#1585;&#1608;&#1576;&#1577;"></span>
+  </div>
+  <div class="sb">
+    <div class="ir">
+      <span class="il">Mu</span>
+      <input type="range" id="sl_Mu" min="0" max="500" step="1" value="0" oninput="sync('Mu')">
+      <input type="number" id="Mu" min="0" max="5000" step="0.1" value="" placeholder="0" oninput="sync('Mu',1)">
+      <span class="unit">kN.m</span>
+    </div>
+    <div class="desc" data-en="Ultimate factored moment" data-ar="&#1575;&#1604;&#1593;&#1586;&#1605; &#1575;&#1604;&#1606;&#1607;&#1575;&#1574;&#1610; &#1575;&#1604;&#1605;&#1590;&#1585;&#1608;&#1576;">Ultimate factored moment</div>
+    <div class="exp" data-en="Mu is the maximum bending moment from structural analysis with load factors (e.g. 1.2D+1.6L per ACI). This is what the beam must resist. It comes from solving the beam under factored loads. Mu is in kN.m; we multiply by 10^6 in formulas to convert to N.mm for consistency with mm-based dimensions." data-ar="Mu &#1607;&#1608; &#1571;&#1602;&#1589;&#1609; &#1593;&#1586;&#1605; &#1575;&#1606;&#1581;&#1606;&#1575;&#1569; &#1605;&#1606; &#1575;&#1604;&#1578;&#1581;&#1604;&#1610;&#1604; &#1575;&#1604;&#1573;&#1606;&#1588;&#1575;&#1574;&#1610; &#1576;&#1605;&#1593;&#1575;&#1605;&#1604;&#1575;&#1578; &#1575;&#1604;&#1571;&#1581;&#1605;&#1575;&#1604; (&#1605;&#1579;&#1604; 1.2D+1.6L). &#1607;&#1584;&#1575; &#1605;&#1575; &#1610;&#1580;&#1576; &#1593;&#1604;&#1609; &#1575;&#1604;&#1603;&#1605;&#1585;&#1577; &#1605;&#1602;&#1575;&#1608;&#1605;&#1578;&#1607;. Mu &#1576;&#1608;&#1581;&#1583;&#1577; kN.m&#1563; &#1606;&#1590;&#1585;&#1576; &#1601;&#1610; 10^6 &#1601;&#1610; &#1575;&#1604;&#1605;&#1593;&#1575;&#1583;&#1604;&#1575;&#1578; &#1604;&#1604;&#1578;&#1581;&#1608;&#1610;&#1604; &#1573;&#1604;&#1609; N.mm.">Mu is the max bending moment from analysis with load factors (1.2D+1.6L). We multiply by 10^6 in formulas to convert kN.m to N.mm.</div>
+  </div>
+</div>
+
+<!-- SECTION D -->
+<div class="sec">
+  <div class="sh">SECTION D &#8212; Design Assumptions
+    <span class="desc-h" data-ar=" / &#1575;&#1601;&#1578;&#1585;&#1575;&#1590;&#1575;&#1578; &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605;"></span>
+  </div>
+  <div class="sb">
+    <div class="ir">
+      <span class="il">j (estimate)</span>
+      <select id="j_est" onchange="calc()" style="grid-column:2/4">
+        <option value="0.95" selected>0.95 &#8212; Slabs / T-Beams (+M)</option>
+        <option value="0.90">0.90 &#8212; Rect. Beams / Neg. Moment</option>
+      </select>
+      <span class="unit">&#8212;</span>
+    </div>
+    <div class="exp" data-en="j is an initial guess for the lever arm ratio. jd = distance between compression and tension resultants. For lightly reinforced slabs/T-beams: j=0.95. For heavier rectangular beams or negative moment: j=0.90. This only affects the FIRST iteration. The refined As in step 2.3 uses the actual lever arm (d-a/2), so the final result does not depend on this guess." data-ar="j &#1607;&#1608; &#1578;&#1602;&#1583;&#1610;&#1585; &#1571;&#1608;&#1604;&#1610; &#1604;&#1606;&#1587;&#1576;&#1577; &#1584;&#1585;&#1575;&#1593; &#1575;&#1604;&#1593;&#1586;&#1605;. jd = &#1575;&#1604;&#1605;&#1587;&#1575;&#1601;&#1577; &#1576;&#1610;&#1606; &#1605;&#1581;&#1589;&#1604;&#1577; &#1575;&#1604;&#1590;&#1594;&#1591; &#1608;&#1605;&#1581;&#1589;&#1604;&#1577; &#1575;&#1604;&#1588;&#1583;. &#1604;&#1604;&#1576;&#1604;&#1575;&#1591;&#1575;&#1578;/&#1575;&#1604;&#1603;&#1605;&#1585;&#1575;&#1578; T: j=0.95. &#1604;&#1604;&#1605;&#1587;&#1578;&#1591;&#1610;&#1604;&#1577;/&#1575;&#1604;&#1593;&#1586;&#1605; &#1575;&#1604;&#1587;&#1575;&#1604;&#1576;: j=0.90. &#1607;&#1584;&#1575; &#1610;&#1572;&#1579;&#1585; &#1601;&#1602;&#1591; &#1593;&#1604;&#1609; &#1575;&#1604;&#1578;&#1603;&#1585;&#1575;&#1585; &#1575;&#1604;&#1571;&#1608;&#1604;. As &#1575;&#1604;&#1605;&#1606;&#1602;&#1581;&#1577; &#1601;&#1610; 2.3 &#1578;&#1587;&#1578;&#1582;&#1583;&#1605; &#1584;&#1585;&#1575;&#1593; &#1575;&#1604;&#1593;&#1586;&#1605; &#1575;&#1604;&#1601;&#1593;&#1604;&#1610; (d-a/2)&#1548; &#1604;&#1584;&#1604;&#1603; &#1575;&#1604;&#1606;&#1578;&#1610;&#1580;&#1577; &#1575;&#1604;&#1606;&#1607;&#1575;&#1574;&#1610;&#1577; &#1604;&#1575; &#1578;&#1593;&#1578;&#1605;&#1583; &#1593;&#1604;&#1609; &#1607;&#1584;&#1575; &#1575;&#1604;&#1578;&#1602;&#1583;&#1610;&#1585;.">j is an initial guess for lever arm ratio. j=0.95 for slabs/T-beams, 0.90 for rect beams. Only affects first iteration &#8212; final result does not depend on this.</div>
+  </div>
+</div>
+
+<!-- RESULTS (hidden until all inputs filled) -->
+<div id="results" class="hidden">
+
+<!-- STEP 1 -->
+<div class="sec">
+  <div class="sh">STEP 1 &#8212; Derived Parameters
+    <span class="desc-h" data-ar=" / &#1575;&#1604;&#1605;&#1578;&#1594;&#1610;&#1585;&#1575;&#1578; &#1575;&#1604;&#1605;&#1588;&#1578;&#1602;&#1577;"></span>
+  </div>
+  <div class="sb">
+    <table class="c">
+      <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+      <tr class="cr"><td>1.1</td><td>B1</td><td>\(\beta_1\) per ACI</td><td data-en="Stress block factor (0.65-0.85)" data-ar="&#1605;&#1593;&#1575;&#1605;&#1604; &#1603;&#1578;&#1604;&#1577; &#1575;&#1604;&#1573;&#1580;&#1607;&#1575;&#1583; (0.65-0.85)">Stress block factor (0.65-0.85)</td><td id="v_b1"></td><td>&#8212;</td></tr>
+      <tr class="cr"><td>1.2</td><td>d</td><td>\(d = h - cover\)</td><td data-en="Effective depth" data-ar="&#1575;&#1604;&#1593;&#1605;&#1602; &#1575;&#1604;&#1601;&#1593;&#1575;&#1604;">Effective depth</td><td id="v_d"></td><td>mm</td></tr>
+    </table>
+    <div class="exp" data-en="B1 converts the real curved stress into a rectangular block (Whitney). f'c&lt;=28: B1=0.85. Above 28, B1 drops by 0.05 per 7MPa, min 0.65. d = h - cover is the useful structural depth from the top compression fiber to the tension steel center." data-ar="B1 &#1610;&#1581;&#1608;&#1604; &#1575;&#1604;&#1573;&#1580;&#1607;&#1575;&#1583; &#1575;&#1604;&#1605;&#1606;&#1581;&#1606;&#1610; &#1575;&#1604;&#1581;&#1602;&#1610;&#1602;&#1610; &#1573;&#1604;&#1609; &#1603;&#1578;&#1604;&#1577; &#1605;&#1587;&#1578;&#1591;&#1610;&#1604;&#1577; (&#1608;&#1610;&#1578;&#1606;&#1610;). f'c&lt;=28: B1=0.85. &#1601;&#1608;&#1602; 28&#1548; &#1610;&#1606;&#1602;&#1589; B1 &#1576;&#1605;&#1602;&#1583;&#1575;&#1585; 0.05 &#1604;&#1603;&#1604; 7MPa&#1548; &#1581;&#1583; &#1571;&#1583;&#1606;&#1609; 0.65. d = h - cover &#1607;&#1608; &#1575;&#1604;&#1593;&#1605;&#1602; &#1575;&#1604;&#1573;&#1606;&#1588;&#1575;&#1574;&#1610; &#1575;&#1604;&#1605;&#1601;&#1610;&#1583;.">B1 converts real stress into rectangular block. f'c&lt;=28: B1=0.85. d = h - cover is the useful structural depth.</div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="sec">
+  <div class="sh">STEP 2 &#8212; Steel Area Calculation
+    <span class="desc-h" data-ar=" / &#1581;&#1587;&#1575;&#1576; &#1605;&#1587;&#1575;&#1581;&#1577; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583;"></span>
+  </div>
+  <div class="sb">
+    <table class="c">
+      <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+      <tr class="cr"><td>2.1</td><td>As,init</td><td>\(\dfrac{M_u \times 10^6}{\phi f_y j d}\)</td><td data-en="Initial estimate (phi=0.9)" data-ar="&#1578;&#1602;&#1583;&#1610;&#1585; &#1571;&#1608;&#1604;&#1610; (phi=0.9)">Initial estimate (phi=0.9)</td><td id="v_Asi"></td><td>mm2</td></tr>
+      <tr class="cr"><td>2.2</td><td>a</td><td>\(\dfrac{A_s f_y}{0.85 f'_c b_{eff}}\)</td><td data-en="Stress block depth" data-ar="&#1593;&#1605;&#1602; &#1603;&#1578;&#1604;&#1577; &#1575;&#1604;&#1590;&#1594;&#1591;">Stress block depth</td><td id="v_a"></td><td>mm</td></tr>
+      <tr class="cr"><td>2.3</td><td>As</td><td>\(\dfrac{M_u \times 10^6}{\phi f_y(d - \frac{a}{2})}\)</td><td data-en="Refined steel area" data-ar="&#1605;&#1587;&#1575;&#1581;&#1577; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583; &#1575;&#1604;&#1605;&#1606;&#1602;&#1581;&#1577;">Refined steel area</td><td id="v_As"></td><td>mm2</td></tr>
+    </table>
+    <div class="exp" data-en="Iterative: (1) Guess As using jd as lever arm. (2) Find 'a' from T=C equilibrium: As.fy = 0.85.f'c.b_eff.a. (3) Recalculate As with actual lever arm (d-a/2). Mu x 10^6 converts kN.m to N.mm. We assume phi=0.9 (tension-controlled). Step 2.3 is the more accurate value." data-ar="&#1578;&#1603;&#1585;&#1575;&#1585;&#1610;: (1) &#1606;&#1602;&#1583;&#1585; As &#1576;&#1575;&#1587;&#1578;&#1582;&#1583;&#1575;&#1605; jd &#1603;&#1584;&#1585;&#1575;&#1593; &#1593;&#1586;&#1605;. (2) &#1606;&#1580;&#1583; 'a' &#1605;&#1606; &#1578;&#1608;&#1575;&#1586;&#1606; T=C: As.fy = 0.85.f'c.b_eff.a. (3) &#1606;&#1593;&#1610;&#1583; &#1581;&#1587;&#1575;&#1576; As &#1576;&#1584;&#1585;&#1575;&#1593; &#1575;&#1604;&#1593;&#1586;&#1605; &#1575;&#1604;&#1601;&#1593;&#1604;&#1610; (d-a/2). &#1606;&#1590;&#1585;&#1576; Mu &#1601;&#1610; 10^6 &#1604;&#1604;&#1578;&#1581;&#1608;&#1610;&#1604; &#1605;&#1606; kN.m &#1573;&#1604;&#1609; N.mm. &#1606;&#1601;&#1578;&#1585;&#1590; phi=0.9. &#1575;&#1604;&#1582;&#1591;&#1608;&#1577; 2.3 &#1607;&#1610; &#1575;&#1604;&#1602;&#1610;&#1605;&#1577; &#1575;&#1604;&#1571;&#1583;&#1602;.">Iterative: (1) Guess As with jd. (2) Find 'a' from equilibrium. (3) Recalculate As with actual lever arm (d-a/2). Step 2.3 is the accurate value.</div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="sec">
+  <div class="sh">STEP 3 &#8212; Minimum Steel (ACI 9.6.1)
+    <span class="desc-h" data-ar=" / &#1575;&#1604;&#1581;&#1583; &#1575;&#1604;&#1571;&#1583;&#1606;&#1609; &#1604;&#1604;&#1581;&#1583;&#1610;&#1583;"></span>
+  </div>
+  <div class="sb">
+    <table class="c">
+      <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+      <tr class="cr"><td>3.1</td><td>As,min1</td><td>\(\dfrac{1.4 b_w d}{f_y}\)</td><td data-en="Criterion 1" data-ar="&#1575;&#1604;&#1605;&#1593;&#1610;&#1575;&#1585; 1">Criterion 1</td><td id="v_Am1"></td><td>mm2</td></tr>
+      <tr class="cr"><td>3.2</td><td>As,min2</td><td>\(\dfrac{0.25\sqrt{f'_c}}{f_y} b_w d\)</td><td data-en="Criterion 2" data-ar="&#1575;&#1604;&#1605;&#1593;&#1610;&#1575;&#1585; 2">Criterion 2</td><td id="v_Am2"></td><td>mm2</td></tr>
+      <tr class="cr"><td>3.3</td><td>As,min</td><td>\(\max(3.1, 3.2)\)</td><td data-en="Governing minimum" data-ar="&#1575;&#1604;&#1581;&#1583; &#1575;&#1604;&#1571;&#1583;&#1606;&#1609; &#1575;&#1604;&#1605;&#1581;&#1603;&#1605;">Governing minimum</td><td id="v_Am"></td><td>mm2</td></tr>
+      <tr class="ck" id="rAd"><td>3.4</td><td>As,adopted</td><td>\(\max(A_s, A_{s,min})\)</td><td data-en="Design steel area" data-ar="&#1605;&#1587;&#1575;&#1581;&#1577; &#1581;&#1583;&#1610;&#1583; &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605;">Design steel area</td><td id="v_Ad"></td><td>mm2</td></tr>
+    </table>
+    <div class="exp" data-en="ACI requires minimum steel to prevent sudden brittle failure when concrete cracks. Two formulas, the larger governs. If As &lt; As,min, we MUST use As,min. Uses b_web (not b_eff) because minimum steel is based on web width. As,adopted = max(As, As,min) is what you actually provide." data-ar="ACI &#1610;&#1578;&#1591;&#1604;&#1576; &#1581;&#1583; &#1571;&#1583;&#1606;&#1609; &#1604;&#1604;&#1581;&#1583;&#1610;&#1583; &#1604;&#1605;&#1606;&#1593; &#1575;&#1604;&#1575;&#1606;&#1607;&#1610;&#1575;&#1585; &#1575;&#1604;&#1607;&#1588; &#1575;&#1604;&#1605;&#1601;&#1575;&#1580;&#1574;. &#1605;&#1593;&#1575;&#1583;&#1604;&#1578;&#1575;&#1606;&#1548; &#1575;&#1604;&#1571;&#1603;&#1576;&#1585; &#1607;&#1610; &#1575;&#1604;&#1605;&#1581;&#1603;&#1605;&#1577;. &#1573;&#1584;&#1575; As &lt; As,min&#1548; &#1610;&#1580;&#1576; &#1575;&#1587;&#1578;&#1582;&#1583;&#1575;&#1605; As,min. &#1606;&#1587;&#1578;&#1582;&#1583;&#1605; b_web (&#1608;&#1604;&#1610;&#1587; b_eff). As,adopted = max(As, As,min) &#1607;&#1610; &#1575;&#1604;&#1603;&#1605;&#1610;&#1577; &#1575;&#1604;&#1578;&#1610; &#1578;&#1608;&#1601;&#1585;&#1607;&#1575; &#1601;&#1593;&#1604;&#1610;&#1575;.">ACI requires min steel to prevent brittle failure. Two formulas &#8212; larger governs. Uses b_web (not b_eff). As,adopted = max(As, As,min).</div>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="sec">
+  <div class="sh">STEP 4 &#8212; Design Verification
+    <span class="desc-h" data-ar=" / &#1575;&#1604;&#1578;&#1581;&#1602;&#1602; &#1605;&#1606; &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605;"></span>
+  </div>
+  <div class="sb">
+    <table class="c">
+      <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+      <tr class="cr"><td>4.1</td><td>a (final)</td><td>\(\dfrac{A_s^{ad} f_y}{0.85 f'_c b_{eff}}\)</td><td data-en="Final stress block" data-ar="&#1603;&#1578;&#1604;&#1577; &#1575;&#1604;&#1590;&#1594;&#1591; &#1575;&#1604;&#1606;&#1607;&#1575;&#1574;&#1610;&#1577;">Final stress block</td><td id="v_af"></td><td>mm</td></tr>
+      <tr class="cr"><td>4.2</td><td>c</td><td>\(\dfrac{a}{\beta_1}\)</td><td data-en="Neutral axis depth" data-ar="&#1593;&#1605;&#1602; &#1575;&#1604;&#1605;&#1581;&#1608;&#1585; &#1575;&#1604;&#1605;&#1581;&#1575;&#1610;&#1583;">Neutral axis depth</td><td id="v_c"></td><td>mm</td></tr>
+      <tr class="cr"><td>4.3</td><td>es</td><td>\(\dfrac{d-c}{c} \times 0.003\)</td><td data-en="Steel strain" data-ar="&#1575;&#1606;&#1601;&#1593;&#1575;&#1604; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583;">Steel strain</td><td id="v_es"></td><td>&#8212;</td></tr>
+      <tr class="ck" id="rY"><td>4.4</td><td>Check es</td><td>\(\varepsilon_s \ge 0.005?\)</td><td data-en="Tension-controlled?" data-ar="&#1607;&#1604; &#1575;&#1604;&#1605;&#1602;&#1591;&#1593; &#1605;&#1581;&#1603;&#1608;&#1605; &#1576;&#1575;&#1604;&#1588;&#1583;&#1567;">Tension-controlled?</td><td id="v_yl"></td><td>&#8212;</td></tr>
+      <tr class="cr"><td>4.5</td><td>phi</td><td>\(\phi\) per ACI</td><td data-en="Strength reduction factor" data-ar="&#1605;&#1593;&#1575;&#1605;&#1604; &#1578;&#1582;&#1601;&#1610;&#1590; &#1575;&#1604;&#1605;&#1602;&#1575;&#1608;&#1605;&#1577;">Strength reduction factor</td><td id="v_ph"></td><td>&#8212;</td></tr>
+      <tr class="cr"><td>4.6</td><td>phiMn</td><td>\(\dfrac{\phi A_s f_y(d-\frac{a}{2})}{10^6}\)</td><td data-en="Design moment capacity" data-ar="&#1587;&#1593;&#1577; &#1575;&#1604;&#1593;&#1586;&#1605; &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605;&#1610;&#1577;">Design moment capacity</td><td id="v_pM"></td><td>kN.m</td></tr>
+      <tr class="ck" id="rF"><td>4.7</td><td>Check</td><td>\(\phi M_n \ge M_u?\)</td><td data-en="Final safety check" data-ar="&#1601;&#1581;&#1589; &#1575;&#1604;&#1571;&#1605;&#1575;&#1606; &#1575;&#1604;&#1606;&#1607;&#1575;&#1574;&#1610;">Final safety check</td><td id="v_fn"></td><td>&#8212;</td></tr>
+    </table>
+    <div class="exp" data-en="Recalculate 'a' with adopted As. c = a/B1 is neutral axis depth. es = (d-c)/c x 0.003 is steel strain. If es >= 0.005: tension-controlled, phi=0.9 (best case). If es &lt;= 0.002: compression-controlled, phi=0.65 (bad, redesign). Between: phi is interpolated. phiMn = phi x As x fy x (d - a/2) / 10^6. If phiMn >= Mu: SAFE. If not: increase h, b, or add more steel." data-ar="&#1606;&#1593;&#1610;&#1583; &#1581;&#1587;&#1575;&#1576; 'a' &#1576;As &#1575;&#1604;&#1605;&#1593;&#1578;&#1605;&#1583;&#1577;. c = a/B1 &#1593;&#1605;&#1602; &#1575;&#1604;&#1605;&#1581;&#1608;&#1585; &#1575;&#1604;&#1605;&#1581;&#1575;&#1610;&#1583;. es = (d-c)/c x 0.003 &#1575;&#1606;&#1601;&#1593;&#1575;&#1604; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583;. &#1573;&#1584;&#1575; es >= 0.005: &#1605;&#1581;&#1603;&#1608;&#1605; &#1576;&#1575;&#1604;&#1588;&#1583;&#1548; phi=0.9 (&#1571;&#1601;&#1590;&#1604; &#1581;&#1575;&#1604;&#1577;). &#1573;&#1584;&#1575; es &lt;= 0.002: &#1605;&#1581;&#1603;&#1608;&#1605; &#1576;&#1575;&#1604;&#1590;&#1594;&#1591;&#1548; phi=0.65 (&#1610;&#1580;&#1576; &#1573;&#1593;&#1575;&#1583;&#1577; &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605;). &#1576;&#1610;&#1606;&#1607;&#1605;&#1575;: phi &#1605;&#1581;&#1587;&#1608;&#1576; &#1576;&#1575;&#1604;&#1578;&#1606;&#1575;&#1587;&#1576;. phiMn = phi x As x fy x (d-a/2) / 10^6. &#1573;&#1584;&#1575; phiMn >= Mu: &#1570;&#1605;&#1606;. &#1608;&#1573;&#1604;&#1575;: &#1586;&#1583; h &#1571;&#1608; b &#1571;&#1608; &#1575;&#1604;&#1581;&#1583;&#1610;&#1583;.">Recalculate 'a' with adopted As. es = (d-c)/c x 0.003. If es>=0.005: phi=0.9 (SAFE). phiMn >= Mu means SAFE DESIGN.</div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="sec">
+  <div class="sh">DESIGN SUMMARY
+    <span class="desc-h" data-ar=" / &#1605;&#1604;&#1582;&#1589; &#1575;&#1604;&#1578;&#1589;&#1605;&#1610;&#1605;"></span>
+  </div>
+  <div class="sb">
+    <div class="sg" id="sum"></div>
+    <div class="nb" data-en="Note: As,adopted is the REQUIRED area. Choose actual bars (e.g. 3T16=603 mm2, 4T14=616 mm2) that meet or exceed it. For T-beams, verify a &lt;= flange thickness." data-ar="&#1605;&#1604;&#1575;&#1581;&#1592;&#1577;: As &#1575;&#1604;&#1605;&#1593;&#1578;&#1605;&#1583;&#1577; &#1607;&#1610; &#1575;&#1604;&#1605;&#1587;&#1575;&#1581;&#1577; &#1575;&#1604;&#1605;&#1591;&#1604;&#1608;&#1576;&#1577;. &#1575;&#1582;&#1578;&#1585; &#1602;&#1590;&#1576;&#1575;&#1606; &#1601;&#1593;&#1604;&#1610;&#1577; (&#1605;&#1579;&#1604; 3T16=603 mm2) &#1578;&#1587;&#1575;&#1608;&#1610; &#1571;&#1608; &#1578;&#1578;&#1580;&#1575;&#1608;&#1586;&#1607;&#1575;. &#1604;&#1604;&#1603;&#1605;&#1585;&#1575;&#1578; T: &#1578;&#1581;&#1602;&#1602; &#1571;&#1606; a &lt;= &#1587;&#1605;&#1575;&#1603;&#1577; &#1575;&#1604;&#1588;&#1601;&#1577;.">Note: As,adopted is the REQUIRED area. Choose actual bars that meet or exceed it.</div>
+  </div>
+</div>
+
+</div><!-- /results -->
+
+<!-- Summary overlay -->
+<div id="overlay" onclick="if(event.target===this)closeSum()">
+  <div id="sumCard">
+    <span class="close" onclick="closeSum()">&times;</span>
+    <div id="sumContent"></div>
+  </div>
+</div>
+
+<script>
+var lang='en';
+var inputs=['fc','fy','h','bw','beff','cover','Mu'];
+
+function gV(id){var e=document.getElementById(id);var v=parseFloat(e.value);return isNaN(v)?0:v;}
+function sync(id,fb){
+  var s=document.getElementById('sl_'+id),b=document.getElementById(id);
+  if(fb){if(s)s.value=b.value||0;}else{b.value=s.value=='0'?'':s.value;}
+  markEmpty();
+  calc();
+}
+function markEmpty(){
+  inputs.forEach(function(id){
+    var el=document.getElementById(id);
+    var v=parseFloat(el.value);
+    el.classList.toggle('empty',isNaN(v)||v<=0);
+  });
+}
+function allFilled(){
+  for(var i=0;i<inputs.length;i++){
+    var v=parseFloat(document.getElementById(inputs[i]).value);
+    if(isNaN(v)||v<=0)return false;
+  }
+  return true;
+}
+function fm(v,d){d=d==null?2:d;if(Math.abs(v)>=1e7)return v.toExponential(2);return parseFloat(v.toFixed(d));}
+function sV(id,v){document.getElementById(id).textContent=v;}
+function sC(id,p){document.getElementById(id).classList.toggle('fail',!p);}
+
+function calc(){
+  var ready=allFilled();
+  document.getElementById('warn').classList.toggle('hidden',ready);
+  document.getElementById('results').classList.toggle('hidden',!ready);
+  if(!ready){window._data=null;return;}
+
+  var fc=gV('fc'),fy=gV('fy'),hh=gV('h'),bw=gV('bw'),be=gV('beff'),cv=gV('cover'),Mu=gV('Mu'),j=parseFloat(document.getElementById('j_est').value);
+
+  // Step 1
+  var b1=fc<=28?0.85:fc>=55?0.65:0.85-0.05*(fc-28)/7;
+  b1=Math.max(0.65,Math.min(0.85,b1));
+  var d=hh-cv;
+  if(d<=0){sV('v_d','ERROR');return;}
+  sV('v_b1',fm(b1));sV('v_d',fm(d,0));
+
+  // Step 2
+  var Asi=Mu*1e6/(0.9*fy*j*d);
+  var a=Asi*fy/(0.85*fc*be);
+  var As=Mu*1e6/(0.9*fy*(d-a/2));
+  sV('v_Asi',fm(Asi,0));sV('v_a',fm(a,1));sV('v_As',fm(As,0));
+
+  // Step 3
+  var Am1=1.4*bw*d/fy,Am2=0.25*Math.sqrt(fc)/fy*bw*d;
+  var Am=Math.max(Am1,Am2),Ad=Math.max(As,Am);
+  var gov=Ad===Am&&Am>As;
+  sV('v_Am1',fm(Am1,0));sV('v_Am2',fm(Am2,0));sV('v_Am',fm(Am,0));sV('v_Ad',fm(Ad,0));
+  sC('rAd',true);
+
+  // Step 4
+  var af=Ad*fy/(0.85*fc*be),c=af/b1;
+  var es=(d-c)/c*0.003;
+  var yl=es>=0.005;
+  var ph=es>=0.005?0.9:es<=0.002?0.65:0.65+0.25*(es-0.002)/0.003;
+  var pM=ph*Ad*fy*(d-af/2)/1e6;
+  var ok=pM>=Mu;
+  sV('v_af',fm(af,1));sV('v_c',fm(c,1));sV('v_es',fm(es,4));
+  sV('v_yl',yl?'Yielding (OK)':'NOT Yielding!');
+  sC('rY',yl);
+  sV('v_ph',fm(ph,2));sV('v_pM',fm(pM,1));
+  sV('v_fn',ok?'SAFE DESIGN':'UNSAFE!');
+  sC('rF',ok);
+
+  // Summary
+  var it=[
+    ['Section',bw+' x '+hh+' mm (d='+fm(d,0)+')'],
+    ["f'c / fy",fc+' / '+fy+' MPa'],
+    ['Mu',Mu+' kN.m'],['B1',fm(b1)],
+    ['As (calc)',fm(As,0)+' mm2'],
+    ['As,min',fm(Am,0)+' mm2'+(gov?' <-- GOVERNS':'')],
+    ['As (adopted)',fm(Ad,0)+' mm2'],
+    ['a / c',fm(af,1)+' / '+fm(c,1)+' mm'],
+    ['es',fm(es,4)],['phi',fm(ph,2)],
+    ['phiMn',fm(pM,1)+' kN.m'],
+    ['Result',ok?'SAFE':'UNSAFE']
+  ];
+  document.getElementById('sum').innerHTML=it.map(function(x){
+    var s='';
+    if(x[1].indexOf('UNSAFE')>=0||x[1].indexOf('NOT')>=0)s=' style="border-left-color:#c00"';
+    else if(x[1].indexOf('SAFE')>=0||x[1].indexOf('GOVERNS')>=0)s=' style="border-left-color:#1a6b1a"';
+    return '<div class="si"'+s+'><span class="lb">'+x[0]+'</span><span class="vl">'+x[1]+'</span></div>';
+  }).join('');
+
+  window._data={fc:fc,fy:fy,h:hh,bw:bw,be:be,cv:cv,Mu:Mu,j:j,b1:b1,d:d,Asi:Asi,a:a,As:As,Am1:Am1,Am2:Am2,Am:Am,Ad:Ad,gov:gov,af:af,c:c,es:es,yl:yl,ph:ph,pM:pM,ok:ok};
+}
+
+function clearAll(){
+  inputs.forEach(function(id){
+    document.getElementById(id).value='';
+    var sl=document.getElementById('sl_'+id);
+    if(sl)sl.value=0;
+  });
+  markEmpty();
+  calc();
+}
+
+function togLang(){
+  lang=lang==='en'?'ar':'en';
+  document.getElementById('btnL').textContent=lang==='en'?'\u{1F310} Arabic Descriptions':'\u{1F310} English Descriptions';
+  // Only change descriptions and explanations, NOT layout direction
+  document.querySelectorAll('[data-'+lang+']').forEach(function(el){
+    el.textContent=el.getAttribute('data-'+lang);
+    if(lang==='ar'){el.setAttribute('dir','rtl');el.style.textAlign='right';}
+    else{el.removeAttribute('dir');el.style.textAlign='';}
+  });
+  // Show/hide Arabic section name suffixes
+  document.querySelectorAll('.desc-h').forEach(function(el){
+    el.textContent=lang==='ar'?(el.getAttribute('data-ar')||''):'';
+  });
+}
+
+function showSum(){
+  var D=window._data;
+  if(!D){alert(lang==='ar'?'\u064A\u0631\u062C\u0649 \u0645\u0644\u0621 \u062C\u0645\u064A\u0639 \u0627\u0644\u0645\u062F\u062E\u0644\u0627\u062A \u0623\u0648\u0644\u0627':'Please fill all inputs first');return;}
+  var h='<h2>Beam Flexure Design Summary</h2>';
+  h+='<table><tr><th>Parameter</th><th>Value</th></tr>';
+  var rows=[
+    ["f'c",D.fc+' MPa'],['fy',D.fy+' MPa'],
+    ['Section',D.bw+' x '+D.h+' mm'],['d',fm(D.d,0)+' mm'],
+    ['Mu',D.Mu+' kN.m'],['B1',fm(D.b1)],
+    ['As (calc)',fm(D.As,0)+' mm2'],
+    ['As,min',fm(D.Am,0)+' mm2'],
+    ['As (adopted)','<b>'+fm(D.Ad,0)+' mm2</b>'+(D.gov?' (min governs)':'')],
+    ['a / c',fm(D.af,1)+' / '+fm(D.c,1)+' mm'],
+    ['es',fm(D.es,4)],['phi',fm(D.ph,2)],
+    ['phiMn','<b>'+fm(D.pM,1)+' kN.m</b>']
+  ];
+  rows.forEach(function(r){h+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';});
+  h+='</table>';
+  h+='<div class="rb '+(D.ok?'rs':'rf')+'">'+(D.ok?'\u2713 SAFE \u2014 phiMn ('+fm(D.pM,1)+') >= Mu ('+D.Mu+')':'\u2717 UNSAFE \u2014 Increase section or steel')+'</div>';
+  h+='<p style="text-align:center;color:#888;font-size:.8em;margin-top:8px">ACI 318 \u2022 SI Units</p>';
+  document.getElementById('sumContent').innerHTML=h;
+  document.getElementById('overlay').style.display='block';
+}
+function closeSum(){document.getElementById('overlay').style.display='none';}
+
+window.onload=function(){markEmpty();calc();if(window.MathJax)MathJax.typeset();};
+</script>
+</body>
+</html>

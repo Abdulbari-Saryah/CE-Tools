@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>RC Flexure Design — ACI 318</title>
+<title>RC Column Design — ACI 318</title>
 <script>
 window.MathJax={tex:{inlineMath:[['\\(','\\)']]},startup:{typeset:true}};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 <style>
-:root{--bl:#2F5496;--lb:#D9E2F3;--yl:#FFF2CC;--gn:#C6EFCE;--rd:#FFC7CE;--gy:#F2F2F2}
+:root{--bl:#1B4332;--lb:#D8F3DC;--yl:#FFF2CC;--gn:#C6EFCE;--rd:#FFC7CE;--gy:#F2F2F2;--dk:#081C15}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Calibri,Arial,sans-serif;background:var(--gy);color:#222;padding:12px;max-width:1040px;margin:0 auto;font-size:15px}
-h1{background:var(--bl);color:#fff;padding:16px 18px;border-radius:10px 10px 0 0;font-size:1.25em;text-align:center}
-.sub{background:var(--bl);color:rgba(255,255,255,.8);text-align:center;padding:0 18px 12px;border-radius:0 0 10px 10px;font-size:.85em;margin-bottom:16px}
+body{font-family:'Segoe UI',Calibri,Arial,sans-serif;background:var(--gy);color:#222;padding:12px;max-width:1100px;margin:0 auto;font-size:15px}
+h1{background:var(--dk);color:#fff;padding:16px 18px;border-radius:10px 10px 0 0;font-size:1.25em;text-align:center}
+.sub{background:var(--dk);color:rgba(255,255,255,.8);text-align:center;padding:0 18px 12px;border-radius:0 0 10px 10px;font-size:.85em;margin-bottom:16px}
 .bar{display:flex;justify-content:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .bar button{padding:8px 14px;border:2px solid var(--bl);border-radius:8px;background:#fff;color:var(--bl);font-weight:600;font-size:.88em;cursor:pointer;transition:.2s;min-height:44px}
 .bar button:hover{background:var(--bl);color:#fff}
@@ -31,7 +31,7 @@ input[type=number].empty{border-color:#dc3545;background:#fff0f0}
 .unit{color:#888;font-size:.85em;min-width:40px}
 select{padding:8px;border:2px solid #ddd;border-radius:6px;font-size:.95em;background:var(--yl);font-weight:600;cursor:pointer;min-height:44px;flex:1}
 .ds{font-size:.8em;color:#888;width:100%;margin-top:-2px;padding-bottom:2px}
-.ex{font-size:.84em;color:#333;width:100%;padding:10px 12px;background:#f0f4ff;border-radius:6px;border-left:3px solid var(--bl);margin:4px 0 8px;line-height:1.7}
+.ex{font-size:.84em;color:#333;width:100%;padding:10px 12px;background:#f0f7f0;border-radius:6px;border-left:3px solid var(--bl);margin:4px 0 8px;line-height:1.7}
 table.c{width:100%;border-collapse:collapse;font-size:.85em}
 table.c th{background:#D6DCE4;padding:7px 8px;text-align:center;font-weight:600;border:1px solid #ccc;font-size:.82em}
 table.c td{padding:7px 8px;border:1px solid #ddd;vertical-align:middle}
@@ -47,12 +47,13 @@ tr.ck.fail td{background:var(--rd)}
 .si .lb{font-weight:600;color:#555}.si .vl{font-weight:700;color:var(--bl)}
 .nb{margin-top:12px;padding:10px;background:var(--yl);border-radius:8px;border-left:4px solid #e6a800;font-size:.85em;line-height:1.6}
 .hidden{display:none}
+canvas{display:block;margin:10px auto;border:1px solid #ddd;border-radius:8px;max-width:100%;height:auto}
 #overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999;overflow:auto}
 #sumCard{background:#fff;max-width:700px;margin:20px auto;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);padding:20px 22px;position:relative}
 #sumCard h2{text-align:center;color:var(--bl);margin-bottom:10px;font-size:1.1em}
 #sumCard .close{position:absolute;top:8px;right:12px;font-size:1.3em;cursor:pointer;color:#888}
 #sumCard table{width:100%;border-collapse:collapse;font-size:.85em;margin-bottom:10px}
-#sumCard table th{background:var(--bl);color:#fff;padding:5px 8px;text-align:center;border:1px solid #2a4a80}
+#sumCard table th{background:var(--bl);color:#fff;padding:5px 8px;text-align:center;border:1px solid #0a2e1a}
 #sumCard table td{padding:5px 8px;border:1px solid #ccc;text-align:center}
 #sumCard .rb{text-align:center;padding:10px;border-radius:8px;font-size:1em;font-weight:700;margin:8px 0}
 #sumCard .rs{background:var(--gn);color:#006100}
@@ -71,13 +72,14 @@ tr.ck.fail td{background:var(--rd)}
   table.c th,table.c td{padding:5px 4px}
   .bar button{padding:8px 10px;font-size:.82em;flex:1;min-width:0}
   .ex{font-size:.8em;padding:8px 10px}
+  canvas{max-width:100%}
 }
 </style>
 </head>
 <body>
 
-<h1 data-en="RC Beam Flexure Design — ACI 318" data-ar="تصميم انحناء الكمرة الخرسانية — ACI 318" data-zh="RC梁弯曲设计 — ACI 318">RC Beam Flexure Design — ACI 318</h1>
-<div class="sub" data-en="SI Units (kN, mm, MPa) | Interactive Calculator" data-ar="وحدات SI (كيلو نيوتن، مم، ميجاباسكال) | حاسبة تفاعلية" data-zh="国际单位制 (kN, mm, MPa) | 交互式计算器">SI Units (kN, mm, MPa) | Interactive Calculator</div>
+<h1 data-en="RC Column Design Check — ACI 318" data-ar="فحص تصميم العمود الخرساني — ACI 318" data-zh="RC柱设计验算 — ACI 318">RC Column Design Check — ACI 318</h1>
+<div class="sub" data-en="SI Units (kN, mm, MPa) | Interaction Diagram" data-ar="وحدات SI (كيلو نيوتن، مم، ميجاباسكال) | مخطط التفاعل" data-zh="国际单位制 (kN, mm, MPa) | 相互作用图">SI Units (kN, mm, MPa) | Interaction Diagram</div>
 
 <div class="bar">
   <button class="lang-btn active" data-lang="en" onclick="setLang('en')">English</button>
@@ -92,7 +94,7 @@ tr.ck.fail td{background:var(--rd)}
   <span id="warnTxt" data-en="Please fill in ALL input fields before results can be calculated." data-ar="يرجى ملء جميع المدخلات قبل حساب النتائج." data-zh="请填写所有输入字段，然后才能计算结果。">Please fill in ALL input fields before results can be calculated.</span>
 </div>
 
-<!-- SECTION A -->
+<!-- SECTION A: Materials -->
 <div class="sec">
   <div class="sh" data-en="SECTION A — Material Properties" data-ar="القسم أ — خصائص المواد" data-zh="第A节 — 材料属性">SECTION A — Material Properties</div>
   <div class="sb">
@@ -102,8 +104,8 @@ tr.ck.fail td{background:var(--rd)}
       <input type="number" id="fc" min="0" max="80" step="1" value="" placeholder="0" oninput="sync('fc',1)">
       <span class="unit">MPa</span>
     </div>
-    <div class="ds" data-en="Concrete compressive strength (cylinder, 28 days)" data-ar="مقاومة ضغط الخرسانة (اسطوانة، 28 يوم)" data-zh="混凝土抗压强度（圆柱体，28天）">Concrete compressive strength (cylinder, 28 days)</div>
-    <div class="ex" data-en="f'c is measured from a standard cylinder (150×300 mm) crushed at 28 days. It is the most important concrete property in flexural design. Common values: 21–25 MPa (normal strength), 28–40 MPa (high strength). Higher f'c reduces the compression block depth because the concrete can resist more compression per unit area. Specifically, the depth of the equivalent rectangular stress block is: \(a = \frac{A_s f_y}{0.85 f'_c b}\). So doubling f'c roughly halves 'a'. f'c also controls: (1) \(\beta_1\): the ratio \(a = \beta_1 c\), where \(\beta_1 = 0.85\) for \(f'_c \le 28\) MPa, decreasing by 0.05 for each 7 MPa above 28, minimum 0.65. (2) Minimum steel: \(A_{s,min} = \frac{0.25\sqrt{f'_c}}{f_y} b_w d\). (3) Concrete modulus: \(E_c = 4700\sqrt{f'_c}\) MPa." data-ar="f'c تُقاس من اسطوانة قياسية (150×300 مم) تُسحق عند 28 يوم. هي أهم خاصية للخرسانة في تصميم الانحناء. القيم الشائعة: 21–25 (عادية)، 28–40 (عالية). f'c أعلى تعني عمق كتلة ضغط أقل لأن الخرسانة تقاوم ضغطاً أكبر لكل وحدة مساحة. معادلة عمق الكتلة: \(a = \frac{A_s f_y}{0.85 f'_c b}\). كذلك تؤثر على: \(\beta_1\) والحد الأدنى للحديد \(A_{s,min} = \frac{0.25\sqrt{f'_c}}{f_y} b_w d\) ومعامل المرونة \(E_c = 4700\sqrt{f'_c}\)." data-zh="f'c 通过标准圆柱体 (150×300mm) 在28天破碎测得。这是弯曲设计中最重要的混凝土参数。常见值: 21–25 MPa (普通), 28–40 MPa (高强)。f'c越高，压力块深度越小，因为混凝土单位面积承压能力更强。等效矩形应力块深度: \(a = \frac{A_s f_y}{0.85 f'_c b}\)。f'c还影响: \(\beta_1\)系数、最小配筋率 \(A_{s,min} = \frac{0.25\sqrt{f'_c}}{f_y} b_w d\) 和混凝土弹性模量 \(E_c = 4700\sqrt{f'_c}\)。">f'c is measured from a standard cylinder (150×300 mm) crushed at 28 days. It is the most important concrete property. Higher f'c reduces the compression block depth: \(a = \frac{A_s f_y}{0.85 f'_c b}\). Also controls \(\beta_1\), \(A_{s,min}\), and \(E_c = 4700\sqrt{f'_c}\).</div>
+    <div class="ds" data-en="Concrete compressive strength" data-ar="مقاومة ضغط الخرسانة" data-zh="混凝土抗压强度">Concrete compressive strength</div>
+    <div class="ex" data-en="f'c is the 28-day cylinder compressive strength. For columns, f'c directly affects: (1) The concrete contribution to pure axial capacity: \(P_{0} = 0.85 f'_c (A_g - A_{st}) + f_y A_{st}\). The 0.85 factor accounts for the difference between cylinder and in-situ concrete strength. (2) The stress block depth \(a = \beta_1 c\). (3) \(\beta_1\): for \(f'_c \le 28\) MPa, \(\beta_1 = 0.85\); decreases by 0.05 per 7 MPa above 28, min 0.65. Common values: 25-35 MPa for normal columns, 40-70 MPa for high-rise." data-ar="f'c مقاومة ضغط الاسطوانة عند 28 يوم. للأعمدة تؤثر على: (1) السعة المحورية الصافية: \(P_{0} = 0.85 f'_c (A_g - A_{st}) + f_y A_{st}\). معامل 0.85 يعوض الفرق بين الاسطوانة والخرسانة الفعلية. (2) عمق كتلة الإجهاد \(a = \beta_1 c\). (3) \(\beta_1\): \(f'_c \le 28\) → 0.85، ينقص 0.05 لكل 7 ميجا فوق 28، حد أدنى 0.65." data-zh="f'c是28天圆柱体抗压强度。对柱子影响: (1)纯轴向承载力: \(P_{0} = 0.85 f'_c(A_g - A_{st}) + f_y A_{st}\)。0.85系数考虑圆柱体与实际混凝土的差异。(2)应力块深度 \(a = \beta_1 c\)。(3) \(\beta_1\): \(f'_c \le 28\) MPa时为0.85，每超7MPa减0.05，最小0.65。">f'c is the 28-day cylinder compressive strength. For columns: \(P_0 = 0.85f'_c(A_g-A_{st})+f_yA_{st}\), stress block \(a = \beta_1 c\), and \(\beta_1\) factor.</div>
 
     <div class="ir">
       <span class="il">fy</span>
@@ -111,81 +113,90 @@ tr.ck.fail td{background:var(--rd)}
       <input type="number" id="fy" min="0" max="700" step="10" value="" placeholder="0" oninput="sync('fy',1)">
       <span class="unit">MPa</span>
     </div>
-    <div class="ds" data-en="Steel yield strength (420 = Grade 60)" data-ar="مقاومة خضوع الحديد (420 = Grade 60)" data-zh="钢筋屈服强度 (420 = 60级)">Steel yield strength (420 = Grade 60)</div>
-    <div class="ex" data-en="fy is the stress at which steel begins to deform permanently (yield point). Grade 60 (fy = 420 MPa) is the most common worldwide. The entire flexural design is based on the assumption that tension steel YIELDS before concrete crushes — this is called tension-controlled behavior. The required steel area depends directly on fy: \(A_s = \frac{M_u}{\phi f_y (d - a/2)}\). Higher fy means each bar carries more force, so fewer bars (less As) are needed. However, if fy is too high, it may push the neutral axis deeper, potentially making the section compression-controlled (\(\varepsilon_s < 0.005\)), which reduces \(\phi\) from 0.9 to as low as 0.65. The yield strain is \(\varepsilon_y = f_y / E_s = 420/200000 = 0.0021\)." data-ar="fy هو الإجهاد الذي يبدأ عنده الحديد بالتشوه الدائم. Grade 60 (fy=420) هو الأكثر شيوعاً. كل تصميم الانحناء مبني على فرضية أن حديد الشد يخضع قبل انسحاق الخرسانة. مساحة الحديد: \(A_s = \frac{M_u}{\phi f_y (d - a/2)}\). fy أعلى = حديد أقل. لكن إذا كان عالياً جداً قد يجعل المقطع محكوم بالضغط (\(\varepsilon_s < 0.005\)) فينخفض \(\phi\) من 0.9 إلى 0.65." data-zh="fy是钢筋开始永久变形的应力（屈服点）。60级 (fy=420 MPa) 全球最常用。弯曲设计假设受拉钢筋在混凝土压碎前屈服——称为受拉控制。所需钢筋面积: \(A_s = \frac{M_u}{\phi f_y (d - a/2)}\)。fy越高，所需As越少。但若fy过高可能导致受压控制 (\(\varepsilon_s < 0.005\))，\(\phi\)从0.9降至0.65。">fy is the yield stress. Grade 60 = 420 MPa. Design: \(A_s = \frac{M_u}{\phi f_y (d - a/2)}\). Higher fy = less steel, but too high may cause compression-controlled behavior.</div>
+    <div class="ds" data-en="Steel yield strength" data-ar="مقاومة خضوع الحديد" data-zh="钢筋屈服强度">Steel yield strength</div>
+    <div class="ex" data-en="fy is the yield strength of longitudinal bars. Grade 60 (fy=420 MPa) is standard. In columns, steel works in BOTH tension and compression simultaneously depending on position relative to the neutral axis. Steel contribution to axial capacity: \(f_y A_{st}\). Steel modulus: \(E_s = 200{,}000\) MPa. ACI 318-19 limits fy to 550 MPa for longitudinal column bars." data-ar="fy مقاومة خضوع القضبان الطولية. Grade 60 (fy=420) هو المعيار. في الأعمدة، الحديد يعمل بالشد والضغط معاً حسب موقعه من المحور المحايد. مساهمة الحديد: \(f_y A_{st}\). \(E_s = 200{,}000\) MPa. ACI يحد fy بـ 550 MPa للأعمدة." data-zh="fy是纵向钢筋屈服强度。60级(fy=420MPa)为标准。柱中钢筋同时承受拉力和压力（取决于其相对中性轴的位置）。钢筋对轴向承载力的贡献: \(f_y A_{st}\)。\(E_s = 200{,}000\) MPa。ACI限制柱纵筋fy不超过550MPa。">fy for longitudinal bars. Steel works in tension AND compression in columns. \(E_s = 200{,}000\) MPa.</div>
   </div>
 </div>
 
-<!-- SECTION B -->
+<!-- SECTION B: Column Geometry -->
 <div class="sec">
-  <div class="sh" data-en="SECTION B — Section Geometry" data-ar="القسم ب — هندسة المقطع" data-zh="第B节 — 截面几何">SECTION B — Section Geometry</div>
+  <div class="sh" data-en="SECTION B — Column Geometry" data-ar="القسم ب — هندسة العمود" data-zh="第B节 — 柱几何">SECTION B — Column Geometry</div>
   <div class="sb">
     <div class="ir">
-      <span class="il">h</span>
-      <input type="range" id="sl_h" min="0" max="2000" step="10" value="0" oninput="sync('h')">
-      <input type="number" id="h" min="0" max="2000" step="10" value="" placeholder="0" oninput="sync('h',1)">
+      <span class="il">h (depth)</span>
+      <input type="range" id="sl_h" min="0" max="1500" step="25" value="0" oninput="sync('h')">
+      <input type="number" id="h" min="0" max="1500" step="25" value="" placeholder="0" oninput="sync('h',1)">
       <span class="unit">mm</span>
     </div>
-    <div class="ds" data-en="Total section depth" data-ar="العمق الكلي للمقطع" data-zh="截面总高度">Total section depth</div>
-    <div class="ex" data-en="h is the total depth from top fiber to bottom fiber. The effective depth \(d = h - \text{cover}\) is the key parameter — it determines both the lever arm and the steel strain. The moment capacity increases roughly with \(d^2\) because: \(M_n = A_s f_y (d - a/2)\). ACI Table 9.3.1.1 gives minimum h: simply supported beam \(h_{min} = L/16\); continuous one end \(L/18.5\); both ends \(L/21\); cantilever \(L/8\)." data-ar="h العمق الكلي من الأعلى للأسفل. العمق الفعال \(d = h - \text{cover}\) هو المفتاح. سعة العزم تزداد تقريباً بمربع d: \(M_n = A_s f_y (d - a/2)\). الحدود الدنيا حسب ACI 9.3.1.1: بسيط \(L/16\)، مستمر طرف \(L/18.5\)، طرفين \(L/21\)، ناتئ \(L/8\)." data-zh="h是从顶部纤维到底部纤维的总深度。有效深度 \(d = h - \text{cover}\) 是关键参数。弯矩承载力约与\(d^2\)成正比: \(M_n = A_s f_y (d - a/2)\)。ACI最小高度: 简支 \(L/16\)、一端连续 \(L/18.5\)、两端连续 \(L/21\)、悬臂 \(L/8\)。">h = total depth. Effective depth \(d = h - cover\). Capacity \(M_n = A_s f_y(d-a/2)\). ACI min: simply supported \(L/16\), continuous \(L/21\).</div>
+    <div class="ds" data-en="Column depth (in bending direction)" data-ar="عمق العمود (باتجاه الانحناء)" data-zh="柱深度（弯曲方向）">Column depth (in bending direction)</div>
+    <div class="ex" data-en="h is the overall dimension in the direction of bending. Effective depth: \(d = h - d'\). h affects: (1) Gross area \(A_g = b \times h\). (2) Moment capacity — lever arm increases with h. (3) Slenderness ratio \(kL_u/r\) where \(r = 0.3h\) for rectangular sections. ACI minimum: 200 mm practical." data-ar="h البعد الكلي للعمود باتجاه الانحناء. العمق الفعال: \(d = h - d'\). يؤثر على: (1) \(A_g = b \times h\). (2) سعة العزم — ذراع العزم يزيد مع h. (3) النحافة \(kL_u/r\) حيث \(r = 0.3h\)." data-zh="h是柱在分析弯曲方向的总尺寸。有效深度: \(d = h - d'\)。影响: (1) \(A_g = b \times h\)。(2)弯矩承载力——力臂随h增大。(3)长细比 \(kL_u/r\)，其中 \(r = 0.3h\)。">h = depth in bending direction. \(A_g = b \times h\). Effective depth \(d = h - d'\).</div>
 
     <div class="ir">
-      <span class="il">b_web</span>
-      <input type="range" id="sl_bw" min="0" max="3000" step="25" value="0" oninput="sync('bw')">
-      <input type="number" id="bw" min="0" max="3000" step="25" value="" placeholder="0" oninput="sync('bw',1)">
+      <span class="il">b (width)</span>
+      <input type="range" id="sl_b" min="0" max="1500" step="25" value="0" oninput="sync('b')">
+      <input type="number" id="b" min="0" max="1500" step="25" value="" placeholder="0" oninput="sync('b',1)">
       <span class="unit">mm</span>
     </div>
-    <div class="ds" data-en="Web width (slabs: 1000 mm strip)" data-ar="عرض الجسم (بلاطات: 1000 مم)" data-zh="腹板宽度（板: 1000mm带）">Web width (slabs: 1000 mm strip)</div>
-    <div class="ex" data-en="b_web is the width of the beam web. For one-way slabs, b_web = b_eff = 1000 mm (1-meter strip). For T-beams, b_web is only the stem width. Used exclusively in minimum steel formulas (ACI 9.6.1): \(A_{s,min} = \max\left(\frac{0.25\sqrt{f'_c}}{f_y} b_w d,\; \frac{1.4 b_w d}{f_y}\right)\)." data-ar="b_web عرض جسم الكمرة. للبلاطات: b_web = b_eff = 1000 مم (شريحة 1 متر). للكمرات T: عرض الساق فقط. يستخدم حصرياً في معادلات الحد الأدنى: \(A_{s,min} = \max\left(\frac{0.25\sqrt{f'_c}}{f_y} b_w d,\; \frac{1.4 b_w d}{f_y}\right)\)." data-zh="b_web是梁腹宽度。单向板: b_web = b_eff = 1000mm。T形梁仅为腹板宽度。仅用于最小配筋公式: \(A_{s,min} = \max\left(\frac{0.25\sqrt{f'_c}}{f_y} b_w d,\; \frac{1.4 b_w d}{f_y}\right)\)。">b_web = web width. For slabs: 1000mm. Used in min steel: \(A_{s,min} = \max\left(\frac{0.25\sqrt{f'_c}}{f_y}b_w d,\;\frac{1.4 b_w d}{f_y}\right)\).</div>
+    <div class="ds" data-en="Column width (perpendicular to bending)" data-ar="عرض العمود (عمودي على الانحناء)" data-zh="柱宽度（垂直于弯曲方向）">Column width (perpendicular to bending)</div>
+    <div class="ex" data-en="b is the dimension perpendicular to bending. The compression block force: \(C_c = 0.85 f'_c \cdot a \cdot b\). For square columns (b=h), strength is equal in both directions. For rectangular, check both axes separately." data-ar="b البعد العمودي على اتجاه الانحناء. قوة كتلة الضغط: \(C_c = 0.85 f'_c \cdot a \cdot b\). للعمود المربع (b=h) القوة متساوية بالاتجاهين. للمستطيل: افحص المحورين." data-zh="b是垂直于弯曲方向的尺寸。压力块力: \(C_c = 0.85 f'_c \cdot a \cdot b\)。正方形柱(b=h)两方向承载力相同。矩形柱须分别验算两轴。">b = width. Compression block: \(C_c = 0.85 f'_c \cdot a \cdot b\).</div>
 
     <div class="ir">
-      <span class="il">b_eff</span>
-      <input type="range" id="sl_beff" min="0" max="3000" step="25" value="0" oninput="sync('beff')">
-      <input type="number" id="beff" min="0" max="3000" step="25" value="" placeholder="0" oninput="sync('beff',1)">
+      <span class="il">Cover (d')</span>
+      <input type="range" id="sl_dp" min="0" max="100" step="5" value="0" oninput="sync('dp')">
+      <input type="number" id="dp" min="0" max="100" step="5" value="" placeholder="0" oninput="sync('dp',1)">
       <span class="unit">mm</span>
     </div>
-    <div class="ds" data-en="Effective flange width (= b_web for rect.)" data-ar="العرض الفعال للشفة (= b_web للمستطيلة)" data-zh="有效翼缘宽度（矩形截面 = b_web）">Effective flange width (= b_web for rect.)</div>
-    <div class="ex" data-en="b_eff is the effective compression flange width. For rectangular beams/slabs, b_eff = b_web. For T-beams, ACI 6.3.2.1 limits: \(b_{eff} \le \min(L/4,\; b_w + 16h_f,\; \text{center-to-center spacing})\). b_eff appears in: \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\). A larger b_eff means a shallower stress block 'a', increasing the lever arm \((d - a/2)\) and moment capacity." data-ar="b_eff العرض الفعال لشفة الضغط. للكمرات المستطيلة/البلاطات: b_eff = b_web. للكمرات T: حدود ACI: \(b_{eff} \le \min(L/4, b_w + 16h_f, \text{spacing})\). يظهر في: \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\). b_eff أكبر = a أصغر = ذراع عزم أكبر." data-zh="b_eff是有效受压翼缘宽度。矩形梁/板: b_eff = b_web。T形梁ACI限制: \(b_{eff} \le \min(L/4, b_w+16h_f, \text{spacing})\)。用于: \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\)。b_eff越大，a越小，力臂越大。">b_eff = effective compression width. For T-beams: \(b_{eff} \le \min(L/4, b_w+16h_f)\). Used in \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\).</div>
-
-    <div class="ir">
-      <span class="il">Cover</span>
-      <input type="range" id="sl_cover" min="0" max="100" step="5" value="0" oninput="sync('cover')">
-      <input type="number" id="cover" min="0" max="100" step="5" value="" placeholder="0" oninput="sync('cover',1)">
-      <span class="unit">mm</span>
-    </div>
-    <div class="ds" data-en="Cover to centroid of tension steel" data-ar="الغطاء حتى مركز حديد الشد" data-zh="受拉钢筋形心保护层">Cover to centroid of tension steel</div>
-    <div class="ex" data-en="Cover is the distance from the extreme tension face to the centroid of the tension reinforcement. It includes clear cover + tie diameter + half bar diameter. Typical values: slabs 30–40 mm, beams 50–65 mm, foundations 75–90 mm. The effective depth is \(d = h - \text{cover}\). Larger cover means smaller d, which means more steel is needed." data-ar="الغطاء هو المسافة من سطح الشد إلى مركز حديد الشد. يشمل الغطاء الصافي + الكانة + نصف القضيب. قيم شائعة: بلاطات 30–40، كمرات 50–65، أساسات 75–90 مم. \(d = h - \text{cover}\). غطاء أكبر = d أصغر = حديد أكثر." data-zh="保护层是从受拉面到受拉钢筋形心的距离。包括净保护层+箍筋+半个钢筋直径。典型值: 板30–40、梁50–65、基础75–90mm。\(d = h - \text{cover}\)。保护层越大，d越小，所需钢筋越多。">Cover to bar centroid. \(d = h - cover\). Includes clear cover + tie + half bar. Typical: slabs 30–40, beams 50–65 mm.</div>
+    <div class="ds" data-en="Distance to bar centroid from nearest face" data-ar="المسافة لمركز الحديد من أقرب وجه" data-zh="钢筋形心到最近面的距离">Distance to bar centroid from nearest face</div>
+    <div class="ex" data-en="d' is measured from the nearest concrete face to the centroid of that layer's bars. Typical: 40-65 mm. Distance between extreme layers: \(h - 2d'\). Larger d' reduces lever arm and moment capacity." data-ar="d' المسافة من وجه الخرسانة لمركز القضبان. قيم شائعة: 40-65 مم. المسافة بين طبقات الحديد القصوى: \(h - 2d'\). d' أكبر = سعة عزم أقل." data-zh="d'是从最近混凝土面到钢筋形心的距离。典型值: 40-65mm。极端钢筋层间距: \(h - 2d'\)。d'越大，弯矩承载力越低。">d' = cover to bar centroid. Steel layer distance: \(h - 2d'\). Typical: 40-65 mm.</div>
   </div>
 </div>
 
-<!-- SECTION C -->
+<!-- SECTION C: Reinforcement -->
 <div class="sec">
-  <div class="sh" data-en="SECTION C — Factored Load" data-ar="القسم ج — الحمل المضروب" data-zh="第C节 — 设计荷载">SECTION C — Factored Load</div>
+  <div class="sh" data-en="SECTION C — Reinforcement" data-ar="القسم ج — التسليح" data-zh="第C节 — 配筋">SECTION C — Reinforcement</div>
   <div class="sb">
+    <div class="ir">
+      <span class="il">Ast (total)</span>
+      <input type="range" id="sl_Ast" min="0" max="20000" step="100" value="0" oninput="sync('Ast')">
+      <input type="number" id="Ast" min="0" max="20000" step="50" value="" placeholder="0" oninput="sync('Ast',1)">
+      <span class="unit">mm2</span>
+    </div>
+    <div class="ds" data-en="Total steel area (all bars)" data-ar="المساحة الكلية للحديد" data-zh="钢筋总面积">Total steel area (all bars)</div>
+    <div class="ex" data-en="Ast is the total area of ALL longitudinal bars. ACI 10.6.1 limits: \(0.01 A_g \le A_{st} \le 0.08 A_g\) (1% to 8%). Ratio \(\rho = A_{st}/A_g\). Practical range: 1%-4%. Above 4% causes congestion at splices. Higher \(\rho\) expands the interaction diagram outward." data-ar="Ast المساحة الكلية لجميع القضبان الطولية. حدود ACI 10.6.1: \(0.01 A_g \le A_{st} \le 0.08 A_g\). نسبة التسليح \(\rho = A_{st}/A_g\). المدى العملي: 1%-4%. فوق 4% يسبب ازدحام عند الوصلات." data-zh="Ast是截面内所有纵向钢筋的总面积。ACI 10.6.1限制: \(0.01A_g \le A_{st} \le 0.08A_g\)（1%至8%）。配筋率 \(\rho = A_{st}/A_g\)。实用范围: 1%-4%。超过4%在连接处造成拥挤。">Ast = total steel. ACI: \(0.01A_g \le A_{st} \le 0.08A_g\). Ratio \(\rho = A_{st}/A_g\).</div>
+
+    <div class="ir">
+      <span class="il" data-en="Layout" data-ar="التوزيع" data-zh="布置">Layout</span>
+      <select id="barLayout" onchange="calc()">
+        <option value="2face" selected>2-face (top + bottom only)</option>
+        <option value="4face">4-face (distributed on all sides)</option>
+      </select>
+    </div>
+    <div class="ds" data-en="Bar distribution pattern" data-ar="نمط توزيع القضبان" data-zh="钢筋分布方式">Bar distribution pattern</div>
+    <div class="ex" data-en="2-face: All steel in 2 layers — half at top (d') and half at bottom (h-d'). Best for uniaxial bending. 4-face: Steel distributed on all 4 sides. Standard for biaxial bending. 4-face interaction diagram is smaller than 2-face for the same Ast because some bars are near the neutral axis (low lever arm)." data-ar="وجهين: الحديد في طبقتين — نصف أعلى ونصف أسفل. الأفضل للانحناء أحادي المحور. 4 وجوه: حديد موزع على الأوجه الأربعة. معياري للأعمدة ذات الانحناء بالاتجاهين. مخطط التفاعل لـ4 وجوه أصغر من وجهين لنفس Ast." data-zh="2面: 所有钢筋在2层——顶部一半底部一半。适合单轴弯曲。4面: 钢筋均匀分布在4面。适用于双向弯曲。4面分布的相互作用图小于2面（部分钢筋靠近中性轴）。">2-face: best for uniaxial. 4-face: for biaxial. 4-face diagram is smaller (bars near neutral axis).</div>
+  </div>
+</div>
+
+<!-- SECTION D: Applied Loads -->
+<div class="sec">
+  <div class="sh" data-en="SECTION D — Applied Loads" data-ar="القسم د — الأحمال المطبقة" data-zh="第D节 — 设计荷载">SECTION D — Applied Loads</div>
+  <div class="sb">
+    <div class="ir">
+      <span class="il">Pu</span>
+      <input type="range" id="sl_Pu" min="0" max="10000" step="10" value="0" oninput="sync('Pu')">
+      <input type="number" id="Pu" min="0" max="50000" step="1" value="" placeholder="0" oninput="sync('Pu',1)">
+      <span class="unit">kN</span>
+    </div>
+    <div class="ds" data-en="Factored axial load" data-ar="الحمل المحوري المضروب" data-zh="设计轴力">Factored axial load</div>
+    <div class="ex" data-en="Pu is the factored axial compression: typically \(P_u = 1.2P_D + 1.6P_L\). The (Pu, Mu) point must be INSIDE the interaction diagram for safety. Pure compression capacity: \(\phi P_{n,max} = \phi \cdot 0.80 [0.85 f'_c(A_g - A_{st}) + f_y A_{st}]\) for tied columns (\(\phi = 0.65\))." data-ar="Pu الحمل المحوري المضروب: \(P_u = 1.2P_D + 1.6P_L\). النقطة (Pu, Mu) يجب أن تكون داخل مخطط التفاعل. السعة المحورية الصافية: \(\phi P_{n,max} = \phi \cdot 0.80[0.85f'_c(A_g-A_{st})+f_yA_{st}]\) (\(\phi=0.65\))." data-zh="Pu是组合后的设计轴力: \(P_u = 1.2P_D + 1.6P_L\)。(Pu,Mu)点必须在相互作用图内部。纯压承载力: \(\phi P_{n,max} = \phi \cdot 0.80[0.85f'_c(A_g-A_{st})+f_yA_{st}]\)（\(\phi=0.65\)）。">Pu factored axial load. Must plot inside interaction diagram. Max: \(\phi \cdot 0.80 P_0\).</div>
+
     <div class="ir">
       <span class="il">Mu</span>
-      <input type="range" id="sl_Mu" min="0" max="500" step="1" value="0" oninput="sync('Mu')">
-      <input type="number" id="Mu" min="0" max="5000" step="0.1" value="" placeholder="0" oninput="sync('Mu',1)">
+      <input type="range" id="sl_Mu" min="0" max="2000" step="5" value="0" oninput="sync('Mu')">
+      <input type="number" id="Mu" min="0" max="10000" step="1" value="" placeholder="0" oninput="sync('Mu',1)">
       <span class="unit">kN.m</span>
     </div>
-    <div class="ds" data-en="Ultimate factored moment" data-ar="العزم النهائي المضروب" data-zh="极限弯矩（已乘荷载系数）">Ultimate factored moment</div>
-    <div class="ex" data-en="Mu is the maximum factored bending moment from structural analysis. Common load combination: \(M_u = 1.2 M_D + 1.6 M_L\). Mu is in kN.m; in formulas we multiply by \(10^6\) to convert to N.mm: \(A_s = \frac{M_u \times 10^6}{\phi f_y (d - a/2)}\). The design requirement is: \(\phi M_n \ge M_u\)." data-ar="Mu أقصى عزم انحناء مضروب من التحليل. توليفة الأحمال الشائعة: \(M_u = 1.2 M_D + 1.6 M_L\). نضرب في \(10^6\) للتحويل من kN.m إلى N.mm: \(A_s = \frac{M_u \times 10^6}{\phi f_y (d - a/2)}\). شرط التصميم: \(\phi M_n \ge M_u\)." data-zh="Mu是结构分析得到的最大设计弯矩。常用荷载组合: \(M_u = 1.2M_D + 1.6M_L\)。公式中乘\(10^6\)将kN.m转换为N.mm: \(A_s = \frac{M_u \times 10^6}{\phi f_y(d-a/2)}\)。设计要求: \(\phi M_n \ge M_u\)。">Mu = factored moment. \(M_u = 1.2M_D + 1.6M_L\). Design: \(\phi M_n \ge M_u\). Multiply by \(10^6\) to convert kN.m to N.mm.</div>
-  </div>
-</div>
-
-<!-- SECTION D -->
-<div class="sec">
-  <div class="sh" data-en="SECTION D — Design Assumptions" data-ar="القسم د — فرضيات التصميم" data-zh="第D节 — 设计假设">SECTION D — Design Assumptions</div>
-  <div class="sb">
-    <div class="ir">
-      <span class="il">j (estimate)</span>
-      <select id="j_est" onchange="calc()">
-        <option value="0.95" selected>0.95 — Slabs / T-Beams (+M)</option>
-        <option value="0.90">0.90 — Rect. Beams / Neg. Moment</option>
-      </select>
-      <span class="unit">—</span>
-    </div>
-    <div class="ex" data-en="j is an initial estimate of the lever arm ratio: \(jd \approx d - a/2\). Only used in the first iteration to get a starting value of As. For lightly reinforced sections (slabs, T-beams): j = 0.95. For rectangular beams or negative moment: j = 0.90. The final result uses the ACTUAL lever arm \((d - a/2)\) computed from equilibrium. Initial estimate: \(A_{s,init} = \frac{M_u \times 10^6}{\phi f_y \cdot j \cdot d}\)." data-ar="j تقدير أولي لنسبة ذراع العزم: \(jd \approx d - a/2\). يستخدم فقط في التكرار الأول. للبلاطات/T: j=0.95. للمستطيلة/السالب: j=0.90. النتيجة النهائية تستخدم ذراع العزم الفعلي \((d-a/2)\). التقدير الأولي: \(A_{s,init} = \frac{M_u \times 10^6}{\phi f_y \cdot j \cdot d}\)." data-zh="j是力臂比的初始估计: \(jd \approx d - a/2\)。仅用于第一次迭代。板/T形梁: j=0.95。矩形梁/负弯矩: j=0.90。最终结果使用实际力臂 \((d-a/2)\)。初始估算: \(A_{s,init} = \frac{M_u \times 10^6}{\phi f_y \cdot j \cdot d}\)。">j is initial lever arm ratio. Only for first iteration. Final result uses actual \((d-a/2)\).</div>
+    <div class="ds" data-en="Factored moment" data-ar="العزم المضروب" data-zh="设计弯矩">Factored moment</div>
+    <div class="ex" data-en="Mu is the factored bending moment acting with Pu. Eccentricity: \(e = M_u / P_u\). Above the balanced point: compression controls (\(\phi = 0.65\)). Below: tension controls (\(\phi\) transitions from 0.65 to 0.90). At balanced point: concrete crushes AND steel yields simultaneously — maximum Mn typically occurs near here." data-ar="Mu العزم المضروب المؤثر مع Pu. الانحراف: \(e = M_u/P_u\). فوق نقطة التوازن: محكوم بالضغط (\(\phi=0.65\)). تحتها: \(\phi\) ينتقل من 0.65 لـ 0.90. عند التوازن: الخرسانة تنسحق والحديد يخضع معاً." data-zh="Mu是与Pu同时作用的设计弯矩。偏心距: \(e = M_u/P_u\)。平衡点上方: 受压控制(\(\phi=0.65\))。下方: \(\phi\)从0.65过渡到0.90。平衡点: 混凝土压碎与钢筋屈服同时发生。">Mu factored moment. Eccentricity \(e=M_u/P_u\). Balanced point: max Mn where concrete crushes and steel yields simultaneously.</div>
   </div>
 </div>
 
@@ -194,61 +205,57 @@ tr.ck.fail td{background:var(--rd)}
 
 <!-- STEP 1 -->
 <div class="sec">
-  <div class="sh" data-en="STEP 1 — Derived Parameters" data-ar="الخطوة 1 — المعاملات المشتقة" data-zh="步骤1 — 推导参数">STEP 1 — Derived Parameters</div>
+  <div class="sh" data-en="STEP 1 — Section Properties" data-ar="الخطوة 1 — خصائص المقطع" data-zh="步骤1 — 截面属性">STEP 1 — Section Properties</div>
   <div class="sb">
     <table class="c">
       <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
-      <tr class="cr"><td>1.1</td><td>B1</td><td>\(\beta_1\)</td><td>Stress block factor</td><td id="v_b1"></td><td>—</td></tr>
-      <tr class="cr"><td>1.2</td><td>d</td><td>\(h - cover\)</td><td>Effective depth</td><td id="v_d"></td><td>mm</td></tr>
+      <tr class="cr"><td>1.1</td><td>Ag</td><td>\(b \times h\)</td><td>Gross area</td><td id="v_Ag"></td><td>mm2</td></tr>
+      <tr class="cr"><td>1.2</td><td>rho</td><td>\(A_{st}/A_g\)</td><td>Steel ratio</td><td id="v_rho"></td><td>%</td></tr>
+      <tr class="ck" id="rRho"><td>1.3</td><td>Check</td><td>\(1\% \le \rho \le 8\%\)</td><td>ACI 10.6.1</td><td id="v_rck"></td><td>-</td></tr>
+      <tr class="cr"><td>1.4</td><td>B1</td><td>\(\beta_1\)</td><td>Stress block factor</td><td id="v_b1"></td><td>-</td></tr>
+      <tr class="cr"><td>1.5</td><td>d</td><td>\(h - d'\)</td><td>Effective depth</td><td id="v_d"></td><td>mm</td></tr>
     </table>
-    <div class="ex" data-en="\(\beta_1\) converts the actual parabolic concrete stress distribution into an equivalent rectangular stress block (Whitney's block). If \(f'_c \le 28\) MPa: \(\beta_1 = 0.85\). For \(f'_c > 28\): \(\beta_1 = 0.85 - 0.05 \frac{f'_c - 28}{7}\), min 0.65. The relationship: \(a = \beta_1 \cdot c\). Effective depth \(d = h - \text{cover}\) is the most critical geometric parameter." data-ar="\(\beta_1\) يحول توزيع الإجهاد المكافئ إلى كتلة مستطيلة (ويتني). إذا \(f'_c \le 28\): \(\beta_1 = 0.85\). لـ \(f'_c > 28\): \(\beta_1 = 0.85 - 0.05\frac{f'_c - 28}{7}\)، حد أدنى 0.65. العلاقة: \(a = \beta_1 \cdot c\). العمق الفعال \(d = h - \text{cover}\) هو الأهم." data-zh="\(\beta_1\)将实际抛物线应力分布转化为等效矩形应力块（Whitney块）。\(f'_c \le 28\) MPa时 \(\beta_1 = 0.85\)。\(f'_c > 28\)时 \(\beta_1 = 0.85 - 0.05\frac{f'_c - 28}{7}\)，最小0.65。关系: \(a = \beta_1 \cdot c\)。有效深度 \(d = h - cover\) 是最关键参数。">\(\beta_1\) converts parabolic stress to rectangular block. \(\beta_1 = 0.85\) for \(f'_c \le 28\), decreases 0.05 per 7 MPa, min 0.65. \(a = \beta_1 c\).</div>
+    <div class="ex" data-en="\(A_g = b \times h\) is the gross area. Steel ratio \(\rho = A_{st}/A_g\) must satisfy ACI 10.6.1: min 1% (resist creep, ensure ductility) and max 8% (avoid congestion). Practical limit: 4%." data-ar="\(A_g = b \times h\) المساحة الإجمالية. نسبة التسليح \(\rho = A_{st}/A_g\) يجب أن تحقق ACI 10.6.1: حد أدنى 1% وحد أعلى 8%. الحد العملي: 4%." data-zh="\(A_g = b \times h\)为总截面面积。配筋率 \(\rho = A_{st}/A_g\) 须满足ACI 10.6.1: 最小1%最大8%。实用限制: 4%。">\(A_g = b \times h\). Steel ratio \(\rho\) must be 1%-8% per ACI 10.6.1.</div>
   </div>
 </div>
 
 <!-- STEP 2 -->
 <div class="sec">
-  <div class="sh" data-en="STEP 2 — Steel Area Calculation" data-ar="الخطوة 2 — حساب مساحة الحديد" data-zh="步骤2 — 钢筋面积计算">STEP 2 — Steel Area Calculation</div>
+  <div class="sh" data-en="STEP 2 — Key Capacity Points" data-ar="الخطوة 2 — نقاط السعة الرئيسية" data-zh="步骤2 — 关键承载力点">STEP 2 — Key Capacity Points</div>
   <div class="sb">
     <table class="c">
-      <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
-      <tr class="cr"><td>2.1</td><td>As,init</td><td>\(\frac{M_u \times 10^6}{\phi f_y j d}\)</td><td>Initial estimate</td><td id="v_Asi"></td><td>mm2</td></tr>
-      <tr class="cr"><td>2.2</td><td>a</td><td>\(\frac{A_s f_y}{0.85 f'_c b_{eff}}\)</td><td>Stress block depth</td><td id="v_a"></td><td>mm</td></tr>
-      <tr class="cr"><td>2.3</td><td>As</td><td>\(\frac{M_u \times 10^6}{\phi f_y(d - a/2)}\)</td><td>Refined steel area</td><td id="v_As"></td><td>mm2</td></tr>
+      <tr><th>#</th><th>Symbol</th><th>Description</th><th colspan="2">Value</th><th>Unit</th></tr>
+      <tr class="cr"><td>2.1</td><td>P0</td><td>Pure axial capacity</td><td id="v_P0" colspan="2"></td><td>kN</td></tr>
+      <tr class="cr"><td>2.2</td><td>phiPmax</td><td>Max allowed \(\phi P_n\)</td><td id="v_pPm" colspan="2"></td><td>kN</td></tr>
+      <tr class="cr"><td>2.3</td><td>Pb</td><td>Balanced axial load</td><td id="v_Pb" colspan="2"></td><td>kN</td></tr>
+      <tr class="cr"><td>2.4</td><td>Mb</td><td>Balanced moment</td><td id="v_Mb" colspan="2"></td><td>kN.m</td></tr>
+      <tr class="cr"><td>2.5</td><td>phiMn0</td><td>Pure bending \(\phi M_n\)</td><td id="v_pM0" colspan="2"></td><td>kN.m</td></tr>
     </table>
-    <div class="ex" data-en="Iterative process: (1) GUESS: \(A_{s,init} = \frac{M_u \times 10^6}{\phi f_y \cdot j \cdot d}\). (2) EQUILIBRIUM: From \(T = C\): \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\). (3) REFINE: \(A_s = \frac{M_u \times 10^6}{\phi f_y (d - a/2)}\). We assume \(\phi = 0.9\) (tension-controlled, verified in Step 4). One iteration is typically sufficient." data-ar="عملية تكرارية: (1) تقدير: \(A_{s,init} = \frac{M_u \times 10^6}{\phi f_y \cdot j \cdot d}\). (2) توازن: من \(T = C\): \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\). (3) تنقيح: \(A_s = \frac{M_u \times 10^6}{\phi f_y (d - a/2)}\). نفترض \(\phi = 0.9\) (يتحقق في الخطوة 4). تكرار واحد كافٍ عادةً." data-zh="迭代过程: (1)估算: \(A_{s,init} = \frac{M_u \times 10^6}{\phi f_y \cdot j \cdot d}\)。(2)平衡: 由 \(T=C\): \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\)。(3)修正: \(A_s = \frac{M_u \times 10^6}{\phi f_y(d-a/2)}\)。假设 \(\phi=0.9\)（步骤4验证）。通常一次迭代就足够。">Iterative: (1) Guess with jd. (2) Equilibrium: \(a = \frac{A_s f_y}{0.85 f'_c b_{eff}}\). (3) Refine: \(A_s = \frac{M_u \times 10^6}{\phi f_y(d-a/2)}\).</div>
+    <div class="ex" data-en="Key points: (1) Pure compression: \(P_0 = 0.85f'_c(A_g - A_{st}) + f_y A_{st}\). ACI caps: \(\phi P_{n,max} = 0.65 \times 0.80 \times P_0\) for tied columns. (2) Balanced point: when \(\varepsilon_c = 0.003\) and \(\varepsilon_s = \varepsilon_y\) simultaneously. Balanced neutral axis: \(c_b = \frac{0.003}{0.003 + \varepsilon_y} \cdot d\). (3) Pure bending (Pn=0): column acts as doubly-reinforced beam." data-ar="النقاط الرئيسية: (1) ضغط صافي: \(P_0 = 0.85f'_c(A_g-A_{st})+f_yA_{st}\). ACI يحد: \(\phi P_{n,max} = 0.65 \times 0.80 \times P_0\). (2) نقطة التوازن: عندما \(\varepsilon_c = 0.003\) و \(\varepsilon_s = \varepsilon_y\) معاً. المحور المحايد المتوازن: \(c_b = \frac{0.003}{0.003+\varepsilon_y} \cdot d\). (3) انحناء صاف: العمود كمرة مزدوجة التسليح." data-zh="关键点: (1)纯压: \(P_0 = 0.85f'_c(A_g-A_{st})+f_yA_{st}\)。ACI限制: \(\phi P_{n,max} = 0.65 \times 0.80 \times P_0\)。(2)平衡点: \(\varepsilon_c=0.003\)且 \(\varepsilon_s=\varepsilon_y\)同时发生。平衡中性轴: \(c_b = \frac{0.003}{0.003+\varepsilon_y} \cdot d\)。(3)纯弯: 柱相当于双筋梁。">P0 = pure compression. Balanced: \(c_b = \frac{0.003}{0.003+\varepsilon_y} \cdot d\). Pure bending = doubly reinforced beam.</div>
   </div>
 </div>
 
-<!-- STEP 3 -->
+<!-- STEP 3: Diagram -->
 <div class="sec">
-  <div class="sh" data-en="STEP 3 — Minimum Steel (ACI 9.6.1)" data-ar="الخطوة 3 — الحد الأدنى للحديد (ACI 9.6.1)" data-zh="步骤3 — 最小配筋 (ACI 9.6.1)">STEP 3 — Minimum Steel (ACI 9.6.1)</div>
+  <div class="sh" data-en="STEP 3 — Interaction Diagram" data-ar="الخطوة 3 — مخطط التفاعل" data-zh="步骤3 — 相互作用图">STEP 3 — Interaction Diagram</div>
   <div class="sb">
-    <table class="c">
-      <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
-      <tr class="cr"><td>3.1</td><td>As,min1</td><td>\(\frac{1.4 b_w d}{f_y}\)</td><td>Criterion 1</td><td id="v_Am1"></td><td>mm2</td></tr>
-      <tr class="cr"><td>3.2</td><td>As,min2</td><td>\(\frac{0.25\sqrt{f'_c}}{f_y} b_w d\)</td><td>Criterion 2</td><td id="v_Am2"></td><td>mm2</td></tr>
-      <tr class="cr"><td>3.3</td><td>As,min</td><td>\(\max(3.1,3.2)\)</td><td>Governing minimum</td><td id="v_Am"></td><td>mm2</td></tr>
-      <tr class="ck" id="rAd"><td>3.4</td><td>As,adopted</td><td>\(\max(A_s, A_{s,min})\)</td><td>Design steel area</td><td id="v_Ad"></td><td>mm2</td></tr>
-    </table>
-    <div class="ex" data-en="ACI 9.6.1 requires minimum reinforcement to prevent BRITTLE FAILURE. Two criteria (use the LARGER): (1) \(A_{s,min} = \frac{1.4 b_w d}{f_y}\) — older empirical formula. (2) \(A_{s,min} = \frac{0.25\sqrt{f'_c}}{f_y} b_w d\) — accounts for higher cracking moment. Both use \(b_w\) (web width), NOT \(b_{eff}\). \(A_{s,adopted} = \max(A_s, A_{s,min})\)." data-ar="ACI 9.6.1 يتطلب حد أدنى لمنع الانهيار الهش. معياران (الأكبر محكم): (1) \(A_{s,min} = \frac{1.4 b_w d}{f_y}\) (2) \(A_{s,min} = \frac{0.25\sqrt{f'_c}}{f_y} b_w d\). كلاهما يستخدم \(b_w\) وليس \(b_{eff}\). \(A_{s,adopted} = \max(A_s, A_{s,min})\)." data-zh="ACI 9.6.1要求最小配筋以防止脆性破坏。两个标准（取大值）: (1) \(A_{s,min} = \frac{1.4 b_w d}{f_y}\) (2) \(A_{s,min} = \frac{0.25\sqrt{f'_c}}{f_y} b_w d\)。均用\(b_w\)而非\(b_{eff}\)。\(A_{s,adopted} = \max(A_s, A_{s,min})\)。">Min steel prevents brittle failure. Two criteria (larger governs). Uses \(b_w\) not \(b_{eff}\).</div>
+    <canvas id="diagram" width="600" height="500"></canvas>
+    <div class="ex" data-en="The interaction diagram plots all valid (\(\phi M_n\), \(\phi P_n\)) combinations. Generated by sweeping neutral axis c. For each c: (1) Strain in each layer: \(\varepsilon_i = 0.003 \frac{c - d_i}{c}\). (2) Stress: \(f_{si} = \min(E_s \varepsilon_i, f_y)\). (3) Forces: \(P_n = C_c + \sum F_{si}\) where \(C_c = 0.85f'_c \cdot a \cdot b\). (4) Moments about centroid. (5) Apply \(\phi\): above balanced → 0.65; below → transitions to 0.90. Green point = applied loads. INSIDE curve = SAFE." data-ar="مخطط التفاعل يرسم جميع توليفات (\(\phi M_n\), \(\phi P_n\)) الصالحة. يُنتج بتغيير عمق المحور المحايد c. لكل c: (1) انفعال كل طبقة: \(\varepsilon_i = 0.003\frac{c-d_i}{c}\). (2) إجهاد: \(f_{si} = \min(E_s\varepsilon_i, f_y)\). (3) قوى: \(P_n = C_c + \sum F_{si}\) حيث \(C_c = 0.85f'_c \cdot a \cdot b\). (4) عزوم حول المركز. (5) \(\phi\): فوق التوازن 0.65، تحت ينتقل لـ 0.90. النقطة الخضراء = الأحمال المطبقة." data-zh="相互作用图绘制所有有效(\(\phi M_n\), \(\phi P_n\))组合。通过扫描中性轴深度c生成。对每个c: (1)每层应变: \(\varepsilon_i = 0.003\frac{c-d_i}{c}\)。(2)应力: \(f_{si} = \min(E_s\varepsilon_i, f_y)\)。(3)合力: \(P_n = C_c + \sum F_{si}\)，\(C_c = 0.85f'_c \cdot a \cdot b\)。(4)对形心取矩。(5)\(\phi\): 平衡点上方0.65，下方过渡至0.90。绿点=设计荷载。曲线内=安全。">Diagram: sweep c, compute strains, forces, moments, apply phi. Green dot inside = SAFE.</div>
   </div>
 </div>
 
 <!-- STEP 4 -->
 <div class="sec">
-  <div class="sh" data-en="STEP 4 — Design Verification" data-ar="الخطوة 4 — التحقق من التصميم" data-zh="步骤4 — 设计验证">STEP 4 — Design Verification</div>
+  <div class="sh" data-en="STEP 4 — Design Check" data-ar="الخطوة 4 — فحص التصميم" data-zh="步骤4 — 设计验算">STEP 4 — Design Check</div>
   <div class="sb">
     <table class="c">
-      <tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
-      <tr class="cr"><td>4.1</td><td>a</td><td>\(\frac{A_s^{ad} f_y}{0.85 f'_c b_{eff}}\)</td><td>Final stress block</td><td id="v_af"></td><td>mm</td></tr>
-      <tr class="cr"><td>4.2</td><td>c</td><td>\(a / \beta_1\)</td><td>Neutral axis</td><td id="v_c"></td><td>mm</td></tr>
-      <tr class="cr"><td>4.3</td><td>es</td><td>\(\frac{d-c}{c} \times 0.003\)</td><td>Steel strain</td><td id="v_es"></td><td>—</td></tr>
-      <tr class="ck" id="rY"><td>4.4</td><td>Check</td><td>\(\varepsilon_s \ge 0.005?\)</td><td>Tension-controlled?</td><td id="v_yl"></td><td>—</td></tr>
-      <tr class="cr"><td>4.5</td><td>phi</td><td>\(\phi\) per ACI</td><td>Reduction factor</td><td id="v_ph"></td><td>—</td></tr>
-      <tr class="cr"><td>4.6</td><td>phiMn</td><td>\(\frac{\phi A_s f_y(d-a/2)}{10^6}\)</td><td>Design capacity</td><td id="v_pM"></td><td>kN.m</td></tr>
-      <tr class="ck" id="rF"><td>4.7</td><td>Check</td><td>\(\phi M_n \ge M_u?\)</td><td>Final check</td><td id="v_fn"></td><td>—</td></tr>
+      <tr><th>#</th><th>Symbol</th><th>Description</th><th colspan="2">Value</th><th>Unit</th></tr>
+      <tr class="cr"><td>4.1</td><td>e</td><td>Eccentricity \(M_u/P_u\)</td><td id="v_e" colspan="2"></td><td>mm</td></tr>
+      <tr class="cr"><td>4.2</td><td>phiPn</td><td>Capacity at this e</td><td id="v_pPn" colspan="2"></td><td>kN</td></tr>
+      <tr class="cr"><td>4.3</td><td>phiMn</td><td>Moment capacity</td><td id="v_pMn" colspan="2"></td><td>kN.m</td></tr>
+      <tr class="cr"><td>4.4</td><td>Util</td><td>Utilization ratio</td><td id="v_util" colspan="2"></td><td>%</td></tr>
+      <tr class="ck" id="rFin"><td>4.5</td><td>Result</td><td>\(\phi P_n \ge P_u\)?</td><td id="v_res" colspan="2"></td><td>-</td></tr>
     </table>
-    <div class="ex" data-en="Final verification: (1) Recalculate stress block: \(a = \frac{A_{s,ad} f_y}{0.85 f'_c b_{eff}}\). (2) Neutral axis: \(c = a / \beta_1\). (3) Steel strain: \(\varepsilon_s = \frac{d - c}{c} \times 0.003\). (4) If \(\varepsilon_s \ge 0.005\) → tension-controlled (\(\phi = 0.9\)). If \(\varepsilon_s \le 0.002\) → compression-controlled (\(\phi = 0.65\)). Between: \(\phi = 0.65 + 0.25 \frac{\varepsilon_s - 0.002}{0.003}\). (5) Capacity: \(\phi M_n = \frac{\phi \cdot A_s \cdot f_y \cdot (d - a/2)}{10^6}\). (6) \(\phi M_n \ge M_u\) → SAFE." data-ar="التحقق النهائي: (1) إعادة حساب a. (2) المحور المحايد: \(c = a/\beta_1\). (3) انفعال الحديد: \(\varepsilon_s = \frac{d-c}{c} \times 0.003\). (4) إذا \(\varepsilon_s \ge 0.005\) → محكوم بالشد (\(\phi=0.9\)). إذا \(\varepsilon_s \le 0.002\) → محكوم بالضغط (\(\phi=0.65\)). بينهما: \(\phi = 0.65 + 0.25\frac{\varepsilon_s - 0.002}{0.003}\). (5) السعة: \(\phi M_n = \frac{\phi \cdot A_s \cdot f_y \cdot (d-a/2)}{10^6}\). (6) \(\phi M_n \ge M_u\) → آمن." data-zh="最终验证: (1)重新计算a。(2)中性轴: \(c = a/\beta_1\)。(3)钢筋应变: \(\varepsilon_s = \frac{d-c}{c} \times 0.003\)。(4)若 \(\varepsilon_s \ge 0.005\) → 受拉控制 (\(\phi=0.9\))。若 \(\varepsilon_s \le 0.002\) → 受压控制 (\(\phi=0.65\))。之间: \(\phi = 0.65+0.25\frac{\varepsilon_s-0.002}{0.003}\)。(5)承载力: \(\phi M_n = \frac{\phi \cdot A_s \cdot f_y \cdot (d-a/2)}{10^6}\)。(6) \(\phi M_n \ge M_u\) → 安全。">Verify: \(\varepsilon_s = \frac{d-c}{c} \times 0.003\). If \(\ge 0.005\): \(\phi=0.9\). Check \(\phi M_n \ge M_u\).</div>
   </div>
 </div>
 
@@ -257,7 +264,7 @@ tr.ck.fail td{background:var(--rd)}
   <div class="sh" data-en="DESIGN SUMMARY" data-ar="ملخص التصميم" data-zh="设计总结">DESIGN SUMMARY</div>
   <div class="sb">
     <div class="sg" id="sum"></div>
-    <div class="nb" data-en="Note: As,adopted is the REQUIRED area. Choose actual bars (e.g. 3T16 = 603 mm2) that meet or exceed it. For T-beams, verify a is less than flange thickness." data-ar="ملاحظة: As المعتمدة هي المساحة المطلوبة. اختر قضبان فعلية تساوي أو تتجاوزها. للكمرات T: تحقق أن a أقل من سماكة الشفة." data-zh="注意: As采用值是所需面积。选择实际钢筋（如 3T16=603mm2）满足或超过它。T形梁验证 a 小于翼缘厚度。">Note: As,adopted is the REQUIRED area. Choose actual bars that meet or exceed it.</div>
+    <div class="nb" data-en="Note: This tool checks uniaxial bending only. For biaxial bending, use Bresler's reciprocal method. Check slenderness separately (kLu/r > 22 for sway). Ties: ACI 25.7.2." data-ar="ملاحظة: هذه الأداة تفحص الانحناء أحادي المحور فقط. للانحناء ثنائي المحور: طريقة Bresler. افحص النحافة (kLu/r > 22). الكانات حسب ACI 25.7.2." data-zh="注意: 此工具仅验算单轴弯曲。双轴弯曲请用Bresler倒数法。另需验算长细比(kLu/r > 22)。箍筋须符合ACI 25.7.2。">Note: Uniaxial only. For biaxial: use Bresler's method. Check slenderness separately.</div>
   </div>
 </div>
 
@@ -273,12 +280,13 @@ tr.ck.fail td{background:var(--rd)}
 
 <script>
 var lang='en';
-var inputs=['fc','fy','h','bw','beff','cover','Mu'];
+var inputs=['fc','fy','h','b','dp','Ast','Pu','Mu'];
+var Es=200000;
 
 function gV(id){var e=document.getElementById(id);var v=parseFloat(e.value);return isNaN(v)?0:v;}
 function sync(id,fb){
-  var s=document.getElementById('sl_'+id),b=document.getElementById(id);
-  if(fb){if(s)s.value=b.value||0;}else{b.value=s.value=='0'?'':s.value;}
+  var s=document.getElementById('sl_'+id),n=document.getElementById(id);
+  if(fb){if(s)s.value=n.value||0;}else{n.value=s.value=='0'?'':s.value;}
   markEmpty();calc();
 }
 function markEmpty(){
@@ -295,9 +303,46 @@ function allFilled(){
   }
   return true;
 }
-function fm(v,d){d=d==null?2:d;if(Math.abs(v)>=1e7)return v.toExponential(2);return parseFloat(v.toFixed(d));}
+function fm(v,dp){dp=dp==null?2:dp;if(Math.abs(v)>=1e7)return v.toExponential(2);return parseFloat(v.toFixed(dp));}
 function sV(id,v){document.getElementById(id).textContent=v;}
 function sC(id,p){document.getElementById(id).classList.toggle('fail',!p);}
+
+function getBarLayers(layout,Ast,h,dp,nLayers){
+  var layers=[];
+  if(layout==='2face'){
+    layers.push({d:dp,As:Ast/2});
+    layers.push({d:h-dp,As:Ast/2});
+  } else {
+    var n=Math.max(nLayers||4,2);
+    var asEach=Ast/n;
+    for(var i=0;i<n;i++){
+      layers.push({d:dp+(h-2*dp)*i/(n-1),As:asEach});
+    }
+  }
+  return layers;
+}
+
+function calcPoint(c,fc,fy,b1,bw,h,layers){
+  var a=Math.min(b1*c,h);
+  var Cc=0.85*fc*a*bw;
+  var Pn=Cc,Mn=Cc*(h/2-a/2);
+  for(var i=0;i<layers.length;i++){
+    var di=layers[i].d;
+    var ei=0.003*(c-di)/c;
+    var fi=Math.max(-fy,Math.min(fy,ei*Es));
+    if(a>=di) fi-=0.85*fc;
+    var Fi=fi*layers[i].As;
+    Pn+=Fi;
+    Mn+=Fi*(h/2-di);
+  }
+  var dMax=layers[layers.length-1].d;
+  var tensStrain=0.003*(dMax-c)/c;
+  var phi;
+  if(tensStrain>=0.005)phi=0.9;
+  else if(tensStrain<=0.002)phi=0.65;
+  else phi=0.65+0.25*(tensStrain-0.002)/0.003;
+  return{Pn:Pn/1000,Mn:Math.abs(Mn)/1e6,phi:phi,phiPn:phi*Pn/1000,phiMn:phi*Math.abs(Mn)/1e6};
+}
 
 function calc(){
   var ready=allFilled();
@@ -305,59 +350,158 @@ function calc(){
   document.getElementById('results').classList.toggle('hidden',!ready);
   if(!ready){window._data=null;return;}
 
-  var fc=gV('fc'),fy=gV('fy'),hh=gV('h'),bw=gV('bw'),be=gV('beff'),cv=gV('cover'),Mu=gV('Mu'),j=parseFloat(document.getElementById('j_est').value);
+  var fc=gV('fc'),fy=gV('fy'),h=gV('h'),bw=gV('b'),dp=gV('dp'),Ast=gV('Ast'),Pu=gV('Pu'),Mu=gV('Mu');
+  var layout=document.getElementById('barLayout').value;
+  var b1=fc<=28?0.85:Math.max(0.65,0.85-0.05*(fc-28)/7);
+  var Ag=bw*h,d=h-dp;
+  var rho=Ast/Ag*100;
+  var rhoOk=rho>=1&&rho<=8;
 
-  var b1=fc<=28?0.85:fc>=55?0.65:0.85-0.05*(fc-28)/7;
-  b1=Math.max(0.65,Math.min(0.85,b1));
-  var d=hh-cv;
-  if(d<=0){sV('v_d','ERROR');return;}
-  sV('v_b1',fm(b1));sV('v_d',fm(d,0));
+  sV('v_Ag',fm(Ag,0));sV('v_rho',fm(rho,2));sV('v_rck',rhoOk?'OK':'FAIL');
+  sC('rRho',rhoOk);sV('v_b1',fm(b1));sV('v_d',fm(d,0));
 
-  var Asi=Mu*1e6/(0.9*fy*j*d);
-  var a=Asi*fy/(0.85*fc*be);
-  var As=Mu*1e6/(0.9*fy*(d-a/2));
-  sV('v_Asi',fm(Asi,0));sV('v_a',fm(a,1));sV('v_As',fm(As,0));
+  var layers=getBarLayers(layout,Ast,h,dp,4);
 
-  var Am1=1.4*bw*d/fy,Am2=0.25*Math.sqrt(fc)/fy*bw*d;
-  var Am=Math.max(Am1,Am2),Ad=Math.max(As,Am);
-  var gov=Ad===Am&&Am>As;
-  sV('v_Am1',fm(Am1,0));sV('v_Am2',fm(Am2,0));sV('v_Am',fm(Am,0));sV('v_Ad',fm(Ad,0));
-  sC('rAd',true);
+  var P0=(0.85*fc*(Ag-Ast)+fy*Ast)/1000;
+  var pPmax=0.65*0.80*P0;
+  sV('v_P0',fm(P0,0));sV('v_pPm',fm(pPmax,0));
 
-  var af=Ad*fy/(0.85*fc*be),c=af/b1;
-  var es=(d-c)/c*0.003;
-  var yl=es>=0.005;
-  var ph=es>=0.005?0.9:es<=0.002?0.65:0.65+0.25*(es-0.002)/0.003;
-  var pM=ph*Ad*fy*(d-af/2)/1e6;
-  var ok=pM>=Mu;
-  sV('v_af',fm(af,1));sV('v_c',fm(c,1));sV('v_es',fm(es,4));
-  sV('v_yl',yl?'Yielding (OK)':'NOT Yielding!');
-  sC('rY',yl);
-  sV('v_ph',fm(ph,2));sV('v_pM',fm(pM,1));
-  sV('v_fn',ok?'SAFE DESIGN':'UNSAFE!');
-  sC('rF',ok);
+  var pts=[],N=200;
+  for(var i=0;i<=N;i++){
+    var c=0.01*d+i/N*(5*h);
+    var pt=calcPoint(c,fc,fy,b1,bw,h,layers);
+    if(pt.phiPn<=pPmax) pts.push(pt);
+  }
+  pts.push({Pn:P0,Mn:0,phi:0.65,phiPn:pPmax,phiMn:0});
+  pts.sort(function(a,b){return b.phiPn-a.phiPn;});
 
-  var it=[
-    ['Section',bw+' x '+hh+' mm (d='+fm(d,0)+')'],
+  var ey=fy/Es;
+  var cb=0.003/(0.003+ey)*d;
+  var bal=calcPoint(cb,fc,fy,b1,bw,h,layers);
+  sV('v_Pb',fm(bal.phiPn,0));sV('v_Mb',fm(bal.phiMn,1));
+
+  var pM0=0;
+  for(var cc=1;cc<5*h;cc+=0.5){
+    var pt2=calcPoint(cc,fc,fy,b1,bw,h,layers);
+    if(Math.abs(pt2.Pn)<5){pM0=Math.max(pM0,pt2.phiMn);}
+  }
+  sV('v_pM0',fm(pM0,1));
+
+  var e=Pu>0?Mu/Pu*1000:1e9;
+  sV('v_e',Pu>0?fm(e,0):'Inf');
+
+  var capPn=0,capMn=0,ok=false;
+  if(Pu<=0.01){
+    capMn=pM0;capPn=0;
+    ok=Mu<=pM0;
+  } else {
+    for(var j=0;j<pts.length;j++){
+      var pt3=pts[j];
+      if(pt3.phiPn<=0)continue;
+      var ePt=pt3.phiMn/pt3.phiPn*1000;
+      if(Math.abs(ePt-e)<e*0.05+5||j===0){
+        if(pt3.phiPn>capPn){capPn=pt3.phiPn;capMn=pt3.phiMn;}
+      }
+    }
+    for(var cc2=0.5;cc2<10*h;cc2+=0.5){
+      var pt4=calcPoint(cc2,fc,fy,b1,bw,h,layers);
+      if(pt4.phiPn>pPmax)continue;
+      var ePt2=pt4.phiPn>0.01?pt4.phiMn/pt4.phiPn*1000:1e9;
+      if(Math.abs(ePt2-e)<Math.abs(capMn/Math.max(capPn,0.01)*1000-e)){
+        capPn=pt4.phiPn;capMn=pt4.phiMn;
+      }
+    }
+    ok=Pu<=capPn&&Mu<=capMn;
+  }
+
+  var util=capPn>0?Pu/capPn*100:(Mu>0&&capMn>0?Mu/capMn*100:0);
+  sV('v_pPn',fm(capPn,0));sV('v_pMn',fm(capMn,1));
+  sV('v_util',fm(Math.min(util,999),1));
+  sV('v_res',ok?'SAFE':'UNSAFE');sC('rFin',ok);
+
+  drawDiagram(pts,pPmax,Pu,Mu,bal,ok);
+
+  var items=[
+    ['Section',bw+' x '+h+' mm'],
     ["f'c / fy",fc+' / '+fy+' MPa'],
-    ['Mu',Mu+' kN.m'],['B1',fm(b1)],
-    ['As (calc)',fm(As,0)+' mm2'],
-    ['As,min',fm(Am,0)+' mm2'+(gov?' <-- GOVERNS':'')],
-    ['As (adopted)',fm(Ad,0)+' mm2'],
-    ['a / c',fm(af,1)+' / '+fm(c,1)+' mm'],
-    ['es',fm(es,4)],['phi',fm(ph,2)],
-    ['phiMn',fm(pM,1)+' kN.m'],
+    ['Ast / rho',fm(Ast,0)+' mm2 / '+fm(rho,2)+'%'],
+    ['Layout',layout],
+    ['P0 / phiPmax',fm(P0,0)+' / '+fm(pPmax,0)+' kN'],
+    ['Balanced',fm(bal.phiPn,0)+' kN, '+fm(bal.phiMn,1)+' kN.m'],
+    ['Pu / Mu',Pu+' / '+Mu],
+    ['Capacity',fm(capPn,0)+' kN, '+fm(capMn,1)+' kN.m'],
+    ['Utilization',fm(Math.min(util,999),1)+'%'],
     ['Result',ok?'SAFE':'UNSAFE']
   ];
-  document.getElementById('sum').innerHTML=it.map(function(x){
+  document.getElementById('sum').innerHTML=items.map(function(x){
     var s='';
-    if(x[1].indexOf('UNSAFE')>=0||x[1].indexOf('NOT')>=0)s=' style="border-left-color:#c00"';
-    else if(x[1].indexOf('SAFE')>=0||x[1].indexOf('GOVERNS')>=0)s=' style="border-left-color:#1a6b1a"';
+    if(x[1].indexOf('UNSAFE')>=0)s=' style="border-left-color:#c00"';
+    else if(x[1].indexOf('SAFE')>=0)s=' style="border-left-color:#1a6b1a"';
     return '<div class="si"'+s+'><span class="lb">'+x[0]+'</span><span class="vl">'+x[1]+'</span></div>';
   }).join('');
 
-  window._data={fc:fc,fy:fy,h:hh,bw:bw,be:be,cv:cv,Mu:Mu,j:j,b1:b1,d:d,Asi:Asi,a:a,As:As,Am1:Am1,Am2:Am2,Am:Am,Ad:Ad,gov:gov,af:af,c:c,es:es,yl:yl,ph:ph,pM:pM,ok:ok};
+  window._data={fc:fc,fy:fy,h:h,bw:bw,dp:dp,Ast:Ast,Pu:Pu,Mu:Mu,layout:layout,Ag:Ag,rho:rho,rhoOk:rhoOk,b1:b1,d:d,P0:P0,pPmax:pPmax,bal:bal,pM0:pM0,e:e,capPn:capPn,capMn:capMn,util:util,ok:ok};
   if(window.MathJax&&MathJax.typeset)MathJax.typeset();
+}
+
+function drawDiagram(pts,pPmax,Pu,Mu,bal,ok){
+  var cv=document.getElementById('diagram');
+  var W=cv.width,H=cv.height;
+  var ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  var maxM=0,maxP=pPmax*1.1;
+  for(var i=0;i<pts.length;i++){maxM=Math.max(maxM,pts[i].phiMn);}
+  maxM=Math.max(maxM,Mu)*1.15;
+  maxP=Math.max(maxP,Pu)*1.15;
+
+  var pad=60,gW=W-pad*2,gH=H-pad*2;
+  function tx(m){return pad+m/maxM*gW;}
+  function ty(p){return pad+(maxP-p)/maxP*gH;}
+
+  ctx.strokeStyle='#ddd';ctx.lineWidth=0.5;
+  for(var g=0;g<=5;g++){
+    var gx=pad+g/5*gW;ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,pad+gH);ctx.stroke();
+    ctx.fillStyle='#999';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText(fm(g/5*maxM,0),gx,pad+gH+15);
+    var gy=pad+g/5*gH;ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(pad+gW,gy);ctx.stroke();
+    ctx.textAlign='right';
+    ctx.fillText(fm(maxP-g/5*maxP,0),pad-5,gy+4);
+  }
+
+  ctx.fillStyle='#333';ctx.font='bold 12px sans-serif';ctx.textAlign='center';
+  ctx.fillText('phiMn (kN.m)',W/2,H-5);
+  ctx.save();ctx.translate(12,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('phiPn (kN)',0,0);ctx.restore();
+
+  ctx.beginPath();ctx.strokeStyle='#1B4332';ctx.lineWidth=2.5;
+  var first=true;
+  for(var j=0;j<pts.length;j++){
+    var x=tx(pts[j].phiMn),y=ty(pts[j].phiPn);
+    if(first){ctx.moveTo(x,y);first=false;}else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  ctx.globalAlpha=0.12;ctx.fillStyle='#2D6A4F';ctx.beginPath();first=true;
+  for(var k=0;k<pts.length;k++){
+    var x2=tx(pts[k].phiMn),y2=ty(pts[k].phiPn);
+    if(first){ctx.moveTo(x2,y2);first=false;}else ctx.lineTo(x2,y2);
+  }
+  ctx.lineTo(tx(0),ty(0));ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+
+  ctx.setLineDash([6,4]);ctx.strokeStyle='#e67700';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad,ty(pPmax));ctx.lineTo(pad+gW,ty(pPmax));ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#e67700';ctx.font='11px sans-serif';ctx.textAlign='left';
+  ctx.fillText('phiPmax='+fm(pPmax,0),pad+gW-90,ty(pPmax)-5);
+
+  ctx.beginPath();ctx.arc(tx(bal.phiMn),ty(bal.phiPn),5,0,Math.PI*2);
+  ctx.fillStyle='#e67700';ctx.fill();ctx.fillText('Balanced',tx(bal.phiMn)+8,ty(bal.phiPn)+4);
+
+  ctx.beginPath();ctx.arc(tx(Mu),ty(Pu),7,0,Math.PI*2);
+  ctx.fillStyle=ok?'#2D6A4F':'#c00';ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle=ok?'#1B4332':'#c00';ctx.font='bold 12px sans-serif';
+  ctx.fillText('(Pu,Mu)',tx(Mu)+10,ty(Pu)-8);
 }
 
 function clearAll(){
@@ -391,23 +535,25 @@ function setLang(l){
 function showSum(){
   var D=window._data;
   if(!D){alert('Please fill all inputs first');return;}
-  var h='<h2>Beam Flexure Design Summary</h2>';
+  var h='<h2>Column Design Check Summary</h2>';
   h+='<table><tr><th>Parameter</th><th>Value</th></tr>';
   var rows=[
     ["f'c",D.fc+' MPa'],['fy',D.fy+' MPa'],
-    ['Section',D.bw+' x '+D.h+' mm'],['d',fm(D.d,0)+' mm'],
-    ['Mu',D.Mu+' kN.m'],['B1',fm(D.b1)],
-    ['As (calc)',fm(D.As,0)+' mm2'],
-    ['As,min',fm(D.Am,0)+' mm2'],
-    ['As (adopted)','<b>'+fm(D.Ad,0)+' mm2</b>'+(D.gov?' (min governs)':'')],
-    ['a / c',fm(D.af,1)+' / '+fm(D.c,1)+' mm'],
-    ['es',fm(D.es,4)],['phi',fm(D.ph,2)],
-    ['phiMn','<b>'+fm(D.pM,1)+' kN.m</b>']
+    ['Section',D.bw+' x '+D.h+' mm'],
+    ['Ag',fm(D.Ag,0)+' mm2'],
+    ['Ast / rho',fm(D.Ast,0)+' mm2 / '+fm(D.rho,2)+'%'],
+    ['Layout',D.layout],
+    ['P0',fm(D.P0,0)+' kN'],
+    ['phiPmax',fm(D.pPmax,0)+' kN'],
+    ['Balanced','P='+fm(D.bal.phiPn,0)+', M='+fm(D.bal.phiMn,1)],
+    ['Pu / Mu',D.Pu+' kN / '+D.Mu+' kN.m'],
+    ['Capacity',fm(D.capPn,0)+' kN / '+fm(D.capMn,1)+' kN.m'],
+    ['Utilization','<b>'+fm(Math.min(D.util,999),1)+'%</b>']
   ];
   rows.forEach(function(r){h+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';});
   h+='</table>';
-  h+='<div class="rb '+(D.ok?'rs':'rf')+'">'+(D.ok?'SAFE — phiMn ('+fm(D.pM,1)+') >= Mu ('+D.Mu+')':'UNSAFE — Increase section or steel')+'</div>';
-  h+='<p style="text-align:center;color:#888;font-size:.8em;margin-top:8px">ACI 318 | SI Units</p>';
+  h+='<div class="rb '+(D.ok?'rs':'rf')+'">'+(D.ok?'SAFE DESIGN — Inside interaction diagram':'UNSAFE — Outside interaction diagram')+'</div>';
+  h+='<p style="text-align:center;color:#888;font-size:.8em;margin-top:8px">ACI 318 | SI Units | Uniaxial</p>';
   document.getElementById('sumContent').innerHTML=h;
   document.getElementById('overlay').style.display='block';
 }

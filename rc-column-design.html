@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RC Column Design — ACI 318 (Educational)</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root{--bl:#2F5496;--lb:#D9E2F3;--yl:#FFF2CC;--gn:#C6EFCE;--rd:#FFC7CE;--gy:#F2F2F2}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Calibri,Arial,sans-serif;background:var(--gy);color:#222;padding:20px;max-width:1040px;margin:0 auto}
+h1{background:var(--bl);color:#fff;padding:18px 24px;border-radius:10px 10px 0 0;font-size:1.35em;text-align:center}
+.sub{background:var(--bl);color:rgba(255,255,255,.8);text-align:center;padding:0 24px 14px;border-radius:0 0 10px 10px;font-size:.9em;margin-bottom:20px}
+.bar{display:flex;justify-content:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.bar button{padding:8px 18px;border:2px solid var(--bl);border-radius:8px;background:#fff;color:var(--bl);font-weight:600;font-size:.92em;cursor:pointer;transition:.2s}
+.bar button:hover{background:var(--bl);color:#fff}
+.warn{text-align:center;padding:14px;background:#FFF3CD;border:2px solid #FFCA2C;border-radius:10px;margin-bottom:18px;font-weight:600;font-size:.95em;color:#856404}
+.sec{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:20px;overflow:hidden}
+.sh{background:var(--bl);color:#fff;padding:12px 20px;font-weight:700;font-size:1.05em}
+.sb{padding:16px 20px}
+.ir{display:grid;grid-template-columns:120px 1fr 90px 55px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #eee}
+.ir:last-child{border-bottom:none}
+.il{font-weight:600;color:var(--bl);font-size:.95em}
+.ds{font-size:.8em;color:#888;grid-column:1/-1;margin-top:-4px;padding-bottom:4px}
+.ex{font-size:.82em;color:#444;grid-column:1/-1;padding:8px 12px;background:#f0f4ff;border-radius:6px;border-left:3px solid var(--bl);margin:2px 0 8px;line-height:1.6}
+input[type=range]{width:100%;accent-color:var(--bl);cursor:pointer}
+input[type=number]{width:85px;padding:6px 8px;border:2px solid #ddd;border-radius:6px;font-size:.95em;font-weight:600;text-align:center;background:var(--yl)}
+input[type=number]:focus{border-color:var(--bl);outline:none}
+input[type=number].empty{border-color:#dc3545;background:#fff0f0}
+.unit{color:#888;font-size:.9em}
+select{padding:6px 8px;border:2px solid #ddd;border-radius:6px;font-size:.95em;background:var(--yl);font-weight:600;cursor:pointer}
+table.c{width:100%;border-collapse:collapse;font-size:.9em}
+table.c th{background:#D6DCE4;padding:8px 10px;text-align:center;font-weight:600;border:1px solid #ccc}
+table.c td{padding:9px 10px;border:1px solid #ddd;vertical-align:middle}
+table.c td:nth-child(1){text-align:center;width:40px;font-weight:600}
+table.c td:nth-child(2){text-align:center;width:75px;font-weight:600;color:var(--bl)}
+table.c td:nth-child(3){background:#fff}
+table.c td:nth-child(4){font-size:.85em;color:#555}
+table.c td:nth-child(5){text-align:center;font-weight:700;width:100px}
+table.c td:nth-child(6){text-align:center;width:55px;color:#888}
+tr.cr td{background:var(--lb)}
+tr.ck td{background:var(--gn);font-weight:600}
+tr.ck.fail td{background:var(--rd)}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.si{display:flex;justify-content:space-between;padding:8px 14px;background:var(--gy);border-radius:6px;border-left:4px solid var(--bl)}
+.si .lb{font-weight:600;color:#555}.si .vl{font-weight:700;color:var(--bl)}
+.nb{margin-top:14px;padding:12px;background:var(--yl);border-radius:8px;border-left:4px solid #e6a800;font-size:.9em;line-height:1.6}
+.hidden{display:none}
+#overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999;overflow:auto}
+#sumCard{background:#fff;max-width:720px;margin:30px auto;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);padding:24px 28px;position:relative}
+#sumCard h2{text-align:center;color:var(--bl);margin-bottom:12px;font-size:1.2em}
+#sumCard .close{position:absolute;top:10px;right:14px;font-size:1.3em;cursor:pointer;color:#888}
+#sumCard table{width:100%;border-collapse:collapse;font-size:.88em;margin-bottom:10px}
+#sumCard table th{background:var(--bl);color:#fff;padding:6px 10px;text-align:center;border:1px solid #2a4a80}
+#sumCard table td{padding:6px 10px;border:1px solid #ccc;text-align:center}
+#sumCard table tr:nth-child(even) td{background:#f5f7fb}
+#sumCard .rb{text-align:center;padding:12px;border-radius:8px;font-size:1.1em;font-weight:700;margin:8px 0}
+#sumCard .rs{background:var(--gn);color:#006100}
+#sumCard .rf{background:var(--rd);color:#9c0006}
+@media print{body{padding:0;background:#fff}.sec{box-shadow:none;break-inside:avoid}input[type=range],.bar{display:none}}
+@media(max-width:700px){.ir{grid-template-columns:100px 1fr 75px 42px;gap:6px}.sg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>&#127963; RC Column Design &#8212; ACI 318 (Educational)</h1>
+<div class="sub">SI Units (kN, mm, MPa) &#8226; Detailed Explanations &#8226; Interactive</div>
+<div class="bar">
+<button id="btnL" onclick="togLang()">&#127760; Arabic Descriptions</button>
+<button onclick="clearAll()">&#128465;&#65039; Clear All</button>
+<button onclick="showSum()">&#128248; Summary</button>
+<button onclick="window.print()">&#128424; Print</button>
+</div>
+<div class="warn hidden" id="warn"><span data-en="&#9888;&#65039; Please fill in ALL input fields before results appear." data-ar="&#9888;&#65039; يرجى ملء جميع المدخلات قبل حساب النتائج." id="warnTxt">&#9888;&#65039; Please fill in ALL input fields before results appear.</span></div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="sec"><div class="sh">WHAT IS THIS TOOL?<span class="dh" data-ar=" / ما هذه الأداة؟"></span></div><div class="sb">
+<div class="ex" data-en="This tool designs a reinforced concrete column per ACI 318 in 6 clear steps. A column carries BOTH axial compression (Pu) AND bending moment (Mu) simultaneously — unlike beams which resist moment only. That's why we need Interaction Diagrams (Step 5) to check the combined effect. Steps: (0) Preliminary sizing, (1) Slenderness check — is buckling a concern?, (2) Moment magnification — amplify moment if column is slender, (3) Axial capacity check, (4) Tie detailing, (5) Interaction diagram parameters. Every formula is explained so you understand WHY, not just HOW." data-ar="هذه الأداة تصمم عمود خرسانة مسلحة حسب ACI 318 في 6 خطوات واضحة. العمود يتحمل ضغط محوري (Pu) وعزم انحناء (Mu) معاً — بعكس الكمرات التي تقاوم العزم فقط. لذلك نحتاج مخططات التفاعل (الخطوة 5) لفحص التأثير المشترك. الخطوات: (0) تحديد الأبعاد الأولية، (1) فحص النحافة — هل الانبعاج مصدر قلق؟، (2) تضخيم العزم — تكبير العزم إذا كان العمود نحيفاً، (3) فحص السعة المحورية، (4) تفاصيل الكانات، (5) معاملات مخطط التفاعل. كل معادلة مشروحة حتى تفهم لماذا وليس فقط كيف.">This tool designs an RC column per ACI 318 in 6 steps. Every formula is explained.</div>
+</div></div>
+
+<!-- ═══ SECTION A: Assumptions ═══ -->
+<div class="sec"><div class="sh">SECTION A — Design Assumptions<span class="dh" data-ar=" / افتراضات التصميم"></span></div><div class="sb">
+<div class="ir"><span class="il">ρg (assumed)</span>
+<input type="range" id="sl_rg" min="0" max="0.04" step="0.001" value="0" oninput="sy('rg')">
+<input type="number" id="rg" min="0" max="0.08" step="0.001" value="" placeholder="0" oninput="sy('rg',1)">
+<span class="unit">—</span></div>
+<div class="ds" data-en="Assumed reinforcement ratio for preliminary sizing (0.01–0.015 for economy)" data-ar="نسبة التسليح المفترضة للتحديد الأولي (0.01-0.015 للاقتصاد)">Assumed reinforcement ratio for preliminary sizing (0.01–0.015 for economy)</div>
+<div class="ex" data-en="ρg = Ast/Ag (total steel area / gross concrete area). ACI allows 1%–8%. For ECONOMY start with 1%–1.5%: less steel = cheaper. Higher ρg → smaller column but more expensive steel and bar congestion. This value is used ONLY in Step 0 to estimate required column size. The ACTUAL ρg is computed in Step 3 after you choose your bars." data-ar="ρg = Ast/Ag (مساحة الحديد الكلية / مساحة الخرسانة الإجمالية). ACI يسمح بـ 1%-8%. للاقتصاد ابدأ بـ 1%-1.5%. ρg أعلى تعني عمود أصغر لكن حديد أكثر وأغلى. هذه القيمة تُستخدم فقط في الخطوة 0 لتقدير حجم العمود. ρg الفعلية تُحسب في الخطوة 3 بعد اختيار القضبان.">ρg = Ast/Ag. ACI allows 1%–8%. Start 1%–1.5% for economy. Used in Step 0 only.</div>
+<div class="ir"><span class="il">Frame Type</span>
+<select id="frame" onchange="calc()" style="grid-column:2/4"><option value="0" selected>Nonsway (Braced — has shear walls)</option><option value="1">Sway (Unbraced — frames only)</option></select>
+<span class="unit">—</span></div>
+<div class="ex" data-en="NONSWAY (braced) = building has shear walls or bracing to resist lateral loads. Columns carry only gravity loads. SWAY (unbraced) = columns must resist lateral loads (wind/earthquake) too. This changes the slenderness limit in Step 1: Nonsway limit = 34−12(M1/M2) ≤ 40. Sway limit = 22 (much stricter → columns more likely to be slender)." data-ar="غير متأرجح (مسنود) = المبنى له جدران قص تقاوم الأحمال الجانبية. الأعمدة تحمل فقط أحمال الجاذبية. متأرجح (غير مسنود) = الأعمدة يجب أن تقاوم الأحمال الجانبية أيضاً. هذا يغير حد النحافة في الخطوة 1: غير متأرجح = 34−12(M1/M2) ≤ 40. متأرجح = 22 (أكثر صرامة).">Nonsway = has shear walls. Sway = no walls. Affects slenderness limit.</div>
+</div></div>
+
+<!-- ═══ SECTION B: Materials ═══ -->
+<div class="sec"><div class="sh">SECTION B — Material Properties<span class="dh" data-ar=" / خصائص المواد"></span></div><div class="sb">
+<div class="ir"><span class="il">f'c</span><input type="range" id="sl_fc" min="0" max="60" step="1" value="0" oninput="sy('fc')"><input type="number" id="fc" min="0" max="80" step="1" value="" placeholder="0" oninput="sy('fc',1)"><span class="unit">MPa</span></div>
+<div class="ds" data-en="Concrete compressive strength (cylinder, 28 days)" data-ar="مقاومة ضغط الخرسانة (اسطوانة، 28 يوم)">Concrete compressive strength (cylinder, 28 days)</div>
+<div class="ex" data-en="f'c is the 28-day cylinder strength. Typical for columns: 25–40 MPa. Higher f'c → concrete carries more compression → smaller column OR less steel needed. f'c affects: Ec = 4700√f'c (elastic modulus), Po (pure axial capacity), Beta-1 (stress block), and the interaction diagram entry (Kn and Rn are divided by f'c)." data-ar="f'c مقاومة الضغط للاسطوانة عند 28 يوم. الشائع للأعمدة: 25-40 MPa. f'c أعلى → الخرسانة تتحمل ضغط أكبر → عمود أصغر أو حديد أقل. f'c تؤثر على: Ec = 4700√f'c، Po (السعة المحورية)، Beta-1، ومعاملات مخطط التفاعل.">f'c = 28-day cylinder strength. Typical: 25–40 MPa. Affects Ec, Po, and interaction diagram.</div>
+<div class="ir"><span class="il">fy</span><input type="range" id="sl_fy" min="0" max="700" step="10" value="0" oninput="sy('fy')"><input type="number" id="fy" min="0" max="700" step="10" value="" placeholder="0" oninput="sy('fy',1)"><span class="unit">MPa</span></div>
+<div class="ds" data-en="Steel yield strength (420 = Grade 60)" data-ar="مقاومة خضوع الحديد (420 = Grade 60)">Steel yield strength (420 = Grade 60)</div>
+<div class="ex" data-en="fy is the yield stress of longitudinal bars. Grade 60 (fy=420 MPa) is most common. Higher fy → each bar carries more force → fewer bars needed. fy appears in: preliminary sizing, Po = 0.85f'c(Ag−Ast) + fy·Ast, and the interaction diagram." data-ar="fy إجهاد الخضوع للحديد الطولي. Grade 60 (fy=420) هو الأكثر شيوعاً. fy أعلى → كل قضيب يتحمل قوة أكبر → قضبان أقل. fy يظهر في: التحديد الأولي، Po، ومخطط التفاعل.">fy = yield stress of bars. Grade 60 = 420 MPa. Affects Po and interaction diagram.</div>
+</div></div>
+
+<!-- ═══ SECTION C: Loads ═══ -->
+<div class="sec"><div class="sh">SECTION C — Factored Loads<span class="dh" data-ar=" / الأحمال المضروبة"></span></div><div class="sb">
+<div class="ir"><span class="il">Pu</span><input type="range" id="sl_Pu" min="0" max="5000" step="50" value="0" oninput="sy('Pu')"><input type="number" id="Pu" min="0" max="20000" step="10" value="" placeholder="0" oninput="sy('Pu',1)"><span class="unit">kN</span></div>
+<div class="ds" data-en="Factored axial load (e.g. 1.2D+1.6L)" data-ar="الحمل المحوري المضروب (مثل 1.2D+1.6L)">Factored axial load (e.g. 1.2D+1.6L)</div>
+<div class="ex" data-en="Pu is the FACTORED axial compression from structural analysis. It comes from applying load factors and summing all forces from beams/slabs above. A column must satisfy BOTH Pu and Mu simultaneously — that's why we use the interaction diagram, not separate checks." data-ar="Pu هو الضغط المحوري المضروب من التحليل الإنشائي. يأتي من تطبيق معاملات الأحمال وجمع كل القوى المنقولة من الكمرات/البلاطات. العمود يجب أن يحقق Pu وMu معاً — لذلك نستخدم مخطط التفاعل.">Pu = factored axial compression. Column must satisfy BOTH Pu and Mu simultaneously.</div>
+<div class="ir"><span class="il">M1</span><input type="range" id="sl_M1" min="-200" max="200" step="5" value="0" oninput="sy('M1')"><input type="number" id="M1" min="-1000" max="1000" step="5" value="0" oninput="sy('M1',1)"><span class="unit">kN·m</span></div>
+<div class="ds" data-en="Smaller end moment (+ve=single curvature, −ve=double curvature)" data-ar="العزم الأصغر عند الطرف (+أحادي الانحناء، −مزدوج)">Smaller end moment (+single, −double curvature)</div>
+<div class="ex" data-en="M1 is the SMALLER end moment. Sign matters: +ve M1 = single curvature (C-shape bend, WORSE — moments add up, higher Cm). −ve M1 = double curvature (S-shape bend, BETTER — moments partially cancel, lower Cm). M1/M2 ratio affects Cm and the slenderness limit. NOTE: M1 CAN be zero." data-ar="M1 هو العزم الأصغر عند الطرف. الإشارة مهمة: +موجب = انحناء أحادي (شكل C، أسوأ — العزوم تتجمع). −سالب = انحناء مزدوج (شكل S، أفضل — العزوم تلغي بعضها جزئياً). نسبة M1/M2 تؤثر على Cm وحد النحافة. ملاحظة: M1 يمكن أن يكون صفراً.">M1 = smaller end moment. +ve = single curvature (worse), −ve = double (better). Can be zero.</div>
+<div class="ir"><span class="il">M2</span><input type="range" id="sl_M2" min="0" max="500" step="5" value="0" oninput="sy('M2')"><input type="number" id="M2" min="0" max="5000" step="5" value="" placeholder="0" oninput="sy('M2',1)"><span class="unit">kN·m</span></div>
+<div class="ds" data-en="Larger end moment (always positive, |M2| ≥ |M1|)" data-ar="العزم الأكبر (موجب دائماً، |M2| ≥ |M1|)">Larger end moment (always positive)</div>
+<div class="ex" data-en="M2 is the LARGER end moment. If SHORT column: design moment Mc = M2. If SLENDER: Mc = δns × M2 (magnified). ACI also sets M2,min = Pu(15+0.03h)/1000 to account for accidental eccentricity — even if analysis shows zero moment." data-ar="M2 العزم الأكبر. إذا العمود قصير: Mc = M2. إذا نحيف: Mc = δns × M2 (مضخم). ACI يضع حد أدنى M2,min = Pu(15+0.03h)/1000 لحساب اللامركزية العرضية.">M2 = larger end moment. SHORT: Mc=M2. SLENDER: Mc=δns×M2. Min: Pu(15+0.03h)/1000.</div>
+<div class="ir"><span class="il">βdns</span><input type="range" id="sl_bd" min="0" max="1" step="0.05" value="0" oninput="sy('bd')"><input type="number" id="bd" min="0" max="1" step="0.05" value="" placeholder="0" oninput="sy('bd',1)"><span class="unit">—</span></div>
+<div class="ds" data-en="Sustained load ratio ≈ 1.2D / Pu (typical 0.4–0.7)" data-ar="نسبة الحمل المستدام ≈ 1.2D / Pu (الشائع 0.4-0.7)">Sustained load ratio ≈ 1.2D / Pu</div>
+<div class="ex" data-en="βdns represents how much of Pu is sustained (long-term). Sustained loads cause concrete CREEP (slow deformation), reducing stiffness. βdns appears in: EI = 0.4·Ec·Ig/(1+βdns). Higher βdns → lower EI → lower Euler load Pc → LARGER magnification δns. Typical: 0.4–0.7." data-ar="βdns تمثل كم من Pu مستدام (طويل الأمد). الأحمال المستدامة تسبب زحف الخرسانة مما يقلل الجساءة. βdns تظهر في: EI = 0.4·Ec·Ig/(1+βdns). βdns أعلى → EI أقل → Pc أقل → تضخيم أكبر. الشائع: 0.4-0.7.">βdns ≈ 1.2D/Pu. Higher → more creep → larger magnification. Typical: 0.4–0.7.</div>
+<div class="ir"><span class="il">ϕ</span><select id="phi" onchange="calc()" style="grid-column:2/4"><option value="0.65" selected>0.65 — Tied Column</option><option value="0.75">0.75 — Spiral Column</option></select><span class="unit">—</span></div>
+<div class="ex" data-en="ϕ is the strength reduction factor. Tied columns: ϕ=0.65. Spiral columns: ϕ=0.75 (higher because spirals provide better confinement and ductility). ϕ reduces the nominal capacity: ϕPn ≥ Pu and ϕMn ≥ Mu." data-ar="ϕ معامل تخفيض المقاومة. أعمدة مربوطة: ϕ=0.65. حلزونية: ϕ=0.75 (أعلى لأن الحلزون يوفر حصر أفضل). ϕ يخفض السعة الاسمية: ϕPn ≥ Pu و ϕMn ≥ Mu.">ϕ = 0.65 tied, 0.75 spiral. Reduces nominal capacity for safety.</div>
+</div></div>
+
+<!-- ═══ SECTION D: Geometry ═══ -->
+<div class="sec"><div class="sh">SECTION D — Geometry & Reinforcement<span class="dh" data-ar=" / الأبعاد والتسليح"></span></div><div class="sb">
+<div class="ir"><span class="il">b</span><input type="range" id="sl_b" min="0" max="900" step="25" value="0" oninput="sy('b')"><input type="number" id="b" min="0" max="2000" step="25" value="" placeholder="0" oninput="sy('b',1)"><span class="unit">mm</span></div>
+<div class="ds" data-en="Column width (short dimension)" data-ar="عرض العمود (البعد الأصغر)">Column width (short dimension)</div>
+<div class="ex" data-en="b is the short dimension. For square columns b=h. Min practical: 200–250mm. b affects: Ag = b×h, tie spacing criterion min(b,h), and Ig = b·h³/12." data-ar="b البعد الأصغر. للعمود المربع b=h. الحد الأدنى العملي: 200-250 مم. b يؤثر على: Ag = b×h، معيار الكانات min(b,h)، وIg.">b = short dimension. Affects Ag, ties, and Ig.</div>
+<div class="ir"><span class="il">h</span><input type="range" id="sl_h" min="0" max="900" step="25" value="0" oninput="sy('h')"><input type="number" id="h" min="0" max="2000" step="25" value="" placeholder="0" oninput="sy('h',1)"><span class="unit">mm</span></div>
+<div class="ds" data-en="Column depth (direction of bending)" data-ar="عمق العمود (اتجاه الانحناء)">Column depth (direction of bending)</div>
+<div class="ex" data-en="h is the dimension in the BENDING DIRECTION. Critical because: r = 0.3h (slenderness), Ig = b·h³/12 (buckling resistance), γ = (h−2d')/h (interaction diagram chart selection). Increasing h greatly improves moment resistance and reduces slenderness." data-ar="h البعد في اتجاه الانحناء. مهم جداً لأن: r = 0.3h (النحافة)، Ig = b·h³/12 (مقاومة الانبعاج)، γ = (h−2d')/h (اختيار مخطط التفاعل). زيادة h تحسن مقاومة العزم بشكل كبير.">h = depth in bending direction. Affects r, Ig, γ. Increasing h greatly helps.</div>
+<div class="ir"><span class="il">lu</span><input type="range" id="sl_lu" min="0" max="8000" step="100" value="0" oninput="sy('lu')"><input type="number" id="lu" min="0" max="15000" step="100" value="" placeholder="0" oninput="sy('lu',1)"><span class="unit">mm</span></div>
+<div class="ds" data-en="Unsupported length (clear height between beams)" data-ar="الطول غير المسنود (الارتفاع الصافي بين الكمرات)">Unsupported length (clear height)</div>
+<div class="ex" data-en="lu = CLEAR height between supports (beam faces), NOT floor-to-floor. λ = k·lu/r. Longer columns are more slender and more prone to buckling. Typical buildings: 2500–4000mm." data-ar="lu = الارتفاع الصافي بين الدعامات (وجوه الكمرات)، وليس ارتفاع الطابق. λ = k·lu/r. الأعمدة الأطول أكثر عرضة للانبعاج. المباني الشائعة: 2500-4000 مم.">lu = clear height between supports. λ = k·lu/r. Typical: 2500–4000mm.</div>
+<div class="ir"><span class="il">k</span><input type="range" id="sl_k" min="0" max="2.5" step="0.05" value="0" oninput="sy('k')"><input type="number" id="k" min="0" max="3" step="0.05" value="" placeholder="0" oninput="sy('k',1)"><span class="unit">—</span></div>
+<div class="ds" data-en="Effective length factor (1.0 typical for nonsway)" data-ar="معامل الطول الفعال (1.0 شائع لغير المتأرجح)">Effective length factor</div>
+<div class="ex" data-en="k accounts for end restraint conditions. Nonsway: k ≤ 1.0 (use 1.0 conservatively). Sway: k > 1.0 (typically 1.2–2.0+). k×lu = effective length for buckling. Higher k → higher λ → more slender." data-ar="k يحسب حساب ظروف الأطراف. غير متأرجح: k ≤ 1.0. متأرجح: k > 1.0 (عادة 1.2-2.0+). k×lu = الطول الفعال للانبعاج. k أعلى → λ أعلى → أكثر نحافة.">k = effective length factor. Nonsway: 1.0. Sway: 1.2–2.0+.</div>
+<div class="ir"><span class="il">cover</span><input type="range" id="sl_cv" min="0" max="80" step="5" value="0" oninput="sy('cv')"><input type="number" id="cv" min="0" max="100" step="5" value="" placeholder="0" oninput="sy('cv',1)"><span class="unit">mm</span></div>
+<div class="ds" data-en="Clear cover to ties (typical 40mm)" data-ar="الغطاء الصافي للكانات (الشائع 40 مم)">Clear cover to ties</div>
+<div class="ex" data-en="Cover = distance from concrete surface to OUTSIDE of tie. d' = cover + d_tie + db/2 (to bar center). Protects steel from fire/corrosion. Larger cover → larger d' → smaller γ → less efficient." data-ar="الغطاء = المسافة من سطح الخرسانة لخارج الكانة. d' = cover + d_tie + db/2. يحمي الحديد من الحريق/التآكل. غطاء أكبر → d' أكبر → γ أصغر.">Cover to tie outside. d' = cover + d_tie + db/2. Typical: 40mm.</div>
+<div class="ir"><span class="il">db</span><select id="db" onchange="calc()" style="grid-column:2/4"><option value="12">12</option><option value="14">14</option><option value="16">16</option><option value="18">18</option><option value="20" selected>20</option><option value="22">22</option><option value="25">25</option><option value="28">28</option><option value="32">32</option></select><span class="unit">mm</span></div>
+<div class="ds" data-en="Longitudinal bar diameter" data-ar="قطر القضيب الطولي">Bar diameter</div>
+<div class="ir"><span class="il">n (bars)</span><input type="range" id="sl_n" min="0" max="20" step="1" value="0" oninput="sy('n')"><input type="number" id="n" min="0" max="40" step="1" value="" placeholder="0" oninput="sy('n',1)"><span class="unit">bars</span></div>
+<div class="ds" data-en="Number of longitudinal bars (min 4 for tied)" data-ar="عدد القضبان الطولية (أدنى 4 للمربوطة)">Number of bars (min 4)</div>
+<div class="ex" data-en="Ast = n × π·db²/4. The actual ρg = Ast/Ag must be 1%–8% (ACI 10.6.1.1). Below 1%: too little steel, sudden cracking risk. Above 8%: too congested, can't pour concrete properly." data-ar="Ast = n × π·db²/4. ρg الفعلية يجب أن تكون 1%-8%. أقل من 1%: حديد قليل جداً. أكثر من 8%: ازدحام وصعوبة صب.">Ast = n×π·db²/4. ρg must be 1%–8%.</div>
+<div class="ir"><span class="il">d_tie</span><select id="dt" onchange="calc()" style="grid-column:2/4"><option value="8">8</option><option value="10" selected>10</option><option value="12">12</option><option value="14">14</option></select><span class="unit">mm</span></div>
+<div class="ds" data-en="Tie diameter (≥10 if db≤32, ≥12 if db>32)" data-ar="قطر الكانة (≥10 إذا db≤32، ≥12 إذا db>32)">Tie diameter</div>
+</div></div>
+
+<!-- ═══ RESULTS ═══ -->
+<div id="results" class="hidden">
+
+<!-- STEP 0 -->
+<div class="sec"><div class="sh">STEP 0 — Preliminary Sizing<span class="dh" data-ar=" / التحديد الأولي"></span></div><div class="sb">
+<table class="c"><tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+<tr class="cr"><td>0.1</td><td>Ag,trial</td><td>\(\dfrac{P_u \times 1000}{0.40(f'_c+f_y \rho_g)}\)</td><td data-en="Min gross area needed" data-ar="أدنى مساحة إجمالية مطلوبة">Min gross area</td><td id="v0a"></td><td>mm²</td></tr>
+<tr class="cr"><td>0.2</td><td>Ag</td><td>\(b \times h\)</td><td data-en="Actual gross area" data-ar="المساحة الإجمالية الفعلية">Actual area</td><td id="v0b"></td><td>mm²</td></tr>
+<tr class="ck" id="r0"><td>0.3</td><td>Check</td><td>\(A_g \geq A_{g,trial}?\)</td><td data-en="Section adequate?" data-ar="هل المقطع كافٍ؟">Adequate?</td><td id="v0c"></td><td>—</td></tr></table>
+<div class="ex" data-en="WHY THIS FORMULA? It comes from inverting the ACI max axial capacity equation: ϕPn,max = 0.80·ϕ·[0.85f'c(Ag−Ast)+fy·Ast]. We substitute Ast = ρg·Ag and solve for Ag. The 0.40 factor ≈ 0.80×0.65×0.85 (conservative). If Ag ≥ Ag,trial → OK. Otherwise → increase b or h. This is just a STARTING POINT — the real confirmation is the interaction diagram in Step 5." data-ar="لماذا هذه المعادلة؟ مشتقة من عكس معادلة السعة المحورية القصوى في ACI. نستبدل Ast = ρg·Ag ونحل لـ Ag. المعامل 0.40 ≈ 0.80×0.65×0.85 (تحفظي). إذا Ag ≥ Ag,trial → مقبول. هذه فقط نقطة بداية — التأكيد الحقيقي في مخطط التفاعل بالخطوة 5.">Derived from ACI max axial. 0.40 ≈ 0.80×ϕ×0.85. Starting point only — Step 5 confirms.</div>
+</div></div>
+
+<!-- STEP 1 -->
+<div class="sec"><div class="sh">STEP 1 — Slenderness Check<span class="dh" data-ar=" / فحص النحافة"></span></div><div class="sb">
+<table class="c"><tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+<tr class="cr"><td>1.1</td><td>r</td><td>\(0.3h\)</td><td data-en="Radius of gyration" data-ar="نصف قطر الدوران">Radius of gyration</td><td id="v1a"></td><td>mm</td></tr>
+<tr class="cr"><td>1.2</td><td>λ</td><td>\(\dfrac{k \cdot l_u}{r}\)</td><td data-en="Slenderness ratio" data-ar="نسبة النحافة">Slenderness ratio</td><td id="v1b"></td><td>—</td></tr>
+<tr class="cr"><td>1.3</td><td>M1/M2</td><td>—</td><td data-en="End moment ratio" data-ar="نسبة عزوم الأطراف">Moment ratio</td><td id="v1c"></td><td>—</td></tr>
+<tr class="cr"><td>1.4</td><td>Limit</td><td id="eq1">—</td><td data-en="Slenderness limit" data-ar="حد النحافة">Slenderness limit</td><td id="v1d"></td><td>—</td></tr>
+<tr class="ck" id="r1"><td>1.5</td><td>Result</td><td>\(\lambda \leq Limit?\)</td><td data-en="Short or Slender?" data-ar="قصير أم نحيف؟">Short/Slender?</td><td id="v1e"></td><td>—</td></tr></table>
+<div class="ex" data-en="WHY? A slender column can BUCKLE (sudden lateral failure) before the material reaches its strength. λ = klu/r measures how 'thin and tall' the column is. If λ ≤ limit → SHORT column, no buckling risk, use M2 directly. If λ > limit → SLENDER, the P-δ effect creates extra moment. For nonsway: limit = min(34−12·M1/M2, 40). Double curvature (−ve M1/M2) raises the limit, making it easier to be short." data-ar="لماذا؟ العمود النحيف قد ينبعج (انهيار جانبي مفاجئ) قبل أن تصل المادة لمقاومتها. λ = klu/r تقيس مدى 'نحافة وطول' العمود. إذا λ ≤ الحد → قصير، لا خطر انبعاج. إذا λ > الحد → نحيف، تأثير P-δ يخلق عزم إضافي. غير متأرجح: الحد = min(34−12·M1/M2, 40). الانحناء المزدوج يرفع الحد.">λ ≤ limit → SHORT (safe). λ > limit → SLENDER (must magnify moment in Step 2).</div>
+</div></div>
+
+<!-- STEP 2 -->
+<div class="sec"><div class="sh">STEP 2 — Moment Magnification<span class="dh" data-ar=" / تضخيم العزم"></span></div><div class="sb">
+<table class="c"><tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+<tr class="cr"><td>2.1</td><td>Ec</td><td>\(4700\sqrt{f'_c}\)</td><td data-en="Concrete modulus" data-ar="معامل مرونة الخرسانة">Concrete modulus</td><td id="v2a"></td><td>MPa</td></tr>
+<tr class="cr"><td>2.2</td><td>Ig</td><td>\(\dfrac{bh^3}{12}\)</td><td data-en="Gross moment of inertia" data-ar="عزم القصور الإجمالي">Gross inertia</td><td id="v2b"></td><td>mm⁴</td></tr>
+<tr class="cr"><td>2.3</td><td>EI</td><td>\(\dfrac{0.4 E_c I_g}{1+\beta_{dns}}\)</td><td data-en="Flexural stiffness" data-ar="الجساءة الانحنائية">Stiffness</td><td id="v2c"></td><td>N·mm²</td></tr>
+<tr class="cr"><td>2.4</td><td>Pc</td><td>\(\dfrac{\pi^2 EI}{(kl_u)^2}\)</td><td data-en="Euler buckling load" data-ar="حمل أويلر للانبعاج">Euler load</td><td id="v2d"></td><td>kN</td></tr>
+<tr class="cr"><td>2.5</td><td>Cm</td><td>\(0.6+0.4\dfrac{M_1}{M_2}\)</td><td data-en="Moment correction" data-ar="معامل تصحيح العزم">Correction factor</td><td id="v2e"></td><td>—</td></tr>
+<tr class="cr"><td>2.6</td><td>δns</td><td>\(\dfrac{C_m}{1-\frac{P_u}{0.75P_c}} \geq 1\)</td><td data-en="Magnification factor" data-ar="معامل التضخيم">Magnification</td><td id="v2f"></td><td>—</td></tr>
+<tr class="cr"><td>2.7</td><td>M2,min</td><td>\(\dfrac{P_u(15+0.03h)}{1000}\)</td><td data-en="Minimum design moment" data-ar="الحد الأدنى لعزم التصميم">Min moment</td><td id="v2g"></td><td>kN·m</td></tr>
+<tr class="cr"><td>2.8</td><td>M2,des</td><td>\(\max(M_2, M_{2,min})\)</td><td data-en="Governing M2" data-ar="M2 المحكم">Governing M2</td><td id="v2h"></td><td>kN·m</td></tr>
+<tr class="ck" id="r2"><td>2.9</td><td>Mc</td><td>\(\delta_{ns} \times M_{2,des}\)</td><td data-en="Design moment" data-ar="عزم التصميم النهائي">Design moment</td><td id="v2i"></td><td>kN·m</td></tr></table>
+<div class="ex" data-en="WHY MAGNIFICATION? When a slender column deflects sideways by δ, Pu creates EXTRA moment = Pu×δ (P-δ effect). δns amplifies M2 to account for this. Pc = Euler buckling load (theoretical elastic buckling). If Pu approaches 0.75Pc → δns → ∞ (column would buckle!). Cm adjusts for curvature: single curvature (Cm≈1.0) is worse; double (Cm≈0.4) is better. For SHORT columns: δns=1.0 (no magnification needed)." data-ar="لماذا التضخيم؟ عندما ينحرف العمود النحيف جانبياً بمقدار δ، Pu يخلق عزم إضافي = Pu×δ (تأثير P-δ). δns يضخم M2 لحساب هذا. Pc = حمل أويلر (الانبعاج المرن النظري). إذا اقترب Pu من 0.75Pc → δns → ∞ (العمود سينبعج!). Cm يضبط للانحناء: أحادي (Cm≈1.0) أسوأ؛ مزدوج (Cm≈0.4) أفضل. للأعمدة القصيرة: δns=1.0.">P-δ effect: Pu×deflection = extra moment. δns magnifies M2. SHORT columns: δns=1.0.</div>
+</div></div>
+
+<!-- STEP 3 -->
+<div class="sec"><div class="sh">STEP 3 — Axial Capacity Check<span class="dh" data-ar=" / فحص السعة المحورية"></span></div><div class="sb">
+<table class="c"><tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+<tr class="cr"><td>3.1</td><td>Ast</td><td>\(n \cdot \dfrac{\pi d_b^2}{4}\)</td><td data-en="Total steel area" data-ar="مساحة الحديد الكلية">Total steel</td><td id="v3a"></td><td>mm²</td></tr>
+<tr class="cr"><td>3.2</td><td>ρg,act</td><td>\(A_{st}/A_g\)</td><td data-en="Actual reinforcement ratio" data-ar="نسبة التسليح الفعلية">Actual ρg</td><td id="v3b"></td><td>—</td></tr>
+<tr class="ck" id="r3r"><td>3.3</td><td>ρg check</td><td>\(0.01 \leq \rho_g \leq 0.08\)</td><td data-en="ACI limits" data-ar="حدود ACI">ACI limits</td><td id="v3c"></td><td>—</td></tr>
+<tr class="cr"><td>3.4</td><td>Po</td><td>\(\dfrac{0.85f'_c(A_g-A_{st})+f_y A_{st}}{1000}\)</td><td data-en="Nominal pure axial capacity" data-ar="السعة المحورية الاسمية">Nominal Po</td><td id="v3d"></td><td>kN</td></tr>
+<tr class="cr"><td>3.5</td><td>ϕPn,max</td><td>\(0.80 \phi P_o\)</td><td data-en="Max design axial" data-ar="أقصى سعة محورية تصميمية">Max design</td><td id="v3e"></td><td>kN</td></tr>
+<tr class="ck" id="r3a"><td>3.6</td><td>Check</td><td>\(P_u \leq \phi P_{n,max}?\)</td><td data-en="Axial capacity OK?" data-ar="هل السعة المحورية كافية؟">Axial OK?</td><td id="v3f"></td><td>—</td></tr></table>
+<div class="ex" data-en="WHY 0.80? ACI 22.4.2 caps axial capacity at 80% of Po (tied) because EVERY real column has some eccentricity — construction tolerances, material non-uniformity, and creep cause bending even if analysis says e=0. Po = 0.85f'c·(Ag−Ast) + fy·Ast: concrete contribution + steel contribution. If Pu > ϕPn,max → column CANNOT work even with zero moment. INCREASE section size or f'c." data-ar="لماذا 0.80؟ ACI 22.4.2 يحد السعة المحورية بـ 80% من Po لأن كل عمود حقيقي له لامركزية — تفاوتات التنفيذ والزحف تسبب انحناء حتى لو التحليل يقول e=0. Po = 0.85f'c·(Ag−Ast) + fy·Ast. إذا Pu > ϕPn,max → العمود لا يعمل حتى بعزم صفر. زد المقطع أو f'c.">0.80 factor: real columns always have eccentricity. If Pu > ϕPn,max → increase section.</div>
+</div></div>
+
+<!-- STEP 4 -->
+<div class="sec"><div class="sh">STEP 4 — Tie Spacing (ACI 25.7.2)<span class="dh" data-ar=" / مسافات الكانات"></span></div><div class="sb">
+<table class="c"><tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+<tr class="cr"><td>4.1</td><td>16·db</td><td>\(16 d_b\)</td><td data-en="Prevent bar buckling" data-ar="منع انبعاج القضيب">Bar buckling</td><td id="v4a"></td><td>mm</td></tr>
+<tr class="cr"><td>4.2</td><td>48·dt</td><td>\(48 d_{tie}\)</td><td data-en="Tie effectiveness" data-ar="فعالية الكانة">Tie effectiveness</td><td id="v4b"></td><td>mm</td></tr>
+<tr class="cr"><td>4.3</td><td>min(b,h)</td><td>\(\min(b,h)\)</td><td data-en="Column dimension" data-ar="بعد العمود">Column dim</td><td id="v4c"></td><td>mm</td></tr>
+<tr class="ck" id="r4"><td>4.4</td><td>s</td><td>\(\min(4.1,4.2,4.3)\)</td><td data-en="Governing tie spacing" data-ar="مسافة الكانات المحكمة">Spacing</td><td id="v4d"></td><td>mm</td></tr></table>
+<div class="ex" data-en="WHY TIES? Three jobs: (1) Prevent longitudinal bars from BUCKLING outward under compression (16db criterion). (2) CONFINE the concrete core, improving ductility (48d_tie). (3) Act as shear reinforcement. The SMALLEST criterion governs. Tie diameter: ≥10mm if db ≤ 32mm, ≥12mm if db > 32mm." data-ar="لماذا الكانات؟ ثلاث وظائف: (1) منع القضبان الطولية من الانبعاج للخارج (معيار 16db). (2) حصر الخرسانة الداخلية لتحسين المطيلية (48d_tie). (3) تسليح قص. الأصغر هو المحكم. قطر الكانة: ≥10 مم إذا db ≤ 32، ≥12 إذا db > 32.">Ties: prevent bar buckling (16db), confine core (48dt), shear. Smallest governs.</div>
+</div></div>
+
+<!-- STEP 5 -->
+<div class="sec"><div class="sh">STEP 5 — Interaction Diagram Parameters<span class="dh" data-ar=" / معاملات مخطط التفاعل"></span></div><div class="sb">
+<table class="c"><tr><th>#</th><th>Symbol</th><th>Formula</th><th>Description</th><th>Value</th><th>Unit</th></tr>
+<tr class="cr"><td>5.1</td><td>d'</td><td>\(cover+d_{tie}+\dfrac{d_b}{2}\)</td><td data-en="Edge to bar center" data-ar="من الحافة لمركز القضيب">Edge to center</td><td id="v5a"></td><td>mm</td></tr>
+<tr class="cr"><td>5.2</td><td>γ</td><td>\(\dfrac{h-2d'}{h}\)</td><td data-en="Steel distribution ratio" data-ar="نسبة توزيع الحديد">Distribution</td><td id="v5b"></td><td>—</td></tr>
+<tr class="cr"><td>5.3</td><td>Kn</td><td>\(\dfrac{P_u \times 1000}{\phi f'_c A_g}\)</td><td data-en="Vertical axis" data-ar="المحور الرأسي">Vertical axis</td><td id="v5c"></td><td>—</td></tr>
+<tr class="cr"><td>5.4</td><td>Rn</td><td>\(\dfrac{M_c \times 10^6}{\phi f'_c A_g h}\)</td><td data-en="Horizontal axis" data-ar="المحور الأفقي">Horizontal axis</td><td id="v5d"></td><td>—</td></tr></table>
+<div class="ex" data-en="WHY INTERACTION DIAGRAMS? A column resists Pu AND Mc TOGETHER. The diagram shows ALL valid (Pn,Mn) combinations for different ρg values. To use: (1) Calculate Kn and Rn. (2) Pick the chart matching γ (0.6/0.7/0.8/0.9) and your f'c/fy combo. (3) Plot point (Rn, Kn). (4) Read which ρg curve it falls on or below. (5) If ρg(required) ≤ ρg(actual from Step 3) → DESIGN ADEQUATE. γ = (h−2d')/h = how spread out the bars are. Higher γ → bars closer to edges → more efficient for bending." data-ar="لماذا مخططات التفاعل؟ العمود يقاوم Pu وMc معاً. المخطط يوضح كل التركيبات الصالحة من (Pn,Mn) لقيم ρg مختلفة. للاستخدام: (1) احسب Kn وRn. (2) اختر المخطط المناسب لـ γ وتركيبة f'c/fy. (3) ارسم النقطة (Rn, Kn). (4) اقرأ ρg المطلوبة. (5) إذا ρg المطلوبة ≤ ρg الفعلية → التصميم كافٍ. γ = (h−2d')/h = مدى انتشار القضبان. γ أعلى = القضبان أقرب للحواف = أكثر كفاءة.">Plot (Rn,Kn) on chart matching γ. If ρg(required) ≤ ρg(actual) → ADEQUATE.</div>
+<div class="nb" data-en="→ Use Kn, Rn, and γ to enter the ACI Interaction Diagram. Read ρg(required). If ρg(actual) from Step 3 ≥ ρg(required) → Design is adequate ✓" data-ar="→ استخدم Kn وRn وγ لدخول مخطط التفاعل ACI. اقرأ ρg المطلوبة. إذا ρg الفعلية من الخطوة 3 ≥ ρg المطلوبة → التصميم كافٍ ✓">→ Use Kn, Rn, γ to read ρg from ACI chart. If ρg(actual) ≥ ρg(required) → OK ✓</div>
+</div></div>
+
+<!-- SUMMARY -->
+<div class="sec"><div class="sh">DESIGN SUMMARY<span class="dh" data-ar=" / ملخص التصميم"></span></div><div class="sb"><div class="sg" id="sum"></div></div></div>
+
+</div><!-- /results -->
+
+<!-- Overlay -->
+<div id="overlay" onclick="if(event.target===this)closeSum()"><div id="sumCard"><span class="close" onclick="closeSum()">&times;</span><div id="sumContent"></div></div></div>
+
+<script>
+var lang='en';
+var inps=['rg','fc','fy','Pu','M2','bd','b','h','lu','k','cv','n'];
+function gV(id){var e=document.getElementById(id);var v=parseFloat(e.value);return isNaN(v)?0:v;}
+function sy(id,fb){var s=document.getElementById('sl_'+id),b2=document.getElementById(id);if(fb){if(s)s.value=b2.value||0;}else{b2.value=s.value=='0'?'':s.value;}markE();calc();}
+function markE(){inps.forEach(function(id){var el=document.getElementById(id);var v=parseFloat(el.value);el.classList.toggle('empty',isNaN(v)||v<=0);});}
+function allOK(){for(var i=0;i<inps.length;i++){var v=parseFloat(document.getElementById(inps[i]).value);if(isNaN(v)||v<=0)return false;}return true;}
+function fm(v,d){d=d==null?2:d;if(Math.abs(v)>=1e7)return v.toExponential(2);return parseFloat(v.toFixed(d));}
+function sV(id,v){document.getElementById(id).textContent=v;}
+function sC(id,p){document.getElementById(id).classList.toggle('fail',!p);}
+
+function calc(){
+var ok=allOK();
+document.getElementById('warn').classList.toggle('hidden',ok);
+document.getElementById('results').classList.toggle('hidden',!ok);
+if(!ok){window._D=null;return;}
+var rg=gV('rg'),fc=gV('fc'),fy=gV('fy'),Pu=gV('Pu'),M1=gV('M1'),M2=gV('M2');
+var bd=gV('bd'),phi=parseFloat(document.getElementById('phi').value);
+var b=gV('b'),h=gV('h'),lu=gV('lu'),kk=gV('k'),cv=gV('cv');
+var db=parseFloat(document.getElementById('db').value),n=gV('n'),dt=parseFloat(document.getElementById('dt').value);
+var fr=parseInt(document.getElementById('frame').value);
+// S0
+var Ag=b*h,Agt=Pu*1000/(0.40*(fc+fy*rg)),c0=Ag>=Agt;
+sV('v0a',fm(Agt,0));sV('v0b',fm(Ag,0));sV('v0c',c0?'OK \u2713':'INCREASE \u2717');sC('r0',c0);
+// S1
+var r=0.3*h,lam=kk*lu/r,mr=M2!==0?M1/M2:0;
+var lraw=fr===0?34-12*mr:22,lim=fr===0?Math.min(lraw,40):22,isS=lam<=lim;
+sV('v1a',fm(r,1));sV('v1b',fm(lam,2));sV('v1c',fm(mr,3));sV('v1d',fm(lim,1));
+document.getElementById('eq1').innerHTML=fr===0?'\\(\\min(34-12\\frac{M_1}{M_2},40)\\)':'\\(22\\)';
+sV('v1e',isS?'SHORT \u2713':'SLENDER \u2192 Step 2');sC('r1',isS);
+// S2
+var Ec=4700*Math.sqrt(fc),Ig=b*Math.pow(h,3)/12,EI=0.4*Ec*Ig/(1+bd);
+var klu=kk*lu,Pc=Math.PI*Math.PI*EI/(klu*klu)/1000;
+var Cm=Math.max(0.4,0.6+0.4*mr),dns_r=Cm/(1-Pu/(0.75*Pc)),dns=Math.max(1,dns_r);
+var Mm=Pu*(15+0.03*h)/1000,Md=Math.max(M2,Mm),Mc=isS?Md:dns*Md;
+sV('v2a',fm(Ec,0));sV('v2b',Ig.toExponential(3));sV('v2c',EI.toExponential(3));
+sV('v2d',fm(Pc,1));sV('v2e',fm(Cm,3));sV('v2f',isS?'N/A (Short)':fm(dns,3));
+sV('v2g',fm(Mm,2));sV('v2h',fm(Md,2));sV('v2i',fm(Mc,2));sC('r2',true);
+// S3
+var Ast=n*Math.PI*db*db/4,rga=Ast/Ag,rok=rga>=0.01&&rga<=0.08;
+var Po=(0.85*fc*(Ag-Ast)+fy*Ast)/1000,pPn=0.80*phi*Po,aok=Pu<=pPn;
+sV('v3a',fm(Ast,0));sV('v3b',fm(rga,4));sV('v3c',rok?'OK \u2713':'OUTSIDE \u2717');sC('r3r',rok);
+sV('v3d',fm(Po,1));sV('v3e',fm(pPn,1));sV('v3f',aok?'SAFE \u2713':'UNSAFE \u2717');sC('r3a',aok);
+// S4
+var s1=16*db,s2=48*dt,s3=Math.min(b,h),ss=Math.min(s1,s2,s3);
+sV('v4a',s1);sV('v4b',s2);sV('v4c',s3);sV('v4d',ss);sC('r4',true);
+// S5
+var dp=cv+dt+db/2,gam=(h-2*dp)/h,Kn=Pu*1000/(phi*fc*Ag),Rn=Mc*1e6/(phi*fc*Ag*h);
+sV('v5a',fm(dp,1));sV('v5b',fm(gam,3));sV('v5c',fm(Kn,4));sV('v5d',fm(Rn,4));
+// Summary
+var it=[['Column',b+' \u00d7 '+h+' mm'],["f'c/fy",fc+'/'+fy+' MPa'],
+['Bars',n+'T'+db+' ('+fm(Ast,0)+' mm\u00b2)'],
+['\u03c1g',(rga*100).toFixed(2)+'%'+(rok?' \u2713':' \u2717')],
+['Slenderness',isS?'SHORT (\u03bb='+fm(lam,1)+')':'SLENDER (\u03bb='+fm(lam,1)+')'],
+['\u03b4ns',isS?'N/A':fm(dns,3)],['Mc',fm(Mc,2)+' kN\u00b7m'],
+['\u03c6Pn,max',fm(pPn,1)+' kN '+(aok?'\u2713':'\u2717')],
+['Ties','\u03a6'+dt+'@'+ss+'mm'],['Kn / Rn',fm(Kn,4)+' / '+fm(Rn,4)],
+['\u03b3',fm(gam,3)]];
+document.getElementById('sum').innerHTML=it.map(function(x){var s='';
+if(x[1].indexOf('\u2717')>=0||x[1].indexOf('UNSAFE')>=0)s=' style="border-left-color:#c00"';
+else if(x[1].indexOf('\u2713')>=0||x[1].indexOf('SHORT')>=0)s=' style="border-left-color:#1a6b1a"';
+return '<div class="si"'+s+'><span class="lb">'+x[0]+'</span><span class="vl">'+x[1]+'</span></div>';}).join('');
+window._D={fc:fc,fy:fy,Pu:Pu,M1:M1,M2:M2,b:b,h:h,Ag:Ag,Ast:Ast,rga:rga,rok:rok,isS:isS,lam:lam,dns:dns,Mc:Mc,Po:Po,pPn:pPn,aok:aok,ss:ss,dt:dt,db:db,n:n,dp:dp,gam:gam,Kn:Kn,Rn:Rn};
+}
+
+function clearAll(){inps.forEach(function(id){document.getElementById(id).value='';var s=document.getElementById('sl_'+id);if(s)s.value=0;});document.getElementById('M1').value='0';markE();calc();}
+
+function togLang(){lang=lang==='en'?'ar':'en';
+document.getElementById('btnL').textContent=lang==='en'?'\u{1F310} Arabic Descriptions':'\u{1F310} English Descriptions';
+document.querySelectorAll('[data-'+lang+']').forEach(function(el){el.textContent=el.getAttribute('data-'+lang);
+if(lang==='ar'){el.setAttribute('dir','rtl');el.style.textAlign='right';}else{el.removeAttribute('dir');el.style.textAlign='';}});
+document.querySelectorAll('.dh').forEach(function(el){el.textContent=lang==='ar'?(el.getAttribute('data-ar')||''):'';});
+if(window.MathJax)MathJax.typeset();}
+
+function showSum(){var D=window._D;if(!D){alert(lang==='ar'?'يرجى ملء جميع المدخلات أولاً':'Please fill all inputs first');return;}
+var h2='<h2>Column Design Summary</h2><table><tr><th>Parameter</th><th>Value</th></tr>';
+var rw=[["f'c",D.fc+' MPa'],['fy',D.fy+' MPa'],['Section',D.b+' \u00d7 '+D.h+' mm'],
+['Bars',D.n+'T'+D.db+' (Ast='+fm(D.Ast,0)+' mm\u00b2)'],['\u03c1g',(D.rga*100).toFixed(2)+'%'],
+['Slenderness',D.isS?'SHORT (\u03bb='+fm(D.lam,1)+')':'SLENDER (\u03bb='+fm(D.lam,1)+')'],
+['\u03b4ns',D.isS?'N/A':fm(D.dns,3)],['Mc','<b>'+fm(D.Mc,2)+' kN\u00b7m</b>'],
+['\u03c6Pn,max','<b>'+fm(D.pPn,1)+' kN</b>'],['Ties','\u03a6'+D.dt+'@'+D.ss+'mm'],
+['Kn',fm(D.Kn,4)],['Rn',fm(D.Rn,4)],['\u03b3',fm(D.gam,3)]];
+rw.forEach(function(r){h2+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';});
+h2+='</table><div class="rb '+(D.aok?'rs':'rf')+'">'+(D.aok?'\u2713 Axial: SAFE (Pu='+D.Pu+' \u2264 \u03c6Pn,max='+fm(D.pPn,1)+')':'\u2717 Axial: UNSAFE')+'</div>';
+h2+='<p style="text-align:center;color:#888;font-size:.8em;margin-top:8px">ACI 318 \u2022 SI Units \u2022 Confirm with Interaction Diagram</p>';
+document.getElementById('sumContent').innerHTML=h2;document.getElementById('overlay').style.display='block';}
+function closeSum(){document.getElementById('overlay').style.display='none';}
+
+window.onload=function(){markE();calc();if(window.MathJax)MathJax.typeset();};
+</script>
+</body>
+</html>

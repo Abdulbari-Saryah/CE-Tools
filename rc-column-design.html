@@ -3,25 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>RC Column Design — ACI 318 (V1.3)</title>
-<script>
-window.MathJax={tex:{inlineMath:[['\\(','\\)']]},startup:{typeset:true}};
-</script>
+<title>RC Column Design — ACI 318 (V1.4)</title>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},startup:{typeset:true}};</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 <style>
-:root{--bl:#1B4332;--lb:#D8F3DC;--yl:#FFF2CC;--gn:#C6EFCE;--rd:#FFC7CE;--gy:#F2F2F2;--dk:#081C15;--ph2:#7B2D26;--ph2dk:#5A1A15}
+:root{--bl:#1B4332;--lb:#D8F3DC;--yl:#FFF2CC;--gn:#C6EFCE;--rd:#FFC7CE;--gy:#F2F2F2;--dk:#081C15}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Calibri,Arial,sans-serif;background:var(--gy);color:#222;padding:12px;max-width:1100px;margin:0 auto;font-size:15px}
 h1{background:var(--dk);color:#fff;padding:16px 18px;border-radius:10px 10px 0 0;font-size:1.25em;text-align:center}
 .sub{background:var(--dk);color:rgba(255,255,255,.8);text-align:center;padding:0 18px 12px;border-radius:0 0 10px 10px;font-size:.85em;margin-bottom:16px}
 .bar{display:flex;justify-content:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .bar button{padding:8px 14px;border:2px solid var(--bl);border-radius:8px;background:#fff;color:var(--bl);font-weight:600;font-size:.88em;cursor:pointer;transition:.2s;min-height:44px}
-.bar button:hover{background:var(--bl);color:#fff}
-.bar button.active{background:var(--bl);color:#fff}
+.bar button:hover,.bar button.active{background:var(--bl);color:#fff}
 .warn{text-align:center;padding:12px;background:#FFF3CD;border:2px solid #FFCA2C;border-radius:10px;margin-bottom:14px;font-weight:600;font-size:.9em;color:#856404}
 .sec{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:16px;overflow:hidden}
 .sh{background:var(--bl);color:#fff;padding:11px 16px;font-weight:700;font-size:1em}
-.sh2{background:var(--ph2);color:#fff;padding:11px 16px;font-weight:700;font-size:1em}
 .sb{padding:14px 16px}
 .ir{display:grid;grid-template-columns:120px 1fr 90px 55px;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eee}
 .ir:last-child{border-bottom:none}
@@ -32,9 +28,6 @@ input[type=number]:focus{border-color:var(--bl);outline:none}
 input[type=number].empty{border-color:#dc3545;background:#fff0f0}
 .unit{color:#888;font-size:.85em}
 select{padding:8px;border:2px solid #ddd;border-radius:6px;font-size:.95em;background:var(--yl);font-weight:600;cursor:pointer;min-height:44px}
-.ds{font-size:.8em;color:#888;grid-column:1/-1;margin-top:-4px;padding-bottom:4px}
-.ex{font-size:.82em;color:#333;grid-column:1/-1;padding:10px 12px;background:#f0f7f0;border-radius:6px;border-left:3px solid var(--bl);margin:2px 0 8px;line-height:1.7}
-.ex2{font-size:.82em;color:#333;grid-column:1/-1;padding:10px 12px;background:#fdf0ef;border-radius:6px;border-left:3px solid var(--ph2);margin:2px 0 8px;line-height:1.7}
 table.c{width:100%;border-collapse:collapse;font-size:.88em}
 table.c th{background:#D6DCE4;padding:7px 8px;text-align:center;font-weight:600;border:1px solid #ccc;font-size:.85em}
 table.c td{padding:7px 8px;border:1px solid #ddd;vertical-align:middle}
@@ -43,48 +36,30 @@ table.c td:nth-child(2){text-align:center;width:75px;font-weight:600;color:var(-
 table.c td:nth-child(5){text-align:center;font-weight:700;width:100px}
 table.c td:nth-child(6){text-align:center;width:55px;color:#888}
 tr.cr td{background:var(--lb)}
-tr.cr2 td{background:#fce8e6}
 tr.ck td{background:var(--gn);font-weight:600}
 tr.ck.fail td{background:var(--rd)}
+tr.hi td{background:#FFF8DC}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .si{display:flex;justify-content:space-between;padding:8px 14px;background:var(--gy);border-radius:6px;border-left:4px solid var(--bl);font-size:.9em}
 .si .lb{font-weight:600;color:#555}.si .vl{font-weight:700;color:var(--bl)}
-.nb{margin-top:12px;padding:10px;background:var(--yl);border-radius:8px;border-left:4px solid #e6a800;font-size:.85em;line-height:1.6}
-.phase-ban{text-align:center;padding:16px;color:#fff;border-radius:10px;margin:20px 0;font-weight:700;font-size:1.05em}
-.phase-ban small{display:block;font-weight:400;font-size:.8em;margin-top:6px;opacity:.9}
-.p1ban{background:linear-gradient(135deg,var(--dk),var(--bl))}
-.p2ban{background:linear-gradient(135deg,var(--ph2dk),var(--ph2))}
+.ex{font-size:.82em;color:#333;padding:10px 12px;background:#f0f7f0;border-radius:6px;border-left:3px solid var(--bl);margin:4px 0 10px;line-height:1.7}
+.nb{margin-top:12px;padding:12px;background:var(--yl);border-radius:8px;border-left:4px solid #e6a800;font-size:.88em;line-height:1.7}
 .hidden{display:none}
 #overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999;overflow:auto}
 #sumCard{background:#fff;max-width:720px;margin:20px auto;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);padding:20px 22px;position:relative}
-#sumCard h2{text-align:center;color:var(--bl);margin-bottom:10px;font-size:1.1em}
+#sumCard h2{text-align:center;color:var(--bl);margin-bottom:10px}
 #sumCard .close{position:absolute;top:8px;right:12px;font-size:1.3em;cursor:pointer;color:#888}
 #sumCard table{width:100%;border-collapse:collapse;font-size:.85em;margin-bottom:10px}
-#sumCard table th{background:var(--bl);color:#fff;padding:5px 8px;text-align:center;border:1px solid #0a2e1a}
+#sumCard table th{background:var(--bl);color:#fff;padding:5px 8px;text-align:center}
 #sumCard table td{padding:5px 8px;border:1px solid #ccc;text-align:center}
-#sumCard table tr:nth-child(even) td{background:#f5f7fb}
-#sumCard .rb{text-align:center;padding:10px;border-radius:8px;font-size:1em;font-weight:700;margin:8px 0}
-#sumCard .rs{background:var(--gn);color:#006100}
-#sumCard .rf{background:var(--rd);color:#9c0006}
-@media print{body{padding:0;background:#fff}.sec{box-shadow:none;break-inside:avoid}input[type=range],.bar,.phase-ban{display:none}}
-@media(max-width:600px){
-  body{padding:8px;font-size:14px}
-  h1{font-size:1.1em;padding:14px 12px}
-  .ir{grid-template-columns:100px 1fr 75px 42px;gap:6px}
-  input[type=number]{width:75px}
-  select{width:100%}
-  .sg{grid-template-columns:1fr}
-  table.c{font-size:.78em}
-  table.c th,table.c td{padding:5px 4px}
-  .bar button{padding:8px 10px;font-size:.82em;flex:1;min-width:0}
-  .ex,.ex2{font-size:.8em;padding:8px 10px}
-}
+@media print{body{padding:0;background:#fff}.sec{box-shadow:none;break-inside:avoid}input[type=range],.bar{display:none}}
+@media(max-width:600px){body{padding:8px;font-size:14px}h1{font-size:1.1em}.ir{grid-template-columns:100px 1fr 75px 42px;gap:6px}input[type=number]{width:75px}select{width:100%}.sg{grid-template-columns:1fr}table.c{font-size:.78em}.bar button{padding:8px 10px;font-size:.82em;flex:1;min-width:0}.ex{font-size:.8em;padding:8px 10px}}
 </style>
 </head>
 <body>
 
-<h1 data-en="RC Column Design — ACI 318 (V1.3)" data-ar="تصميم العمود الخرساني — ACI 318 (V1.3)" data-zh="RC柱设计 — ACI 318（V1.3）">RC Column Design — ACI 318 (V1.3)</h1>
-<div class="sub" data-en="Two-Phase Workflow: Design → Interaction Diagram → Verify" data-ar="مرحلتان: تصميم → مخطط التفاعل → تحقق" data-zh="两阶段流程：设计 → 相互作用图 → 验证">Two-Phase Workflow: Design → Interaction Diagram → Verify</div>
+<h1 data-en="RC Column Design — ACI 318 (V1.4)" data-ar="تصميم العمود الخرساني — ACI 318 (V1.4)" data-zh="RC柱设计 — ACI 318（V1.4）">RC Column Design — ACI 318 (V1.4)</h1>
+<div class="sub" data-en="Educational Tool: Slender Column Analysis + Interaction Diagram" data-ar="أداة تعليمية: تحليل العمود النحيف + مخطط التفاعل" data-zh="教育工具：细长柱分析 + 相互作用图">Educational Tool: Slender Column Analysis + Interaction Diagram</div>
 
 <div class="bar">
   <button class="lang-btn active" data-lang="en" onclick="setLang('en')">English</button>
@@ -95,23 +70,17 @@ tr.ck.fail td{background:var(--rd)}
   <button onclick="window.print()" data-en="Print" data-ar="طباعة" data-zh="打印">Print</button>
 </div>
 
-<div class="phase-ban p1ban">
-  <span data-en="PHASE 1 — DESIGN" data-ar="المرحلة 1 — التصميم" data-zh="第一阶段 — 设计">PHASE 1 — DESIGN</span>
-  <small data-en="Enter loads, materials, geometry → Get Kn, Rn, γ → Read ρg from Interaction Diagram" data-ar="أدخل الأحمال والمواد والأبعاد → احصل على Kn, Rn, γ → اقرأ ρg من مخطط التفاعل" data-zh="输入荷载、材料、几何 → 获取 Kn, Rn, γ → 从相互作用图读取 ρg">Enter loads, materials, geometry → Get Kn, Rn, γ → Read ρg from Interaction Diagram</small>
-</div>
-
-<!-- A: Assumptions -->
+<!-- A -->
 <div class="sec">
   <div class="sh" data-en="A — Design Assumptions" data-ar="أ — افتراضات التصميم" data-zh="A — 设计假设">A — Design Assumptions</div>
   <div class="sb">
     <div class="ir">
-      <span class="il">\(\rho_g\) assumed</span>
+      <span class="il">\(\rho_g\)</span>
       <input type="range" id="sl_rg" min="0" max="0.04" step="0.001" value="0" oninput="sy('rg')">
       <input type="number" id="rg" min="0" max="0.08" step="0.001" value="" placeholder="0" oninput="sy('rg',1)">
       <span class="unit">—</span>
     </div>
-    <div class="ds" data-en="Assumed ratio for Step 0 only (0.01–0.015 for economy)" data-ar="نسبة مفترضة للخطوة 0 فقط (0.01-0.015 للاقتصاد)" data-zh="仅用于步骤0的假定配筋率（经济取0.01-0.015）">Assumed ratio for Step 0 only (0.01–0.015)</div>
-    <div class="ex" data-en="\(\rho_g = A_{st}/A_g\). Used ONLY in Step 0 to estimate column size. The REAL \(\rho_g\) comes from the Interaction Diagram at the end of Phase 1." data-ar="\(\rho_g = A_{st}/A_g\). تُستخدم فقط في الخطوة 0 لتقدير حجم العمود. \(\rho_g\) الحقيقية تأتي من مخطط التفاعل." data-zh="\(\rho_g = A_{st}/A_g\)。仅用于步骤0估算柱尺寸。实际\(\rho_g\)来自相互作用图。">\(\rho_g\) used ONLY in Step 0. Real \(\rho_g\) from diagram.</div>
+    <div class="ex" data-en="\(\rho_g = A_{st}/A_g\): ratio of total longitudinal steel area to gross column area. Used <b>only</b> in Step 0 for preliminary sizing. Typical: 0.01–0.015 for economy. ACI limits: 0.01–0.08. The <b>actual</b> \(\rho_g\) is determined from the Interaction Diagram (Step 3)." data-ar="\(\rho_g = A_{st}/A_g\): نسبة مساحة حديد التسليح الطولي إلى مساحة المقطع. تُستخدم <b>فقط</b> في الخطوة 0 للتحديد الأولي. الشائع: 0.01–0.015. حدود ACI: 0.01–0.08. النسبة <b>الحقيقية</b> من مخطط التفاعل (الخطوة 3)." data-zh="\(\rho_g = A_{st}/A_g\)：纵筋总面积与柱毛截面积之比。<b>仅</b>用于步骤0初步估算。典型：0.01–0.015。ACI限值：0.01–0.08。<b>实际</b>\(\rho_g\)从相互作用图确定（步骤3）。">\(\rho_g = A_{st}/A_g\). Only for Step 0. Actual from Interaction Diagram.</div>
     <div class="ir">
       <span class="il" data-en="Frame" data-ar="الإطار" data-zh="框架">Frame</span>
       <select id="frame" onchange="calc()" style="grid-column:2/4">
@@ -120,11 +89,11 @@ tr.ck.fail td{background:var(--rd)}
       </select>
       <span class="unit">—</span>
     </div>
-    <div class="ex" data-en="Nonsway: has shear walls → limit = \(\min(34-12M_1/M_2, 40)\). Sway: no walls → limit = 22." data-ar="غير متأرجح: جدران قص → الحد = \(\min(34-12M_1/M_2, 40)\). متأرجح: → الحد = 22." data-zh="无侧移: 有剪力墙 → 限值=\(\min(34-12M_1/M_2, 40)\)。有侧移: → 限值=22。">Nonsway limit = \(\min(34-12M_1/M_2, 40)\). Sway = 22.</div>
+    <div class="ex" data-en="<b>Nonsway:</b> shear walls prevent sway → limit = \(\min(34-12\frac{M_1}{M_2},\;40)\). <b>Sway:</b> no bracing → limit = 22 (more conservative)." data-ar="<b>غير متأرجح:</b> جدران قص تمنع التمايل → الحد = \(\min(34-12\frac{M_1}{M_2},\;40)\). <b>متأرجح:</b> بدون تدعيم → الحد = 22." data-zh="<b>无侧移：</b>剪力墙防止侧移 → 限值 = \(\min(34-12\frac{M_1}{M_2},\;40)\)。<b>有侧移：</b>无支撑 → 限值 = 22。">Nonsway: limit = min(34-12M1/M2, 40). Sway: limit = 22.</div>
   </div>
 </div>
 
-<!-- B: Materials -->
+<!-- B -->
 <div class="sec">
   <div class="sh" data-en="B — Materials" data-ar="ب — المواد" data-zh="B — 材料">B — Materials</div>
   <div class="sb">
@@ -134,18 +103,18 @@ tr.ck.fail td{background:var(--rd)}
       <input type="number" id="fc" min="0" max="80" step="1" value="" placeholder="0" oninput="sy('fc',1)">
       <span class="unit">MPa</span>
     </div>
-    <div class="ds" data-en="Concrete compressive strength (typical 25–40 MPa)" data-ar="مقاومة ضغط الخرسانة (الشائع 25-40)" data-zh="混凝土抗压强度（典型25-40 MPa）">Concrete strength (25–40 MPa)</div>
+    <div class="ex" data-en="<b>Concrete compressive strength</b> from cylinder tests (150×300mm) at 28 days. Used for: \(E_c = 4700\sqrt{f'_c}\), stiffness EI, and Interaction Diagram selection. Typical: 25–40 MPa." data-ar="<b>مقاومة ضغط الخرسانة</b> من اختبار الأسطوانات (150×300مم) عند 28 يوماً. لحساب: \(E_c = 4700\sqrt{f'_c}\)، الجساءة EI، واختيار مخطط التفاعل. الشائع: 25–40 MPa." data-zh="混凝土28天圆柱体试验<b>抗压强度</b>。用于：\(E_c = 4700\sqrt{f'_c}\)、刚度EI、相互作用图选择。典型：25–40 MPa。">Concrete strength from cylinder tests. For Ec, EI, diagram. Typical: 25–40 MPa.</div>
     <div class="ir">
       <span class="il">fy</span>
       <input type="range" id="sl_fy" min="0" max="700" step="10" value="0" oninput="sy('fy')">
       <input type="number" id="fy" min="0" max="700" step="10" value="" placeholder="0" oninput="sy('fy',1)">
       <span class="unit">MPa</span>
     </div>
-    <div class="ds" data-en="Steel yield strength (420 = Grade 60)" data-ar="مقاومة خضوع الحديد (420 = Grade 60)" data-zh="钢筋屈服强度（420=60级）">Steel yield (420 = Grade 60)</div>
+    <div class="ex" data-en="<b>Steel yield strength</b> — stress where bars deform permanently. For Step 0 and Interaction Diagram selection. Standard: 420 MPa (Grade 60)." data-ar="<b>إجهاد خضوع الصلب</b> — الإجهاد عند بدء التشوه الدائم. للخطوة 0 واختيار مخطط التفاعل. القياسي: 420 MPa (Grade 60)." data-zh="<b>钢筋屈服强度</b>——永久变形开始的应力。用于步骤0和相互作用图选择。标准：420 MPa（60级）。">Steel yield strength. Standard: 420 MPa (Grade 60).</div>
   </div>
 </div>
 
-<!-- C: Loads -->
+<!-- C -->
 <div class="sec">
   <div class="sh" data-en="C — Factored Loads" data-ar="ج — الأحمال المضروبة" data-zh="C — 设计荷载">C — Factored Loads</div>
   <div class="sb">
@@ -155,40 +124,41 @@ tr.ck.fail td{background:var(--rd)}
       <input type="number" id="Pu" min="0" max="20000" step="10" value="" placeholder="0" oninput="sy('Pu',1)">
       <span class="unit">kN</span>
     </div>
-    <div class="ds" data-en="Factored axial load (e.g. 1.2D+1.6L)" data-ar="الحمل المحوري المضروب" data-zh="设计轴力">Factored axial load</div>
+    <div class="ex" data-en="<b>Factored axial load</b> \(P_u = 1.2D + 1.6L\) (D=dead, L=live). Divided by \(A_g\) gives the Y-axis value (MPa) for the Interaction Diagram." data-ar="<b>الحمل المحوري المضروب</b> \(P_u = 1.2D + 1.6L\) (D=ميت، L=حي). عند قسمته على \(A_g\) يعطي المحور الرأسي (MPa) لمخطط التفاعل." data-zh="<b>设计轴力</b> \(P_u = 1.2D + 1.6L\)（D=恒载，L=活载）。除以 \(A_g\) 得相互作用图纵轴值（MPa）。">Factored axial \(P_u = 1.2D + 1.6L\). /Ag = Y-axis (MPa).</div>
     <div class="ir">
       <span class="il">M1</span>
       <input type="range" id="sl_M1" min="-200" max="200" step="5" value="0" oninput="sy('M1')">
       <input type="number" id="M1" min="-1000" max="1000" step="5" value="0" oninput="sy('M1',1)">
       <span class="unit">kN·m</span>
     </div>
-    <div class="ds" data-en="Smaller end moment (+single curvature, −double)" data-ar="العزم الأصغر (+أحادي، −مزدوج)" data-zh="较小端弯矩（+单曲率，-双曲率）">Smaller moment (+single, −double)</div>
+    <div class="ex" data-en="<b>Smaller end moment.</b> <b>+</b> = single curvature (C-shape bending), <b>−</b> = double curvature (S-shape). \(M_1/M_2\) affects slenderness limit and \(C_m = 0.6 + 0.4(M_1/M_2)\)." data-ar="<b>العزم الأصغر.</b> <b>+</b> = انحناء أحادي (شكل C)، <b>−</b> = مزدوج (شكل S). \(M_1/M_2\) تؤثر على حد النحافة و \(C_m = 0.6 + 0.4(M_1/M_2)\)." data-zh="<b>较小端弯矩。</b><b>+</b> = 单曲率(C形)，<b>−</b> = 双曲率(S形)。\(M_1/M_2\) 影响长细比限值和 \(C_m = 0.6+0.4(M_1/M_2)\)。">Smaller moment. + single / − double curvature. Affects \(C_m\).</div>
     <div class="ir">
       <span class="il">M2</span>
       <input type="range" id="sl_M2" min="0" max="500" step="5" value="0" oninput="sy('M2')">
       <input type="number" id="M2" min="0" max="5000" step="5" value="" placeholder="0" oninput="sy('M2',1)">
       <span class="unit">kN·m</span>
     </div>
-    <div class="ds" data-en="Larger end moment (always positive, |M2| ≥ |M1|)" data-ar="العزم الأكبر (موجب دائماً)" data-zh="较大端弯矩（始终为正）">Larger moment (always +ve)</div>
+    <div class="ex" data-en="<b>Larger end moment</b> (always +, \(|M_2| \geq |M_1|\)). For eccentricity: \(M = P_u \times e\). ACI minimum: \(M_{2,min} = P_u(15+0.03h)/1000\) for accidental eccentricity." data-ar="<b>العزم الأكبر</b> (موجب دائماً، \(|M_2| \geq |M_1|\)). للامركزية: \(M = P_u \times e\). أدنى ACI: \(M_{2,min} = P_u(15+0.03h)/1000\)." data-zh="<b>较大端弯矩</b>（始终为正，\(|M_2| \geq |M_1|\)）。偏心：\(M = P_u \times e\)。ACI最小值：\(M_{2,min} = P_u(15+0.03h)/1000\)。">Larger moment (always +). Min: \(M_{2,min} = P_u(15+0.03h)/1000\).</div>
     <div class="ir">
       <span class="il">\(\beta_{dns}\)</span>
       <input type="range" id="sl_bd" min="0" max="1" step="0.05" value="0" oninput="sy('bd')">
       <input type="number" id="bd" min="0" max="1" step="0.05" value="" placeholder="0" oninput="sy('bd',1)">
       <span class="unit">—</span>
     </div>
-    <div class="ds" data-en="Sustained load ratio ≈ 1.2D/Pu (typical 0.4–0.7)" data-ar="نسبة الحمل المستدام (0.4-0.7)" data-zh="持续荷载比（典型0.4-0.7）">Sustained ratio (0.4–0.7)</div>
+    <div class="ex" data-en="<b>Sustained load ratio</b> \(\beta_{dns} \approx 1.2D/P_u\). Accounts for creep reducing stiffness. Used in: \(EI = \frac{0.4\,E_c I_g}{1+\beta_{dns}}\). Typical: 0.4–0.7." data-ar="<b>نسبة الحمل المستدام</b> \(\beta_{dns} \approx 1.2D/P_u\). يراعي الزحف الذي يقلل الجساءة. يُستخدم في: \(EI = \frac{0.4\,E_c I_g}{1+\beta_{dns}}\). الشائع: 0.4–0.7." data-zh="<b>持续荷载比</b> \(\beta_{dns} \approx 1.2D/P_u\)。考虑徐变降低刚度。用于：\(EI = \frac{0.4\,E_c I_g}{1+\beta_{dns}}\)。典型：0.4–0.7。">\(\beta_{dns} \approx 1.2D/P_u\). For EI calculation. Typical: 0.4–0.7.</div>
     <div class="ir">
       <span class="il">\(\phi\)</span>
       <select id="phi" onchange="calc()" style="grid-column:2/4">
-        <option value="0.65" selected data-en="0.65 — Tied" data-ar="0.65 — مربوط" data-zh="0.65 — 箍筋柱">0.65 — Tied</option>
-        <option value="0.75" data-en="0.75 — Spiral" data-ar="0.75 — حلزوني" data-zh="0.75 — 螺旋柱">0.75 — Spiral</option>
+        <option value="0.65" selected data-en="0.65 — Tied" data-ar="0.65 — كانات" data-zh="0.65 — 箍筋">0.65 — Tied</option>
+        <option value="0.75" data-en="0.75 — Spiral" data-ar="0.75 — حلزوني" data-zh="0.75 — 螺旋">0.75 — Spiral</option>
       </select>
       <span class="unit">—</span>
     </div>
+    <div class="ex" data-en="<b>Strength reduction factor.</b> Tied: \(\phi=0.65\) (less ductile). Spiral: \(\phi=0.75\) (more ductile). <b>Note:</b> \(P_u/A_g\) and \(M_c/(A_g h)\) are direct stresses — \(\phi\) is already embedded in the SI interaction diagram curves." data-ar="<b>معامل تخفيض المقاومة.</b> كانات: \(\phi=0.65\) (أقل مطيلية). حلزوني: \(\phi=0.75\). <b>ملاحظة:</b> \(P_u/A_g\) و \(M_c/(A_g h)\) إجهادات مباشرة — \(\phi\) مضمّن في منحنيات مخطط SI." data-zh="<b>强度折减系数。</b>箍筋：\(\phi=0.65\)（延性低）。螺旋：\(\phi=0.75\)。<b>注：</b>\(P_u/A_g\)和\(M_c/(A_g h)\)是直接应力——\(\phi\)已嵌入SI图曲线中。">Tied: 0.65. Spiral: 0.75. \(\phi\) embedded in SI diagram curves.</div>
   </div>
 </div>
 
-<!-- D: Geometry -->
+<!-- D -->
 <div class="sec">
   <div class="sh" data-en="D — Geometry" data-ar="د — الأبعاد" data-zh="D — 几何尺寸">D — Geometry</div>
   <div class="sb">
@@ -198,223 +168,114 @@ tr.ck.fail td{background:var(--rd)}
       <input type="number" id="b" min="0" max="2000" step="25" value="" placeholder="0" oninput="sy('b',1)">
       <span class="unit">mm</span>
     </div>
-    <div class="ds" data-en="Column width (short dimension)" data-ar="عرض العمود" data-zh="柱宽度（短边）">Column width</div>
+    <div class="ex" data-en="<b>Column width</b> (short side). \(A_g = b \times h\), \(I_g = bh^3/12\). Min recommended: 300 mm." data-ar="<b>عرض العمود</b> (البعد الأقصر). \(A_g = b \times h\)، \(I_g = bh^3/12\). الحد الأدنى: 300 مم." data-zh="<b>柱宽</b>（短边）。\(A_g = b \times h\)，\(I_g = bh^3/12\)。建议最小：300mm。">Column width. \(A_g = b \times h\).</div>
     <div class="ir">
       <span class="il">h</span>
       <input type="range" id="sl_h" min="0" max="900" step="25" value="0" oninput="sy('h')">
       <input type="number" id="h" min="0" max="2000" step="25" value="" placeholder="0" oninput="sy('h',1)">
       <span class="unit">mm</span>
     </div>
-    <div class="ds" data-en="Column depth (bending direction)" data-ar="عمق العمود (اتجاه الانحناء)" data-zh="柱深度（弯曲方向）">Column depth (bending direction)</div>
+    <div class="ex" data-en="<b>Column depth</b> in bending direction. Critical for: \(r = 0.3h\), \(I_g = bh^3/12\), \(\gamma = (h-2d')/h\)." data-ar="<b>عمق العمود</b> في اتجاه الانحناء. حاسم لحساب: \(r = 0.3h\)، \(I_g = bh^3/12\)، \(\gamma = (h-2d')/h\)." data-zh="<b>柱深度</b>（弯曲方向）。关键计算：\(r = 0.3h\)、\(I_g = bh^3/12\)、\(\gamma = (h-2d')/h\)。">Column depth in bending direction. For r, Ig, γ.</div>
     <div class="ir">
       <span class="il">lu</span>
       <input type="range" id="sl_lu" min="0" max="8000" step="100" value="0" oninput="sy('lu')">
       <input type="number" id="lu" min="0" max="15000" step="100" value="" placeholder="0" oninput="sy('lu',1)">
       <span class="unit">mm</span>
     </div>
-    <div class="ds" data-en="Unsupported length (clear height)" data-ar="الطول غير المسنود" data-zh="无支撑长度">Unsupported length</div>
+    <div class="ex" data-en="<b>Unsupported length</b> — clear height between lateral supports (beam/slab faces). Not the same as story height — subtract beam depth." data-ar="<b>الطول غير المسنود</b> — الارتفاع الصافي بين المساند (أوجه الكمرات/البلاطات). ليس ارتفاع الطابق — اطرح عمق الكمرة." data-zh="<b>无支撑长度</b>——侧向支撑间净高（梁/板面之间）。不等于层高——须减去梁高。">Clear height between supports. Not story height.</div>
     <div class="ir">
       <span class="il">k</span>
       <input type="range" id="sl_k" min="0" max="2.5" step="0.05" value="0" oninput="sy('k')">
       <input type="number" id="k" min="0" max="3" step="0.05" value="" placeholder="0" oninput="sy('k',1)">
       <span class="unit">—</span>
     </div>
-    <div class="ds" data-en="Effective length factor (1.0 for nonsway)" data-ar="معامل الطول الفعال (1.0 لغير المتأرجح)" data-zh="有效长度系数（无侧移取1.0）">Effective length factor</div>
+    <div class="ex" data-en="<b>Effective length factor.</b> k=1.0 pinned-pinned (nonsway), k=0.5 fixed-fixed, k>1 sway. Buckling length = \(k \cdot l_u\)." data-ar="<b>معامل الطول الفعال.</b> k=1.0 مفصلي-مفصلي، k=0.5 مثبت-مثبت، k>1 متأرجح. طول الانبعاج = \(k \cdot l_u\)." data-zh="<b>有效长度系数。</b>k=1.0 铰接-铰接，k=0.5 固定-固定，k>1 有侧移。屈曲长度 = \(k \cdot l_u\)。">k=1.0 pinned, k=0.5 fixed, k>1 sway. Buckling = \(k l_u\).</div>
     <div class="ir">
       <span class="il">d'</span>
       <input type="range" id="sl_dp" min="0" max="100" step="5" value="0" oninput="sy('dp')">
       <input type="number" id="dp" min="0" max="150" step="1" value="" placeholder="0" oninput="sy('dp',1)">
       <span class="unit">mm</span>
     </div>
-    <div class="ds" data-en="Distance: edge → bar center = cover + d_tie + db/2 (typical 50–70 mm)" data-ar="المسافة: الحافة → مركز القضيب = غطاء + كانة + db/2 (الشائع 50-70)" data-zh="边缘到钢筋中心 = 保护层+箍筋+db/2（典型50-70mm）">Edge to bar center ≈ cover + tie + db/2 (typical 50–70 mm)</div>
-    <div class="ex" data-en="d' determines \(\gamma = (h - 2d')/h\) which selects the Interaction Diagram chart. Example: 40mm cover + 10mm tie + 20mm bar/2 = 60mm. Estimate now — Phase 2 recalculates with actual bars. If significantly different, update d' and re-read the diagram." data-ar="d' تحدد \(\gamma = (h - 2d')/h\) التي تختار مخطط التفاعل. مثال: 40 غطاء + 10 كانة + 20/2 = 60 مم. قدّر الآن — المرحلة 2 تعيد الحساب. إذا اختلفت كثيراً، حدّث d' وأعد القراءة." data-zh="d' 决定 \(\gamma = (h-2d')/h\) 用于选择相互作用图。例：40+10+20/2=60mm。先估算——第二阶段用实际钢筋重算。如差异大，更新d'并重新查图。">d' determines \(\gamma\). Example: 40+10+10=60mm. Phase 2 refines with actual bars.</div>
+    <div class="ex" data-en="<b>Edge to bar center:</b> \(d' = \text{cover} + d_{tie} + d_b/2\). Determines \(\gamma = (h-2d')/h\) for Interaction Diagram chart selection (round to 0.6/0.7/0.8/0.9). Example: 40+10+25/2 = 62.5mm. Typical: 50–70 mm." data-ar="<b>الحافة إلى مركز القضيب:</b> \(d' = \text{غطاء} + d_{tie} + d_b/2\). تحدد \(\gamma = (h-2d')/h\) لاختيار مخطط التفاعل (قرّب لـ 0.6/0.7/0.8/0.9). مثال: 40+10+25/2 = 62.5مم. الشائع: 50–70 مم." data-zh="<b>边缘到筋心：</b>\(d' = \text{保护层} + d_{tie} + d_b/2\)。决定 \(\gamma = (h-2d')/h\) 用于选图（取整到0.6/0.7/0.8/0.9）。例：40+10+25/2=62.5mm。典型：50–70mm。">\(d' = cover + tie + d_b/2\). For \(\gamma\). Typical: 50–70 mm.</div>
   </div>
 </div>
 
-<!-- Phase 1 warning -->
 <div class="warn hidden" id="warn1">
-  <span data-en="Fill ALL Phase 1 inputs above to see Steps 0, 1, 2, 5." data-ar="املأ جميع مدخلات المرحلة 1 لرؤية الخطوات 0، 1، 2، 5." data-zh="请填写所有第一阶段输入以查看步骤0、1、2、5。">Fill ALL Phase 1 inputs to see results.</span>
+  <span data-en="⚠ Fill ALL inputs to see results." data-ar="⚠ املأ جميع المدخلات لرؤية النتائج." data-zh="⚠ 请填写所有输入以查看结果。">⚠ Fill ALL inputs to see results.</span>
 </div>
 
-<!-- PHASE 1 RESULTS -->
 <div id="res1" class="hidden">
 
 <!-- Step 0 -->
 <div class="sec">
   <div class="sh" data-en="Step 0 — Preliminary Sizing" data-ar="الخطوة 0 — التحديد الأولي" data-zh="步骤0 — 初步选型">Step 0 — Preliminary Sizing</div>
   <div class="sb">
-    <table class="c"><tr><th>#</th><th data-en="Sym" data-ar="رمز" data-zh="符号">Sym</th><th data-en="Formula" data-ar="المعادلة" data-zh="公式">Formula</th><th data-en="Desc" data-ar="الوصف" data-zh="描述">Desc</th><th data-en="Value" data-ar="القيمة" data-zh="值">Value</th><th data-en="Unit" data-ar="وحدة" data-zh="单位">Unit</th></tr>
-    <tr class="cr"><td>0.1</td><td>Ag,trial</td><td>\(\frac{P_u \times 1000}{0.40(f'_c+f_y \rho_g)}\)</td><td data-en="Min area needed" data-ar="أدنى مساحة" data-zh="所需最小面积">Min area</td><td id="v0a"></td><td>mm²</td></tr>
-    <tr class="cr"><td>0.2</td><td>Ag</td><td>\(b \times h\)</td><td data-en="Actual area" data-ar="المساحة الفعلية" data-zh="实际面积">Actual</td><td id="v0b"></td><td>mm²</td></tr>
-    <tr class="ck" id="r0"><td>0.3</td><td data-en="Check" data-ar="فحص" data-zh="检验">Check</td><td>\(A_g \geq A_{g,trial}?\)</td><td data-en="Adequate?" data-ar="كافٍ؟" data-zh="足够？">OK?</td><td id="v0c"></td><td>—</td></tr>
+    <table class="c"><tr><th>#</th><th data-en="Sym" data-ar="رمز" data-zh="符号">Sym</th><th data-en="Formula" data-ar="معادلة" data-zh="公式">Formula</th><th data-en="Description" data-ar="الوصف" data-zh="描述">Desc</th><th data-en="Value" data-ar="القيمة" data-zh="值">Value</th><th data-en="Unit" data-ar="وحدة" data-zh="单位">Unit</th></tr>
+    <tr class="cr"><td>0.1</td><td>Ag,trial</td><td>\(\frac{P_u \times 1000}{0.40(f'_c+f_y \rho_g)}\)</td><td data-en="Min area" data-ar="أدنى مساحة" data-zh="最小面积">Min area</td><td id="v0a"></td><td>mm²</td></tr>
+    <tr class="cr"><td>0.2</td><td>Ag</td><td>\(b \times h\)</td><td data-en="Actual" data-ar="الفعلية" data-zh="实际">Actual</td><td id="v0b"></td><td>mm²</td></tr>
+    <tr class="ck" id="r0"><td>0.3</td><td data-en="Check" data-ar="فحص" data-zh="检验">Check</td><td>\(A_g \geq A_{g,trial}\)</td><td>OK?</td><td id="v0c"></td><td>—</td></tr>
     </table>
-    <div class="ex" data-en="0.40 factor ≈ 0.80 × ϕ × 0.85 (conservative). This is just a starting point — Step 5 confirms the design." data-ar="المعامل 0.40 ≈ 0.80×ϕ×0.85 (تحفظي). مجرد نقطة بداية — الخطوة 5 تؤكد التصميم." data-zh="0.40系数 ≈ 0.80×ϕ×0.85（偏保守）。仅为起点——步骤5确认设计。">0.40 ≈ 0.80×ϕ×0.85. Starting point only.</div>
+    <div class="ex" data-en="Factor 0.40 ≈ 0.80×ϕ×0.85 (conservative). Just a starting point — final design governed by Interaction Diagram." data-ar="المعامل 0.40 ≈ 0.80×ϕ×0.85 (تحفظي). مجرد نقطة بداية — التصميم النهائي من مخطط التفاعل." data-zh="系数 0.40 ≈ 0.80×ϕ×0.85（保守）。仅为起点——最终设计由相互作用图控制。">0.40 ≈ 0.80×ϕ×0.85. Starting point only.</div>
   </div>
 </div>
 
 <!-- Step 1 -->
 <div class="sec">
-  <div class="sh" data-en="Step 1 — Slenderness Check" data-ar="الخطوة 1 — فحص النحافة" data-zh="步骤1 — 长细比检验">Step 1 — Slenderness Check</div>
+  <div class="sh" data-en="Step 1 — Slenderness Check (ACI 6.2.5)" data-ar="الخطوة 1 — فحص النحافة (ACI 6.2.5)" data-zh="步骤1 — 长细比检验 (ACI 6.2.5)">Step 1 — Slenderness Check</div>
   <div class="sb">
     <table class="c"><tr><th>#</th><th>Sym</th><th>Formula</th><th>Desc</th><th>Value</th><th>Unit</th></tr>
     <tr class="cr"><td>1.1</td><td>r</td><td>\(0.3h\)</td><td data-en="Radius of gyration" data-ar="نصف قطر الدوران" data-zh="回转半径">r</td><td id="v1a"></td><td>mm</td></tr>
-    <tr class="cr"><td>1.2</td><td>\(\lambda\)</td><td>\(\frac{k \cdot l_u}{r}\)</td><td data-en="Slenderness ratio" data-ar="نسبة النحافة" data-zh="长细比">λ</td><td id="v1b"></td><td>—</td></tr>
+    <tr class="cr"><td>1.2</td><td>\(\lambda\)</td><td>\(kl_u/r\)</td><td data-en="Slenderness ratio" data-ar="نسبة النحافة" data-zh="长细比">λ</td><td id="v1b"></td><td>—</td></tr>
     <tr class="cr"><td>1.3</td><td>M1/M2</td><td>—</td><td data-en="Moment ratio" data-ar="نسبة العزوم" data-zh="弯矩比">Ratio</td><td id="v1c"></td><td>—</td></tr>
-    <tr class="cr"><td>1.4</td><td data-en="Limit" data-ar="الحد" data-zh="限值">Limit</td><td id="eq1">—</td><td data-en="Slenderness limit" data-ar="حد النحافة" data-zh="限值">Limit</td><td id="v1d"></td><td>—</td></tr>
-    <tr class="ck" id="r1"><td>1.5</td><td data-en="Result" data-ar="النتيجة" data-zh="结果">Result</td><td>\(\lambda \leq Limit?\)</td><td data-en="Short or Slender?" data-ar="قصير/نحيف؟" data-zh="短柱/细长柱？">Type</td><td id="v1e"></td><td>—</td></tr>
+    <tr class="cr"><td>1.4</td><td data-en="Limit" data-ar="الحد" data-zh="限值">Limit</td><td id="eq1">—</td><td data-en="Slenderness limit" data-ar="حد النحافة" data-zh="长细比限值">Limit</td><td id="v1d"></td><td>—</td></tr>
+    <tr class="ck" id="r1"><td>1.5</td><td data-en="Result" data-ar="النتيجة" data-zh="结果">Result</td><td>\(\lambda \leq Limit?\)</td><td data-en="Short/Slender?" data-ar="قصير/نحيف؟" data-zh="短柱/细长？">Type</td><td id="v1e"></td><td>—</td></tr>
     </table>
-    <div class="ex" data-en="SHORT → use M2 directly. SLENDER → must magnify moment in Step 2." data-ar="قصير → استخدم M2 مباشرة. نحيف → يجب تضخيم العزم في الخطوة 2." data-zh="短柱 → 直接用M2。细长柱 → 须在步骤2放大弯矩。">SHORT → M2. SLENDER → magnify in Step 2.</div>
+    <div class="ex" data-en="\(r = 0.3h\) for rectangular sections. <b>SHORT</b> (\(\lambda \leq\) limit): use M2 directly, no magnification. <b>SLENDER</b> (\(\lambda >\) limit): must amplify moments in Step 2 due to P-\(\delta\) second-order effect." data-ar="\(r = 0.3h\) للمقاطع المستطيلة. <b>قصير</b> (\(\lambda \leq\) الحد): استخدم M2 مباشرة، بدون تضخيم. <b>نحيف</b> (\(\lambda >\) الحد): يجب تضخيم العزوم في الخطوة 2 بسبب تأثير P-\(\delta\)." data-zh="\(r = 0.3h\)适用于矩形截面。<b>短柱</b>(λ≤限值)：直接用M2。<b>细长柱</b>(λ>限值)：须在步骤2放大弯矩（P-\(\delta\)效应）。">SHORT: use M2. SLENDER: magnify in Step 2 (P-δ).</div>
   </div>
 </div>
 
 <!-- Step 2 -->
 <div class="sec">
-  <div class="sh" data-en="Step 2 — Moment Magnification" data-ar="الخطوة 2 — تضخيم العزم" data-zh="步骤2 — 弯矩放大">Step 2 — Moment Magnification</div>
+  <div class="sh" data-en="Step 2 — Moment Magnification (ACI 6.6.4)" data-ar="الخطوة 2 — تضخيم العزم (ACI 6.6.4)" data-zh="步骤2 — 弯矩放大 (ACI 6.6.4)">Step 2 — Moment Magnification</div>
   <div class="sb">
     <table class="c"><tr><th>#</th><th>Sym</th><th>Formula</th><th>Desc</th><th>Value</th><th>Unit</th></tr>
     <tr class="cr"><td>2.1</td><td>Ec</td><td>\(4700\sqrt{f'_c}\)</td><td data-en="Concrete modulus" data-ar="معامل المرونة" data-zh="弹性模量">Ec</td><td id="v2a"></td><td>MPa</td></tr>
-    <tr class="cr"><td>2.2</td><td>Ig</td><td>\(\frac{bh^3}{12}\)</td><td data-en="Gross inertia" data-ar="عزم القصور" data-zh="惯性矩">Ig</td><td id="v2b"></td><td>mm⁴</td></tr>
+    <tr class="cr"><td>2.2</td><td>Ig</td><td>\(bh^3/12\)</td><td data-en="Gross inertia" data-ar="عزم القصور" data-zh="惯性矩">Ig</td><td id="v2b"></td><td>mm⁴</td></tr>
     <tr class="cr"><td>2.3</td><td>EI</td><td>\(\frac{0.4 E_c I_g}{1+\beta_{dns}}\)</td><td data-en="Stiffness" data-ar="الجساءة" data-zh="刚度">EI</td><td id="v2c"></td><td>N·mm²</td></tr>
-    <tr class="cr"><td>2.4</td><td>Pc</td><td>\(\frac{\pi^2 EI}{(kl_u)^2}\)</td><td data-en="Euler load" data-ar="حمل أويلر" data-zh="欧拉荷载">Pc</td><td id="v2d"></td><td>kN</td></tr>
-    <tr class="cr"><td>2.5</td><td>Cm</td><td>\(0.6+0.4\frac{M_1}{M_2}\)</td><td data-en="Correction" data-ar="تصحيح" data-zh="修正系数">Cm</td><td id="v2e"></td><td>—</td></tr>
-    <tr class="cr"><td>2.6</td><td>\(\delta_{ns}\)</td><td>\(\frac{C_m}{1-\frac{P_u}{0.75P_c}} \geq 1\)</td><td data-en="Magnification" data-ar="التضخيم" data-zh="放大系数">δns</td><td id="v2f"></td><td>—</td></tr>
-    <tr class="cr"><td>2.7</td><td>M2,min</td><td>\(\frac{P_u(15+0.03h)}{1000}\)</td><td data-en="Min moment" data-ar="الحد الأدنى" data-zh="最小弯矩">Min</td><td id="v2g"></td><td>kN·m</td></tr>
-    <tr class="cr"><td>2.8</td><td>M2,des</td><td>\(\max(M_2, M_{2,min})\)</td><td data-en="Governing M2" data-ar="M2 المحكم" data-zh="控制M2">M2,des</td><td id="v2h"></td><td>kN·m</td></tr>
-    <tr class="ck" id="r2"><td>2.9</td><td>Mc</td><td>\(\delta_{ns} \times M_{2,des}\)</td><td data-en="Design moment" data-ar="عزم التصميم" data-zh="设计弯矩">Mc</td><td id="v2i"></td><td>kN·m</td></tr>
+    <tr class="cr"><td>2.4</td><td>Pc</td><td>\(\frac{\pi^2 EI}{(kl_u)^2}\)</td><td data-en="Euler buckling load" data-ar="حمل أويلر" data-zh="欧拉荷载">Pc</td><td id="v2d"></td><td>kN</td></tr>
+    <tr class="cr"><td>2.5</td><td>Cm</td><td>\(0.6+0.4\frac{M_1}{M_2}\)</td><td data-en="Correction" data-ar="تصحيح" data-zh="修正">Cm</td><td id="v2e"></td><td>—</td></tr>
+    <tr class="cr"><td>2.6</td><td>\(\delta_{ns}\)</td><td>\(\frac{C_m}{1-P_u/(0.75P_c)} \geq 1\)</td><td data-en="Magnifier" data-ar="معامل التضخيم" data-zh="放大系数">δns</td><td id="v2f"></td><td>—</td></tr>
+    <tr class="cr"><td>2.7</td><td>M2,min</td><td>\(P_u(15+0.03h)/1000\)</td><td data-en="Min moment" data-ar="الحد الأدنى" data-zh="最小弯矩">Min</td><td id="v2g"></td><td>kN·m</td></tr>
+    <tr class="cr"><td>2.8</td><td>M2,des</td><td>\(\max(M_2, M_{2,min})\)</td><td data-en="Governing" data-ar="المحكم" data-zh="控制值">M2,des</td><td id="v2h"></td><td>kN·m</td></tr>
+    <tr class="ck" id="r2"><td>2.9</td><td><b>Mc</b></td><td>\(\delta_{ns} \times M_{2,des}\)</td><td data-en="Design moment" data-ar="عزم التصميم" data-zh="设计弯矩"><b>Mc</b></td><td id="v2i"></td><td>kN·m</td></tr>
     </table>
-    <div class="ex" data-en="SHORT columns: δns = 1.0 (no magnification). SLENDER: P-δ effect amplifies the moment." data-ar="الأعمدة القصيرة: δns = 1.0. النحيفة: تأثير P-δ يضخم العزم." data-zh="短柱: δns=1.0。细长柱: P-δ效应放大弯矩。">SHORT: δns=1.0. SLENDER: P-δ amplifies.</div>
-  </div>
-</div>
-
-<!-- Step 5 (in Phase 1!) -->
-<div class="sec">
-  <div class="sh" style="font-size:1.1em" data-en="★ Step 5 — Interaction Diagram Parameters" data-ar="★ الخطوة 5 — معاملات مخطط التفاعل" data-zh="★ 步骤5 — 相互作用图参数">★ Step 5 — Interaction Diagram Parameters</div>
-  <div class="sb">
-    <table class="c"><tr><th>#</th><th>Sym</th><th>Formula</th><th>Desc</th><th>Value</th><th>Unit</th></tr>
-    <tr class="cr"><td>5.1</td><td>d'</td><td data-en="(your estimate)" data-ar="(تقديرك)" data-zh="(你的估算)">(estimate)</td><td data-en="Edge to bar center" data-ar="الحافة لمركز القضيب" data-zh="边缘到钢筋中心">d'</td><td id="v5a"></td><td>mm</td></tr>
-    <tr class="cr"><td>5.2</td><td>\(\gamma\)</td><td>\(\frac{h-2d'}{h}\)</td><td data-en="Chart selection" data-ar="اختيار المخطط" data-zh="图表选择">γ</td><td id="v5b"></td><td>—</td></tr>
-    <tr class="cr" style="background:#FFF8DC"><td style="font-size:1.1em">5.3</td><td style="font-size:1.15em;color:var(--ph2)"><b>Kn</b></td><td>\(\frac{P_u \times 1000}{\phi f'_c A_g}\)</td><td data-en="VERTICAL axis" data-ar="المحور الرأسي" data-zh="纵轴"><b>Y-axis</b></td><td id="v5c" style="font-size:1.15em;color:var(--ph2)"></td><td>—</td></tr>
-    <tr class="cr" style="background:#FFF8DC"><td style="font-size:1.1em">5.4</td><td style="font-size:1.15em;color:var(--ph2)"><b>Rn</b></td><td>\(\frac{M_c \times 10^6}{\phi f'_c A_g h}\)</td><td data-en="HORIZONTAL axis" data-ar="المحور الأفقي" data-zh="横轴"><b>X-axis</b></td><td id="v5d" style="font-size:1.15em;color:var(--ph2)"></td><td>—</td></tr>
-    </table>
-    <div class="nb" style="font-size:.95em;padding:14px" data-en="★ NOW: (1) Pick the ACI Interaction Diagram matching γ (round to 0.6/0.7/0.8/0.9) and your f'c/fy combo. (2) Plot point (Rn, Kn) on the chart. (3) Read the ρg curve through or above your point → that is your REQUIRED ρg. (4) Scroll down to Phase 2, select bars to provide Ast ≥ ρg × Ag, and verify." data-ar="★ الآن: (1) اختر مخطط التفاعل ACI المناسب لـ γ (قرّب لـ 0.6/0.7/0.8/0.9) وتركيبة f'c/fy. (2) ارسم النقطة (Rn, Kn). (3) اقرأ منحنى ρg → هذه ρg المطلوبة. (4) انتقل للمرحلة 2 واختر القضبان بحيث Ast ≥ ρg × Ag." data-zh="★ 现在：(1)选择匹配γ（四舍五入到0.6/0.7/0.8/0.9）和f'c/fy的ACI相互作用图。(2)标出(Rn, Kn)点。(3)读取ρg曲线 → 所需ρg。(4)到第二阶段选钢筋使Ast ≥ ρg×Ag。">★ Pick chart for γ + f'c/fy → Plot (Rn, Kn) → Read ρg → Phase 2 below</div>
-  </div>
-</div>
-
-<!-- Phase 1 Summary -->
-<div class="sec">
-  <div class="sh" data-en="Phase 1 — Design Summary" data-ar="المرحلة 1 — ملخص" data-zh="第一阶段 — 总结">Phase 1 — Design Summary</div>
-  <div class="sb"><div class="sg" id="sum1"></div></div>
-</div>
-
-</div><!-- /res1 -->
-
-<!-- ═══════ PHASE 2 ═══════ -->
-<div class="phase-ban p2ban" id="ph2ban">
-  <span data-en="PHASE 2 — VERIFICATION" data-ar="المرحلة 2 — التحقق" data-zh="第二阶段 — 验证">PHASE 2 — VERIFICATION</span>
-  <small data-en="After reading ρg from the Interaction Diagram, select bars and verify" data-ar="بعد قراءة ρg من مخطط التفاعل، اختر القضبان وتحقق" data-zh="从相互作用图读取ρg后，选择钢筋并验证">After reading ρg, select bars and verify</small>
-</div>
-
-<!-- E: Bar Selection -->
-<div class="sec">
-  <div class="sh2" data-en="E — Bar Selection &amp; Detailing" data-ar="هـ — اختيار القضبان والتفاصيل" data-zh="E — 钢筋选择与构造">E — Bar Selection &amp; Detailing</div>
-  <div class="sb">
-    <div class="ir">
-      <span class="il">db</span>
-      <select id="db" onchange="calc()" style="grid-column:2/4">
-        <option value="0" selected data-en="— Select —" data-ar="— اختر —" data-zh="— 选择 —">— Select —</option>
-        <option value="12">12 mm</option><option value="14">14 mm</option><option value="16">16 mm</option>
-        <option value="18">18 mm</option><option value="20">20 mm</option><option value="22">22 mm</option>
-        <option value="25">25 mm</option><option value="28">28 mm</option><option value="32">32 mm</option>
-      </select>
-      <span class="unit">mm</span>
-    </div>
-    <div class="ds" data-en="Longitudinal bar diameter" data-ar="قطر القضيب الطولي" data-zh="纵向钢筋直径">Bar diameter</div>
-    <div class="ir">
-      <span class="il" data-en="n (bars)" data-ar="n (قضبان)" data-zh="n（根数）">n (bars)</span>
-      <input type="range" id="sl_n" min="0" max="20" step="1" value="0" oninput="sy('n')">
-      <input type="number" id="n" min="0" max="40" step="1" value="" placeholder="0" oninput="sy('n',1)">
-      <span class="unit" data-en="bars" data-ar="قضبان" data-zh="根">bars</span>
-    </div>
-    <div class="ds" data-en="Number of longitudinal bars (min 4 for tied)" data-ar="عدد القضبان (أدنى 4)" data-zh="钢筋数量（最少4根）">Number of bars (min 4)</div>
-    <div class="ir">
-      <span class="il" data-en="cover" data-ar="الغطاء" data-zh="保护层">cover</span>
-      <input type="range" id="sl_cv" min="0" max="80" step="5" value="0" oninput="sy('cv')">
-      <input type="number" id="cv" min="0" max="100" step="5" value="" placeholder="0" oninput="sy('cv',1)">
-      <span class="unit">mm</span>
-    </div>
-    <div class="ds" data-en="Clear cover to ties (typical 40 mm)" data-ar="الغطاء الصافي للكانات (40 مم)" data-zh="箍筋净保护层（典型40mm）">Clear cover (typical 40mm)</div>
-    <div class="ir">
-      <span class="il">d_tie</span>
-      <select id="dt" onchange="calc()" style="grid-column:2/4">
-        <option value="0" selected data-en="— Select —" data-ar="— اختر —" data-zh="— 选择 —">— Select —</option>
-        <option value="8">8 mm</option><option value="10">10 mm</option>
-        <option value="12">12 mm</option><option value="14">14 mm</option>
-      </select>
-      <span class="unit">mm</span>
-    </div>
-    <div class="ds" data-en="Tie diameter (≥10 if db≤32, ≥12 if db>32)" data-ar="قطر الكانة" data-zh="箍筋直径">Tie diameter</div>
-    <div class="ex2" data-en="Choose n and db so that \(A_{st} = n \times \pi d_b^2/4 \geq \rho_{g,required} \times A_g\). The tool will verify ρg limits, axial capacity, tie spacing, and compare d'(actual) vs d'(estimated)." data-ar="اختر n وdb بحيث \(A_{st} = n \times \pi d_b^2/4 \geq \rho_{g,required} \times A_g\). الأداة ستتحقق من حدود ρg والسعة المحورية ومسافات الكانات وتقارن d'." data-zh="选择n和db使 \(A_{st} \geq \rho_{g,required} \times A_g\)。工具将验证ρg限值、轴向承载力、箍筋间距，并比较d'。">Choose n×db so \(A_{st} \geq \rho_{g,req} \times A_g\).</div>
-  </div>
-</div>
-
-<!-- Phase 2 warning -->
-<div class="warn hidden" id="warn2">
-  <span data-en="Fill Phase 2 inputs (db, n, cover, d_tie) to see verification." data-ar="املأ مدخلات المرحلة 2 لرؤية التحقق." data-zh="请填写第二阶段输入以查看验证结果。">Fill Phase 2 inputs for verification.</span>
-</div>
-
-<!-- PHASE 2 RESULTS -->
-<div id="res2" class="hidden">
-
-<!-- d' comparison -->
-<div class="sec">
-  <div class="sh2" data-en="d' Comparison — Estimated vs Actual" data-ar="مقارنة d' — المقدرة مقابل الفعلية" data-zh="d' 比较 — 估算值与实际值">d' Comparison</div>
-  <div class="sb">
-    <table class="c">
-    <tr><th data-en="Parameter" data-ar="المعامل" data-zh="参数">Parameter</th><th data-en="Phase 1 (est.)" data-ar="المرحلة 1" data-zh="第一阶段">Phase 1</th><th data-en="Phase 2 (actual)" data-ar="المرحلة 2" data-zh="第二阶段">Phase 2</th><th data-en="Match?" data-ar="تطابق؟" data-zh="匹配？">Match?</th></tr>
-    <tr><td>d' (mm)</td><td id="vDe"></td><td id="vDa"></td><td id="vDm"></td></tr>
-    <tr><td>γ</td><td id="vGe"></td><td id="vGa"></td><td id="vGm"></td></tr>
-    </table>
-    <div class="nb" id="dpNote" data-en="If d'(actual) differs by more than 5mm, consider updating d' in Phase 1 and re-reading the Interaction Diagram." data-ar="إذا اختلفت d' الفعلية بأكثر من 5 مم، حدّث d' في المرحلة 1 وأعد قراءة مخطط التفاعل." data-zh="如果实际d'差异超过5mm，请更新第一阶段d'并重新查看相互作用图。">If d' differs >5mm, update Phase 1 and re-check diagram.</div>
+    <div class="ex" data-en="<b>Ec:</b> ACI formula for normal concrete. <b>EI:</b> 0.4 factor + creep reduction. <b>Pc:</b> Euler critical load — if \(P_u \geq 0.75P_c\), column is unstable! <b>Cm:</b> moment correction (≥0.4). <b>δns:</b> always ≥1.0 (=1.0 for short columns). <b>Mc</b> = amplified design moment for the Interaction Diagram." data-ar="<b>Ec:</b> معادلة ACI للخرسانة العادية. <b>EI:</b> معامل 0.4 + تخفيض الزحف. <b>Pc:</b> حمل أويلر — إذا \(P_u \geq 0.75P_c\) العمود غير مستقر! <b>Cm:</b> تصحيح العزم (≥0.4). <b>δns:</b> دائماً ≥1.0 (=1.0 للقصير). <b>Mc</b> = العزم المضخم لمخطط التفاعل." data-zh="<b>Ec:</b> ACI普通混凝土公式。<b>EI:</b> 0.4系数+徐变折减。<b>Pc:</b> 欧拉临界荷载——若\(P_u \geq 0.75P_c\)柱不稳定！<b>Cm:</b> 弯矩修正(≥0.4)。<b>δns:</b> 始终≥1.0(短柱=1.0)。<b>Mc</b> = 相互作用图用放大弯矩。">Ec, EI, Pc, Cm, δns → <b>Mc</b> = design moment for diagram.</div>
   </div>
 </div>
 
 <!-- Step 3 -->
 <div class="sec">
-  <div class="sh2" data-en="Step 3 — Axial Capacity Check" data-ar="الخطوة 3 — فحص السعة المحورية" data-zh="步骤3 — 轴向承载力检验">Step 3 — Axial Capacity Check</div>
+  <div class="sh" style="font-size:1.05em" data-en="★ Step 3 — Interaction Diagram Parameters" data-ar="★ الخطوة 3 — معاملات مخطط التفاعل" data-zh="★ 步骤3 — 相互作用图参数">★ Step 3 — Interaction Diagram Parameters</div>
   <div class="sb">
     <table class="c"><tr><th>#</th><th>Sym</th><th>Formula</th><th>Desc</th><th>Value</th><th>Unit</th></tr>
-    <tr class="cr2"><td>3.1</td><td>Ast</td><td>\(n \cdot \frac{\pi d_b^2}{4}\)</td><td data-en="Total steel area" data-ar="مساحة الحديد" data-zh="钢筋总面积">Ast</td><td id="v3a"></td><td>mm²</td></tr>
-    <tr class="cr2"><td>3.2</td><td>\(\rho_{g,act}\)</td><td>\(A_{st}/A_g\)</td><td data-en="Actual ratio" data-ar="النسبة الفعلية" data-zh="实际配筋率">ρg</td><td id="v3b"></td><td>—</td></tr>
-    <tr class="ck" id="r3r"><td>3.3</td><td>ρg check</td><td>\(0.01 \leq \rho_g \leq 0.08\)</td><td data-en="ACI limits" data-ar="حدود ACI" data-zh="ACI限值">Limits</td><td id="v3c"></td><td>—</td></tr>
-    <tr class="cr2"><td>3.4</td><td>Po</td><td>\(\frac{0.85f'_c(A_g-A_{st})+f_y A_{st}}{1000}\)</td><td data-en="Nominal axial" data-ar="السعة الاسمية" data-zh="标称轴力">Po</td><td id="v3d"></td><td>kN</td></tr>
-    <tr class="cr2"><td>3.5</td><td>\(\phi P_{n,max}\)</td><td>\(0.80 \phi P_o\)</td><td data-en="Max design" data-ar="أقصى تصميمي" data-zh="最大设计轴力">ϕPn</td><td id="v3e"></td><td>kN</td></tr>
-    <tr class="ck" id="r3a"><td>3.6</td><td data-en="Check" data-ar="فحص" data-zh="检验">Check</td><td>\(P_u \leq \phi P_{n,max}?\)</td><td data-en="Axial OK?" data-ar="محوري؟" data-zh="轴力？">OK?</td><td id="v3f"></td><td>—</td></tr>
+    <tr class="cr"><td>3.1</td><td>d'</td><td data-en="(input)" data-ar="(مدخل)" data-zh="(输入)">(input)</td><td>d'</td><td id="v3a"></td><td>mm</td></tr>
+    <tr class="cr"><td>3.2</td><td>\(\gamma\)</td><td>\(\frac{h-2d'}{h}\)</td><td data-en="Chart selection" data-ar="اختيار المخطط" data-zh="选图">γ</td><td id="v3b"></td><td>—</td></tr>
+    <tr class="hi"><td style="font-size:1.1em"><b>3.3</b></td><td style="font-size:1.15em;color:#7B2D26"><b>Pu/Ag</b></td><td>\(\frac{P_u \times 1000}{A_g}\)</td><td data-en="<b>Y-AXIS</b>" data-ar="<b>المحور الرأسي</b>" data-zh="<b>纵轴</b>"><b>Y-axis</b></td><td id="v3c" style="font-size:1.15em;color:#7B2D26"></td><td><b>MPa</b></td></tr>
+    <tr class="hi"><td style="font-size:1.1em"><b>3.4</b></td><td style="font-size:1.15em;color:#7B2D26"><b>Mc/(Ag·h)</b></td><td>\(\frac{M_c \times 10^6}{A_g \times h}\)</td><td data-en="<b>X-AXIS</b>" data-ar="<b>المحور الأفقي</b>" data-zh="<b>横轴</b>"><b>X-axis</b></td><td id="v3d" style="font-size:1.15em;color:#7B2D26"></td><td><b>MPa</b></td></tr>
     </table>
+    <div class="ex" data-en="\(\gamma = (h-2d')/h\) is the ratio of bar centroid spacing to column depth. Determines which chart to use — round to nearest 0.6, 0.7, 0.8, or 0.9. Higher \(\gamma\) = bars farther from center = more efficient for bending." data-ar="\(\gamma = (h-2d')/h\) نسبة المسافة بين مراكز القضبان إلى عمق العمود. تحدد أي مخطط تستخدم — قرّب لأقرب 0.6/0.7/0.8/0.9. \(\gamma\) أعلى = القضبان أبعد عن المركز = أكفأ للانحناء." data-zh="\(\gamma = (h-2d')/h\) 是筋心距与柱深之比。决定使用哪张图——取整到0.6/0.7/0.8/0.9。\(\gamma\)越大 = 筋离中心越远 = 抗弯效率越高。">\(\gamma\) selects the chart. Higher = more efficient.</div>
+    <div class="nb" data-en="★ <b>HOW TO USE:</b> (1) Pick ACI SI Interaction Diagram for your \(f'_c\), \(f_y\), and nearest \(\gamma\). (2) Y-axis: locate \(P_u/A_g\) (MPa). X-axis: locate \(M_c/(A_g h)\) (MPa). (3) Plot the point and read the \(\rho_g\) curve through or above it. (4) That is your <b>required</b> \(\rho_g\). (5) Choose bars: \(A_{st} = \rho_g \times A_g\)." data-ar="★ <b>طريقة الاستخدام:</b> (1) اختر مخطط التفاعل ACI (SI) المناسب لـ \(f'_c\) و \(f_y\) وأقرب \(\gamma\). (2) الرأسي: \(P_u/A_g\) (MPa). الأفقي: \(M_c/(A_g h)\) (MPa). (3) ارسم النقطة واقرأ منحنى \(\rho_g\) فوقها. (4) هذه \(\rho_g\) <b>المطلوبة</b>. (5) اختر القضبان: \(A_{st} = \rho_g \times A_g\)." data-zh="★ <b>使用方法：</b>(1) 选择对应 \(f'_c\)、\(f_y\) 和最近 \(\gamma\) 的ACI SI相互作用图。(2) 纵轴：\(P_u/A_g\)(MPa)。横轴：\(M_c/(A_g h)\)(MPa)。(3) 标出该点，读取经过或高于该点的 \(\rho_g\) 曲线。(4) 即为<b>所需</b> \(\rho_g\)。(5) 选筋：\(A_{st} = \rho_g \times A_g\)。">★ Plot (Mc/(Ag·h), Pu/Ag) on ACI SI diagram → read ρg → Ast = ρg × Ag</div>
   </div>
 </div>
 
-<!-- Step 4 -->
+<!-- Summary -->
 <div class="sec">
-  <div class="sh2" data-en="Step 4 — Tie Spacing (ACI 25.7.2)" data-ar="الخطوة 4 — مسافات الكانات" data-zh="步骤4 — 箍筋间距">Step 4 — Tie Spacing</div>
-  <div class="sb">
-    <table class="c"><tr><th>#</th><th>Sym</th><th>Formula</th><th>Desc</th><th>Value</th><th>Unit</th></tr>
-    <tr class="cr2"><td>4.1</td><td>16db</td><td>\(16 d_b\)</td><td data-en="Bar buckling" data-ar="انبعاج القضيب" data-zh="钢筋屈曲">16db</td><td id="v4a"></td><td>mm</td></tr>
-    <tr class="cr2"><td>4.2</td><td>48dt</td><td>\(48 d_{tie}\)</td><td data-en="Tie effectiveness" data-ar="فعالية الكانة" data-zh="箍筋有效性">48dt</td><td id="v4b"></td><td>mm</td></tr>
-    <tr class="cr2"><td>4.3</td><td>min(b,h)</td><td>\(\min(b,h)\)</td><td data-en="Column dim" data-ar="بعد العمود" data-zh="柱尺寸">min</td><td id="v4c"></td><td>mm</td></tr>
-    <tr class="ck" id="r4"><td>4.4</td><td>s</td><td>\(\min(4.1,4.2,4.3)\)</td><td data-en="Adopted spacing" data-ar="المسافة المعتمدة" data-zh="采用间距">s</td><td id="v4d"></td><td>mm</td></tr>
-    </table>
-  </div>
+  <div class="sh" data-en="Design Summary" data-ar="ملخص التصميم" data-zh="设计总结">Design Summary</div>
+  <div class="sb"><div class="sg" id="sum1"></div></div>
 </div>
 
-<!-- Full Summary -->
-<div class="sec">
-  <div class="sh2" data-en="COMPLETE DESIGN SUMMARY" data-ar="ملخص التصميم الكامل" data-zh="完整设计总结">COMPLETE DESIGN SUMMARY</div>
-  <div class="sb"><div class="sg" id="sum2"></div></div>
 </div>
 
-</div><!-- /res2 -->
-
-<!-- Overlay -->
 <div id="overlay" onclick="if(event.target===this)closeSum()">
   <div id="sumCard">
     <span class="close" onclick="closeSum()">&times;</span>
@@ -424,228 +285,75 @@ tr.ck.fail td{background:var(--rd)}
 
 <script>
 var lang='en';
-var ph1=['rg','fc','fy','Pu','M2','bd','b','h','lu','k','dp'];
-var ph2=['n','cv'];
-
+var ids=['rg','fc','fy','Pu','M2','bd','b','h','lu','k','dp'];
 function gV(id){var e=document.getElementById(id);if(!e)return 0;var v=parseFloat(e.value);return isNaN(v)?0:v;}
-
-function sy(id,fb){
-  var s=document.getElementById('sl_'+id),b2=document.getElementById(id);
-  if(!s||!b2)return;
-  if(fb){s.value=b2.value||0;}else{b2.value=s.value=='0'?'':s.value;}
-  markE();calc();
-}
-
-function markE(){
-  ph1.forEach(function(id){
-    var el=document.getElementById(id);
-    if(el){var v=parseFloat(el.value);el.classList.toggle('empty',isNaN(v)||v<=0);}
-  });
-  ph2.forEach(function(id){
-    var el=document.getElementById(id);
-    if(el){var v=parseFloat(el.value);el.classList.toggle('empty',isNaN(v)||v<=0);}
-  });
-}
-
-function ph1OK(){
-  for(var i=0;i<ph1.length;i++){
-    var v=parseFloat(document.getElementById(ph1[i]).value);
-    if(isNaN(v)||v<=0)return false;
-  }
-  return true;
-}
-function ph2OK(){
-  var db=parseFloat(document.getElementById('db').value);
-  var dt=parseFloat(document.getElementById('dt').value);
-  var n=parseFloat(document.getElementById('n').value);
-  var cv=parseFloat(document.getElementById('cv').value);
-  return db>0&&dt>0&&n>0&&cv>0;
-}
-
+function sy(id,fb){var s=document.getElementById('sl_'+id),b2=document.getElementById(id);if(!s||!b2)return;if(fb){s.value=b2.value||0;}else{b2.value=s.value=='0'?'':s.value;}markE();calc();}
+function markE(){ids.forEach(function(id){var el=document.getElementById(id);if(el){var v=parseFloat(el.value);el.classList.toggle('empty',isNaN(v)||v<=0);}});}
+function allOK(){for(var i=0;i<ids.length;i++){var v=parseFloat(document.getElementById(ids[i]).value);if(isNaN(v)||v<=0)return false;}return true;}
 function fm(v,d){d=d==null?2:d;if(Math.abs(v)>=1e7)return v.toExponential(2);return parseFloat(v.toFixed(d));}
 function sV(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
 function sC(id,p){var e=document.getElementById(id);if(e)e.classList.toggle('fail',!p);}
-
 function calc(){
-  var ok1=ph1OK(), ok2=ph2OK();
-  document.getElementById('warn1').classList.toggle('hidden',ok1);
-  document.getElementById('res1').classList.toggle('hidden',!ok1);
-  document.getElementById('warn2').classList.toggle('hidden',!ok1||ok2);
-  document.getElementById('res2').classList.toggle('hidden',!ok1||!ok2);
-  if(!ok1){window._D=null;return;}
-
+  var ok=allOK();
+  document.getElementById('warn1').classList.toggle('hidden',ok);
+  document.getElementById('res1').classList.toggle('hidden',!ok);
+  if(!ok){window._D=null;return;}
   var rg=gV('rg'),fc=gV('fc'),fy=gV('fy'),Pu=gV('Pu'),M1=gV('M1'),M2v=gV('M2');
   var bd=gV('bd'),phi=parseFloat(document.getElementById('phi').value);
   var b=gV('b'),h=gV('h'),lu=gV('lu'),kk=gV('k'),dp=gV('dp');
-  var fr=parseInt(document.getElementById('frame').value);
-  var Ag=b*h;
-
-  // STEP 0
-  var Agt=Pu*1000/(0.40*(fc+fy*rg)), c0=Ag>=Agt;
-  sV('v0a',fm(Agt,0));sV('v0b',fm(Ag,0));
-  sV('v0c',c0?'OK \u2713':'INCREASE \u2717');sC('r0',c0);
-
-  // STEP 1
-  var r=0.3*h, lam=kk*lu/r, mr=M2v!==0?M1/M2v:0;
-  var lim=fr===0?Math.min(34-12*mr,40):22, isS=lam<=lim;
+  var fr=parseInt(document.getElementById('frame').value),Ag=b*h;
+  var Agt=Pu*1000/(0.40*(fc+fy*rg)),c0=Ag>=Agt;
+  sV('v0a',fm(Agt,0));sV('v0b',fm(Ag,0));sV('v0c',c0?'OK \u2713':'INCREASE \u2717');sC('r0',c0);
+  var r=0.3*h,lam=kk*lu/r,mr=M2v!==0?M1/M2v:0;
+  var lim=fr===0?Math.min(34-12*mr,40):22,isS=lam<=lim;
   sV('v1a',fm(r,1));sV('v1b',fm(lam,2));sV('v1c',fm(mr,3));sV('v1d',fm(lim,1));
   document.getElementById('eq1').innerHTML=fr===0?'\\(\\min(34-12\\frac{M_1}{M_2},40)\\)':'\\(22\\)';
   sV('v1e',isS?'SHORT \u2713':'SLENDER \u2192 Step 2');sC('r1',isS);
-
-  // STEP 2
-  var Ec=4700*Math.sqrt(fc), Ig=b*Math.pow(h,3)/12, EI=0.4*Ec*Ig/(1+bd);
-  var klu=kk*lu, Pc=Math.PI*Math.PI*EI/(klu*klu)/1000;
-  var Cm=Math.max(0.4,0.6+0.4*mr), dns=isS?1:Math.max(1,Cm/(1-Pu/(0.75*Pc)));
-  var Mm=Pu*(15+0.03*h)/1000, Md=Math.max(M2v,Mm), Mc=dns*Md;
+  var Ec=4700*Math.sqrt(fc),Ig=b*Math.pow(h,3)/12,EI=0.4*Ec*Ig/(1+bd);
+  var klu=kk*lu,Pc=Math.PI*Math.PI*EI/(klu*klu)/1000;
+  var Cm=Math.max(0.4,0.6+0.4*mr),dns=isS?1:Math.max(1,Cm/(1-Pu/(0.75*Pc)));
+  var Mm=Pu*(15+0.03*h)/1000,Md=Math.max(M2v,Mm),Mc=dns*Md;
   sV('v2a',fm(Ec,0));sV('v2b',Ig.toExponential(3));sV('v2c',EI.toExponential(3));
-  sV('v2d',fm(Pc,1));sV('v2e',fm(Cm,3));
-  sV('v2f',isS?'1.0 (Short)':fm(dns,3));
+  sV('v2d',fm(Pc,1));sV('v2e',fm(Cm,3));sV('v2f',isS?'1.0 (Short)':fm(dns,3));
   sV('v2g',fm(Mm,2));sV('v2h',fm(Md,2));sV('v2i',fm(Mc,2));sC('r2',true);
-
-  // STEP 5 (Phase 1)
-  var gam=(h-2*dp)/h;
-  var Kn=Pu*1000/(phi*fc*Ag), Rn=Mc*1e6/(phi*fc*Ag*h);
-  sV('v5a',fm(dp,1));sV('v5b',fm(gam,3));sV('v5c',fm(Kn,4));sV('v5d',fm(Rn,4));
-
-  // Phase 1 summary
-  var s1=[
-    ['Section',b+' \u00d7 '+h+' mm (Ag='+fm(Ag,0)+')'],
-    ['Slenderness',isS?'SHORT (\u03bb='+fm(lam,1)+' \u2264 '+fm(lim,1)+')':'SLENDER (\u03bb='+fm(lam,1)+' > '+fm(lim,1)+')'],
-    ['Mc',fm(Mc,2)+' kN\u00b7m'],
-    ['\u03b3',fm(gam,3)],
-    ['Kn',fm(Kn,4)],
-    ['Rn',fm(Rn,4)]
-  ];
-  document.getElementById('sum1').innerHTML=s1.map(function(x){
-    return '<div class="si"><span class="lb">'+x[0]+'</span><span class="vl">'+x[1]+'</span></div>';
-  }).join('');
-
-  window._D={fc:fc,fy:fy,Pu:Pu,M1:M1,M2:M2v,b:b,h:h,Ag:Ag,dp_est:dp,gam_est:gam,Kn_est:Kn,Rn_est:Rn,isS:isS,lam:lam,lim:lim,dns:dns,Mc:Mc,phi:phi};
-
-  // PHASE 2
-  if(!ok2){if(window.MathJax&&MathJax.typeset)MathJax.typeset();return;}
-  var db=parseFloat(document.getElementById('db').value);
-  var dt=parseFloat(document.getElementById('dt').value);
-  var nv=gV('n'), cv=gV('cv');
-
-  // Actual d'
-  var dpA=cv+dt+db/2, gamA=(h-2*dpA)/h;
-
-  // d' comparison
-  sV('vDe',fm(dp,1));sV('vDa',fm(dpA,1));
-  var dMatch=Math.abs(dp-dpA)<=5;
-  sV('vDm',dMatch?'\u2713 Close':'\u2717 Diff '+(dpA-dp>0?'+':'')+fm(dpA-dp,1)+'mm');
-  sV('vGe',fm(gam,3));sV('vGa',fm(gamA,3));
-  var gMatch=Math.abs(gam-gamA)<0.03;
-  sV('vGm',gMatch?'\u2713':'\u2717 Differs');
-
-  // STEP 3
-  var Ast=nv*Math.PI*db*db/4, rga=Ast/Ag, rok=rga>=0.01&&rga<=0.08;
-  var Po=(0.85*fc*(Ag-Ast)+fy*Ast)/1000, pPn=0.80*phi*Po, aok=Pu<=pPn;
-  sV('v3a',fm(Ast,0));sV('v3b',fm(rga,4));
-  sV('v3c',rok?'OK \u2713':'OUTSIDE \u2717');sC('r3r',rok);
-  sV('v3d',fm(Po,1));sV('v3e',fm(pPn,1));
-  sV('v3f',aok?'SAFE \u2713':'UNSAFE \u2717');sC('r3a',aok);
-
-  // STEP 4
-  var s1v=16*db, s2v=48*dt, s3v=Math.min(b,h), ss=Math.min(s1v,s2v,s3v);
-  sV('v4a',s1v);sV('v4b',s2v);sV('v4c',s3v);sV('v4d',ss);sC('r4',true);
-
-  // Full summary
-  var it=[
-    ['Column',b+' \u00d7 '+h+' mm'],
-    ["f'c / fy",fc+' / '+fy+' MPa'],
-    ['Bars',nv+'T'+db+' (Ast='+fm(Ast,0)+' mm\u00b2)'],
-    ['\u03c1g(actual)',(rga*100).toFixed(2)+'%'+(rok?' \u2713':' \u2717')],
+  var gam=(h-2*dp)/h,PuAg=Pu*1000/Ag,McAgh=Mc*1e6/(Ag*h);
+  sV('v3a',fm(dp,1));sV('v3b',fm(gam,3));sV('v3c',fm(PuAg,2));sV('v3d',fm(McAgh,2));
+  var s1=[['Section',b+' \u00d7 '+h+' mm (Ag='+fm(Ag,0)+')'],
     ['Slenderness',isS?'SHORT (\u03bb='+fm(lam,1)+')':'SLENDER (\u03bb='+fm(lam,1)+')'],
-    ['Mc',fm(Mc,2)+' kN\u00b7m'],
-    ['\u03c6Pn,max',fm(pPn,1)+' kN '+(aok?'\u2713':'\u2717')],
-    ['Ties','\u03a6'+dt+'@'+ss+'mm'],
-    ['\u03b3(actual)',fm(gamA,3)],
-    ['d\' match',dMatch?'\u2713 (est='+fm(dp,0)+', act='+fm(dpA,0)+')':'\u2717 (est='+fm(dp,0)+', act='+fm(dpA,0)+')']
-  ];
-  document.getElementById('sum2').innerHTML=it.map(function(x){
-    var s='';
-    if(x[1].indexOf('\u2717')>=0)s=' style="border-left-color:#c00"';
-    else if(x[1].indexOf('\u2713')>=0)s=' style="border-left-color:#1a6b1a"';
-    return '<div class="si"'+s+'><span class="lb">'+x[0]+'</span><span class="vl">'+x[1]+'</span></div>';
-  }).join('');
-
-  window._D.db=db;window._D.dt=dt;window._D.n=nv;window._D.cv=cv;
-  window._D.dpA=dpA;window._D.gamA=gamA;window._D.Ast=Ast;window._D.rga=rga;window._D.rok=rok;
-  window._D.Po=Po;window._D.pPn=pPn;window._D.aok=aok;window._D.ss=ss;
-
+    ['\u03b4ns',isS?'1.0':fm(dns,3)],['Mc',fm(Mc,2)+' kN\u00b7m'],
+    ['\u03b3',fm(gam,3)],['Pu/Ag',fm(PuAg,2)+' MPa (Y)'],
+    ['Mc/(Ag\u00b7h)',fm(McAgh,2)+' MPa (X)']];
+  document.getElementById('sum1').innerHTML=s1.map(function(x){
+    return '<div class="si"><span class="lb">'+x[0]+'</span><span class="vl">'+x[1]+'</span></div>';}).join('');
+  window._D={fc:fc,fy:fy,Pu:Pu,b:b,h:h,Ag:Ag,dp:dp,gam:gam,PuAg:PuAg,McAgh:McAgh,isS:isS,lam:lam,lim:lim,dns:dns,Mc:Mc};
   if(window.MathJax&&MathJax.typeset)MathJax.typeset();
 }
-
-function clearAll(){
-  ph1.forEach(function(id){
-    document.getElementById(id).value='';
-    var s=document.getElementById('sl_'+id);if(s)s.value=0;
-  });
-  ph2.forEach(function(id){
-    document.getElementById(id).value='';
-    var s=document.getElementById('sl_'+id);if(s)s.value=0;
-  });
-  document.getElementById('M1').value='0';
-  document.getElementById('db').value='0';
-  document.getElementById('dt').value='0';
-  markE();calc();
-}
-
+function clearAll(){ids.forEach(function(id){document.getElementById(id).value='';var s=document.getElementById('sl_'+id);if(s)s.value=0;});document.getElementById('M1').value='0';markE();calc();}
 function setLang(l){
-  lang=l;
-  document.querySelectorAll('.lang-btn').forEach(function(b){
-    b.classList.toggle('active',b.dataset.lang===l);
-  });
+  lang=l;document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l);});
   var key='data-'+l;
   document.querySelectorAll('['+key+']').forEach(function(el){
     if(el.classList.contains('lang-btn'))return;
-    var t=el.getAttribute(key);
-    if(t){
+    var t=el.getAttribute(key);if(t){
       if(window.MathJax&&MathJax.typesetClear)try{MathJax.typesetClear([el]);}catch(e){}
-      if(el.tagName==='OPTION'){el.textContent=t;}
-      else{el.innerHTML=t;}
-      if(l==='ar'&&el.tagName!=='OPTION'){el.dir='rtl';el.style.textAlign='right';}
-      else{el.dir='';el.style.textAlign='';}
-    }
-  });
+      if(el.tagName==='OPTION'){el.textContent=t;}else{el.innerHTML=t;}
+      if(l==='ar'&&el.tagName!=='OPTION'){el.dir='rtl';el.style.textAlign='right';}else{el.dir='';el.style.textAlign='';}
+    }});
   if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise().catch(function(){});
 }
-
 function showSum(){
-  var D=window._D;
-  if(!D){alert(lang==='ar'?'\u0627\u0645\u0644\u0623 \u0627\u0644\u0645\u062f\u062e\u0644\u0627\u062a':lang==='zh'?'\u8bf7\u5148\u586b\u5199\u8f93\u5165':'Fill inputs first');return;}
-  var h2='<h2>'+(lang==='ar'?'\u0645\u0644\u062e\u0635 \u062a\u0635\u0645\u064a\u0645 \u0627\u0644\u0639\u0645\u0648\u062f':lang==='zh'?'\u67f1\u8bbe\u8ba1\u603b\u7ed3':'Column Design Summary')+'</h2>';
-  h2+='<table><tr><th>'+(lang==='ar'?'\u0627\u0644\u0645\u0639\u0627\u0645\u0644':lang==='zh'?'\u53c2\u6570':'Parameter')+'</th><th>'+(lang==='ar'?'\u0627\u0644\u0642\u064a\u0645\u0629':lang==='zh'?'\u503c':'Value')+'</th></tr>';
-  var rw=[
-    ['Section',D.b+' \u00d7 '+D.h+' mm'],
-    ["f'c / fy",D.fc+' / '+D.fy+' MPa'],
-    ['Slenderness',D.isS?'SHORT (\u03bb='+fm(D.lam,1)+')':'SLENDER (\u03bb='+fm(D.lam,1)+')'],
-    ['Mc',fm(D.Mc,2)+' kN\u00b7m'],
-    ['\u03b3(est)',fm(D.gam_est,3)],
-    ['Kn',fm(D.Kn_est,4)],
-    ['Rn',fm(D.Rn_est,4)]
-  ];
-  if(D.Ast){
-    rw.push(['Bars',D.n+'T'+D.db+' (Ast='+fm(D.Ast,0)+')']);
-    rw.push(['\u03c1g(act)',(D.rga*100).toFixed(2)+'%']);
-    rw.push(['\u03b3(act)',fm(D.gamA,3)]);
-    rw.push(['\u03c6Pn,max',fm(D.pPn,1)+' kN']);
-    rw.push(['Ties','\u03a6'+D.dt+'@'+D.ss+'mm']);
-  }
-  rw.forEach(function(r){h2+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';});
+  var D=window._D;if(!D){alert('Fill inputs first');return;}
+  var h2='<h2>Design Summary</h2><table><tr><th>Parameter</th><th>Value</th></tr>';
+  [['Section',D.b+' \u00d7 '+D.h+' mm'],['f\'c/fy',D.fc+'/'+D.fy+' MPa'],
+   ['\u03bb',D.isS?'SHORT '+fm(D.lam,1):'SLENDER '+fm(D.lam,1)],
+   ['Mc',fm(D.Mc,2)+' kN\u00b7m'],['\u03b3',fm(D.gam,3)],
+   ['Pu/Ag',fm(D.PuAg,2)+' MPa'],['Mc/(Ag\u00b7h)',fm(D.McAgh,2)+' MPa']
+  ].forEach(function(r){h2+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';});
   h2+='</table>';
-  if(D.aok!==undefined){
-    h2+='<div class="rb '+(D.aok?'rs':'rf')+'">'+(D.aok?'\u2713 SAFE (Pu='+D.Pu+' \u2264 \u03c6Pn,max='+fm(D.pPn,1)+')':'\u2717 UNSAFE')+'</div>';
-  } else {
-    h2+='<div class="rb" style="background:#FFF3CD;color:#856404">'+(lang==='ar'?'\u0623\u0643\u0645\u0644 \u0627\u0644\u0645\u0631\u062d\u0644\u0629 2':'Complete Phase 2')+'</div>';
-  }
   document.getElementById('sumContent').innerHTML=h2;
   document.getElementById('overlay').style.display='block';
 }
 function closeSum(){document.getElementById('overlay').style.display='none';}
-
 window.onload=function(){markE();calc();};
 </script>
 </body>
